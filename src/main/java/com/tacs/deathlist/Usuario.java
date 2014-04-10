@@ -12,8 +12,8 @@ import javax.ws.rs.core.Response;
 @Path("/{username}")
 public class Usuario {
     
-	@PathParam("username") 
-	private String username;
+    @PathParam("username") 
+    private String username;
 	
     public Usuario() {
     	
