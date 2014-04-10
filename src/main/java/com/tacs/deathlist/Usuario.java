@@ -8,8 +8,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.core.Response;
 
-
-@Path("/users/{username}")
+// TODO: yo lo haría asi: @Path("/users/{username}")
+@Path("/{username}")
 public class Usuario {
     
 	@PathParam("username") 
@@ -27,7 +27,8 @@ public class Usuario {
     	return username;
     } 
     
-    @GET @Path("/lists/{listName}")
+ // TODO: yo lo haría asi: @GET @Path("/lists/{listName}")
+    @GET @Path("/list/{listName}")
     @Produces("text/plain")
     public Response getList(@PathParam("listName") String listName) { 
         
@@ -35,7 +36,8 @@ public class Usuario {
     	return Response.status(Response.Status.OK).build();
     }  
     
-    @POST @Path("/lists/{listName}")
+    // TODO: yo lo haría asi: @POST @Path("/lists/{listName}")
+    @POST @Path("/list/{listName}")
     @Consumes("text/plain")
     public void createList(@PathParam("listName") String listName) { 
         
