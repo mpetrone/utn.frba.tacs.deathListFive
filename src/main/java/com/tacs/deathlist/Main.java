@@ -21,7 +21,7 @@ public class Main {
      */
     public static HttpServer startServer() {
         //agarra las clases del paquete com.tacs.deathlist e inicia el servidor
-        final ResourceConfig rc = new ResourceConfig().packages("com.tacs.deathlist");
+        final ResourceConfig rc = new ResourceConfig().packages("com.tacs.deathlist.endpoints");
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
 

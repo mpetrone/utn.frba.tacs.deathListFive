@@ -1,10 +1,6 @@
 package com.tacs.deathlist;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -15,14 +11,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.gson.Gson;
-
-public class ListasTest {
-
+public class FrontTest {
+    
     private HttpServer server;
     private WebTarget target;
-    private Gson gson = new Gson();
-
+    
     @Before
     public void setUp() throws Exception {
         // start the server
@@ -37,14 +30,12 @@ public class ListasTest {
         server.shutdownNow();
     }
 
-
+    
     @Test
     public void testGetLists() {
-        String jsonResponse = target.path("list/lista1").request().get(String.class);
+        String frontHtml = target.path("front").request().get(String.class);
         
-        assertNotNull(jsonResponse);
-        assertTrue(!jsonResponse.isEmpty());
-        List<?> list = gson.fromJson(jsonResponse, List.class);
-        assertEquals(3, list.size());
+        assertNotNull(frontHtml);
     }
+
 }
