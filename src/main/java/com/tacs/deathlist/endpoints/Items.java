@@ -28,7 +28,8 @@ public class Items {
     public Response voteItem(@PathParam("itemName") String itemName) { 
         System.out.format("Entró a voteItem en Item con: %s%n",itemName);
         return Response.status(Status.CREATED).build();
-    }   
+    } 
+	
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteItem(@PathParam("itemName") String itemName) {

@@ -18,8 +18,8 @@ public class Front {
     String front;
     
     {
-        // inicializacion del engine velocity, cuando tengamos el proyecto armado
-        // bien esto va a estar en algun otro lado
+        // inicializacion del engine velocity, cuando tengamos el proyecto bien
+        // armado esto va a estar en algun otro lado
         VelocityEngine ve = new VelocityEngine();
         ve.setProperty(VelocityEngine.FILE_RESOURCE_LOADER_PATH, 
                 "./src/main/resources/com/tacs/deathlist/templates/");

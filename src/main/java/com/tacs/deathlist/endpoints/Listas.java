@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response.Status;
 
 import com.google.gson.Gson;
 
-@Path("list/{listName}")
+@Path("/users/{username}/list/{listName}")
 public class Listas {
     
     private List<String> list = new ArrayList<>();
@@ -30,22 +30,25 @@ public class Listas {
 
     @GET 
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getList(@PathParam("listName") String listName) { 
-        System.out.format("Entró a getList en Usuario con: %s%n",listName);
+    public Response getList(@PathParam("listName") String listName,
+                            @PathParam("username") String username) { 
+        System.out.format("Entró a getList en Usuario con " + listName + " y nombre de lista: " + listName);
         return Response.status(Response.Status.OK).entity(gsonParser.toJson(list)).build();
     }  
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createList(@PathParam("listName") String listName) { 
-        System.out.format("Entró a createList en Usuario con: %s%n",listName);
+    public Response createList(@PathParam("listName") String listName,
+                               @PathParam("username") String username) { 
+        System.out.format("Entró a getList en Usuario con " + listName + " y nombre de lista: " + listName);
         return Response.status(Status.CREATED).build();
     }
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteList(@PathParam("listName") String listName) {
-    	System.out.format("Entró a deleteList en Usuario con: %s%n",listName);
+    public Response deleteList(@PathParam("listName") String listName,
+                               @PathParam("username") String username) { 
+        System.out.format("Entró a getList en Usuario con " + listName + " y nombre de lista: " + listName);
         return Response.status(Status.OK).build();    
     }
     
