@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -40,5 +41,12 @@ public class Listas {
     public Response createList(@PathParam("listName") String listName) { 
         System.out.format("Entró a createList en Usuario con: %s%n",listName);
         return Response.status(Status.CREATED).build();
-    }   
+    }
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteList(@PathParam("listName") String listName) {
+    	System.out.format("Entró a deleteList en Usuario con: %s%n",listName);
+        return Response.status(Status.OK).build();    
+    }
+    
 }

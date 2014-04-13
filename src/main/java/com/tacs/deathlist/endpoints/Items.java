@@ -1,6 +1,7 @@
 package com.tacs.deathlist.endpoints;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -28,5 +29,11 @@ public class Items {
         System.out.format("Entró a voteItem en Item con: %s%n",itemName);
         return Response.status(Status.CREATED).build();
     }   
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteItem(@PathParam("itemName") String itemName) {
+		System.out.format("Entró a deleteItem en Item con: %s%n", itemName);
+		return Response.status(Status.OK).build();
+	}
 
 }
