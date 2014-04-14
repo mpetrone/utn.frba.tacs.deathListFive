@@ -11,32 +11,48 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-@Path("item/{itemName}")
+@Path("/user/{username}/list/{listName}/item/{itemName}")
 public class Items {
-	
-	// Crea un nuevo ítem en una lista.
+
+	/**
+	 * Crea un nuevo ítem en una lista.
+	 * 
+	 * @param userName
+	 * @param listName
+	 * @param itemName
+	 * @return
+	 */
 	@POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createItem(@PathParam("itemName") String itemName) { 
-        System.out.format("Entró a createItem en Item con: %s%n",itemName);
-        return Response.status(Status.CREATED).build();
-    }
-	
-	// Votación de un ítem.
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createItem(@PathParam("userName") String userName,
+			@PathParam("listName") String listName,
+			@PathParam("itemName") String itemName) {
+		return Response.status(Status.CREATED).build();
+	}
+
+	/**
+	 * Votación de un ítem.
+	 * 
+	 * @param itemName
+	 * @return
+	 */
 	@PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response voteItem(@PathParam("itemName") String itemName) { 
-        System.out.format("Entró a voteItem en Item con: %s%n",itemName);
-        return Response.status(Status.CREATED).build();
-    } 
-	
-	// Elimina un item.
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response voteItem(@PathParam("itemName") String itemName) {
+		return Response.status(Status.CREATED).build();
+	}
+
+	/**
+	 * Elimina un item.
+	 * 
+	 * @param itemName
+	 * @return
+	 */
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteItem(@PathParam("itemName") String itemName) {
-		System.out.format("Entró a deleteItem en Item con: %s%n", itemName);
 		return Response.status(Status.OK).build();
 	}
 
