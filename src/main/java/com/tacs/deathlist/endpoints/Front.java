@@ -34,6 +34,10 @@ public class Front {
         front = sw.toString();
     }
     
+    /**
+     * Retorna la pagina principal en html.
+     * @return el html
+     */
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response getFront() { 

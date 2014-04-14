@@ -40,7 +40,7 @@ public class ListasTest {
 
     @Test
     public void testGetLists() {
-        String jsonResponse = target.path("list/lista1").request().get(String.class);
+        String jsonResponse = target.path("/users/usuario1/list/lista1").request().get(String.class);
         
         assertNotNull(jsonResponse);
         assertTrue(!jsonResponse.isEmpty());

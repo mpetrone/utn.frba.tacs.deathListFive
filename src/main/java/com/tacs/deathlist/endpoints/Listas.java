@@ -27,29 +27,47 @@ public class Listas {
         list.add("elemento 2");
         list.add("elemento 3");
     }
-
+  
+    /**
+     * Recupera una lista del set de listas de un usuario.
+     * @param listName
+     * @param username
+     * @return the http response
+     */
     @GET 
     @Produces(MediaType.APPLICATION_JSON)
     public Response getList(@PathParam("listName") String listName,
                             @PathParam("username") String username) { 
-        System.out.format("Entró a getList en Usuario con " + listName + " y nombre de lista: " + listName);
+        System.out.format("Entró a getList en Usuario con " + username + " y nombre de lista " + listName);
         return Response.status(Response.Status.OK).entity(gsonParser.toJson(list)).build();
-    }  
+    }
     
-    @POST
+    /**
+     * Crea una nueva lista.
+     * @param listName
+     * @param username
+     * @return the http response
+     */
+    @POST 
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createList(@PathParam("listName") String listName,
                                @PathParam("username") String username) { 
-        System.out.format("Entró a getList en Usuario con " + listName + " y nombre de lista: " + listName);
+        System.out.format("Entró a createList en Usuario con " + username + " y nombre de lista " + listName);
         return Response.status(Status.CREATED).build();
     }
-    @DELETE
+    
+    /**
+     * Elimina una lista del set de listas de un usuario.
+     * @param listName
+     * @param username
+     * @return the http response
+     */
+    @DELETE 
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteList(@PathParam("listName") String listName,
                                @PathParam("username") String username) { 
-        System.out.format("Entró a getList en Usuario con " + listName + " y nombre de lista: " + listName);
+        System.out.format("Entró a deleteList en Usuario con " + username + " y nombre de lista " + listName);
         return Response.status(Status.OK).build();    
     }
-    
 }
