@@ -32,7 +32,7 @@ public class FrontTest {
 
     
     @Test
-    public void testGetLists() {
+    public void testGetFront() {
         String frontHtml = target.path("front").request().get(String.class);
         
         assertNotNull(frontHtml);
