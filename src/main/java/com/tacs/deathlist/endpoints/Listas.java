@@ -38,7 +38,7 @@ public class Listas {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getList(@PathParam("listName") String listName,
                             @PathParam("username") String username) { 
-        System.out.format("Entró a getList en Usuario con " + username + " y nombre de lista " + listName);
+        System.out.format("Entró a getList en Listas con " + username + " y nombre de lista " + listName + "%n");
         return Response.status(Response.Status.OK).entity(gsonParser.toJson(list)).build();
     }
     
@@ -53,7 +53,7 @@ public class Listas {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createList(@PathParam("listName") String listName,
                                @PathParam("username") String username) { 
-        System.out.format("Entró a createList en Usuario con " + username + " y nombre de lista " + listName);
+        System.out.format("Entró a createList en Listas con " + username + " y nombre de lista " + listName + "%n");
         return Response.status(Status.CREATED).build();
     }
     
@@ -67,7 +67,7 @@ public class Listas {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteList(@PathParam("listName") String listName,
                                @PathParam("username") String username) { 
-        System.out.format("Entró a deleteList en Usuario con " + username + " y nombre de lista " + listName);
+        System.out.format("Entró a deleteList en Listas con " + username + " y nombre de lista " + listName + "%n");
         return Response.status(Status.OK).build();    
     }
 }
