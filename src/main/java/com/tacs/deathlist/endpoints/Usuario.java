@@ -31,7 +31,7 @@ public class Usuario {
 
 	// Recupera todas las listas de un user.
 	@GET
-	@Path("/list")
+	@Path("/lists")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllLists(@PathParam("username") String username) {
 		System.out.format("Entró a getAllLists en Usuario con: %s%n", username);

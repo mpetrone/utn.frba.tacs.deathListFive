@@ -37,7 +37,7 @@ public class UsuarioTest {
                               
     @Test
     public void testGetAllLists() {
-        String jsonResponse = target.path("/user/usuario1/list").request().get(String.class);
+        String jsonResponse = target.path("/user/usuario1/lists").request().get(String.class);
         
         assertNotNull(jsonResponse);
         assertTrue(!jsonResponse.isEmpty());
