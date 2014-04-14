@@ -40,7 +40,9 @@ public class Items {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response voteItem(@PathParam("itemName") String itemName) {
+	public Response voteItem(@PathParam("userName") String userName,
+			@PathParam("listName") String listName,
+			@PathParam("itemName") String itemName) {
 		return Response.status(Status.CREATED).build();
 	}
 
@@ -52,7 +54,9 @@ public class Items {
 	 */
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response deleteItem(@PathParam("itemName") String itemName) {
+	public Response deleteItem(@PathParam("userName") String userName,
+			@PathParam("listName") String listName,
+			@PathParam("itemName") String itemName) {
 		return Response.status(Status.OK).build();
 	}
 
