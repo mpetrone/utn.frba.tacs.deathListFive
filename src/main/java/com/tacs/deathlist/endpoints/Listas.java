@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response.Status;
 
 import com.google.gson.Gson;
 
-@Path("/users/{username}/list/{listName}")
+@Path("/user/{username}/list/{listName}")
 public class Listas {
     
     private List<String> list = new ArrayList<>();
@@ -71,3 +71,4 @@ public class Listas {
         return Response.status(Status.OK).build();    
     }
 }
+
