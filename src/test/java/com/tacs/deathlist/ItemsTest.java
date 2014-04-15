@@ -36,7 +36,7 @@ public class ItemsTest {
 	@Test
 	public void testCreateItem() {
 		// TODO: stub
-		Response jsonResponse = target.path("/user/aa/list/bb/item/cc")
+		Response jsonResponse = target.path("/users/aa/lists/bb/items/cc")
 				.request(MediaType.APPLICATION_JSON).post(Entity.json(null));
 
 		assertNotNull(jsonResponse);
@@ -46,7 +46,7 @@ public class ItemsTest {
 	@Test
 	public void testVoteItem() {
 		// TODO: stub
-		Response jsonResponse = target.path("/user/aa/list/bb/item/cc")
+		Response jsonResponse = target.path("/users/aa/lists/bb/items/cc/vote")
 				.request(MediaType.APPLICATION_JSON).put(Entity.json("up"));
 
 		assertNotNull(jsonResponse);
@@ -56,7 +56,7 @@ public class ItemsTest {
 	@Test
 	public void testDeleteItem() {
 		// TODO: stub
-		Response jsonResponse = target.path("/user/aa/list/bb/item/cc")
+		Response jsonResponse = target.path("/users/aa/lists/bb/items/cc")
 				.request(MediaType.APPLICATION_JSON).delete();
 
 		assertNotNull(jsonResponse);

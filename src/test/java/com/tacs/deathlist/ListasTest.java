@@ -38,11 +38,20 @@ public class ListasTest {
     public static void tearDown() throws Exception {
         server.shutdownNow();
     }
-
+    
+    @Test
+    public void testGetAllLists() {
+        String jsonResponse = target.path("/users/usuario1/lists").request().get(String.class);
+        
+        assertNotNull(jsonResponse);
+        assertTrue(!jsonResponse.isEmpty());
+        List<?> list = gson.fromJson(jsonResponse, List.class);
+        assertEquals(1, list.size());
+    }
 
     @Test
     public void testGetLists() {
-        String jsonResponse = target.path("/user/usuario1/list/lista1").request().get(String.class);
+        String jsonResponse = target.path("/users/usuario1/lists/lista1").request().get(String.class);
         
         assertNotNull(jsonResponse);
         assertTrue(!jsonResponse.isEmpty());
@@ -52,7 +61,7 @@ public class ListasTest {
     
     @Test
     public void testCreateLists() {
-        Response response = target.path("/user/usuario1/list/lista1").request().post(null);
+        Response response = target.path("/users/usuario1/lists/lista1").request().post(null);
         
         assertNotNull(response);
         assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
@@ -60,7 +69,7 @@ public class ListasTest {
     
     @Test
     public void testDeleteLists() {
-        Response response = target.path("/user/usuario1/list/lista1").request().delete();
+        Response response = target.path("/users/usuario1/lists/lista1").request().delete();
         
         assertNotNull(response);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());

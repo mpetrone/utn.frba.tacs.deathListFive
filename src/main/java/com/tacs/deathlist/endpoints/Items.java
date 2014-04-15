@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-@Path("/user/{username}/list/{listName}/item/{itemName}")
+@Path("/users/{username}/lists/{listName}/items/{itemName}")
 public class Items {
 
 	/**
@@ -37,8 +37,8 @@ public class Items {
 	 * @param itemName
 	 * @return
 	 */
+	@Path("vote")
 	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response voteItem(@PathParam("userName") String userName,
 			                 @PathParam("listName") String listName,

@@ -3,7 +3,7 @@ utn.frba.tacs.deathListFive
 
 Repositorio del tp del primer cuatrimestre del 2014 http://www.tacs-utn.com.ar/
 
-Integrantes:
+#### Integrantes:
 
   Damian Barbieri
   Eugenio Bruno
@@ -12,3 +12,7 @@ Integrantes:
   Matias Petrone
   Rodrigo Yanis
   
+  
+#### Instrucciones
+
+Para levantar el servidor realizar mvn exec:java  
