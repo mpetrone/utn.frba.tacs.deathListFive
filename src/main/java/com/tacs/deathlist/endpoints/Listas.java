@@ -29,8 +29,7 @@ public class Listas {
     }
     
     /**
-     * Recupera una lista del set de listas de un usuario.
-     * @param listName
+     * Recupera todas las listas de un usuario. 
      * @param username
      * @return the http response
      */
