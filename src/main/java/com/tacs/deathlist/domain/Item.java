@@ -1,16 +1,20 @@
-package com.tacs.deathlist;
+package com.tacs.deathlist.domain;
 
-public class ItemInMemory {
+public class Item {
 	
 	private String nombre;
 	private int votos;
 	
-	public ItemInMemory(String nombre) {
+	public Item(String nombre) {
 		this.nombre = nombre;		
 		this.votos = 0;
 	}
 	
-	public int getVotos() {
+	public String getNombre() {
+        return nombre;
+    }
+
+    public int getVotos() {
 		return this.votos;
 	}
 	
@@ -39,7 +43,7 @@ public class ItemInMemory {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ItemInMemory other = (ItemInMemory) obj;
+		Item other = (Item) obj;
 		if (nombre == null) {
 			if (other.nombre != null)
 				return false;

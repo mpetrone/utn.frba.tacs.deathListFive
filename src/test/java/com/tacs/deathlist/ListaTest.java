@@ -4,14 +4,17 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class ListaInMemoryTest {
+import com.tacs.deathlist.domain.Item;
+import com.tacs.deathlist.domain.Lista;
 
-    private static ListaInMemory lista;
+public class ListaTest {
+
+    private static Lista lista;
     
     @Test
     public void testAgregarItems() {    	
     	
-    	lista = new ListaInMemory("Paises");
+    	lista = new Lista("Paises");
     	
     	lista.agregarItem("Argentina");
     	lista.agregarItem("Chile");
@@ -21,7 +24,7 @@ public class ListaInMemoryTest {
     	lista.agregarItem("Argentina");
     	lista.agregarItem("Chile");
     	
-        assertEquals(5, lista.size());
+        assertEquals(7, lista.size());
         
         assertTrue(lista.existeElItemConNombre("Uruguay"));
         assertTrue(lista.existeElItemConNombre("Chile"));
@@ -31,11 +34,11 @@ public class ListaInMemoryTest {
     @Test
     public void testVotarItems() {
     	
-    	lista = new ListaInMemory("Paises");
+    	lista = new Lista("Paises");
     	
-    	ItemInMemory itemArg = new ItemInMemory("Argentina");
-    	ItemInMemory itemUru = new ItemInMemory("Uruguay");
-    	ItemInMemory itemChi = new ItemInMemory("Chile");
+    	Item itemArg = new Item("Argentina");
+    	Item itemUru = new Item("Uruguay");
+    	Item itemChi = new Item("Chile");
     	
     	lista.agregarItem("Chile");
     	lista.agregarItem("Uruguay");

@@ -35,7 +35,7 @@ public class UsuarioTest {
     }
     
     @Test
-    public void testModUser() {
+    public void testGetUser() {
         Response response = target.path("/users/usuario1").request().get();
         
         assertNotNull(response);

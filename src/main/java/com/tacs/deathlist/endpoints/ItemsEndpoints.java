@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 @Path("/users/{username}/lists/{listName}/items/{itemName}")
-public class Items {
+public class ItemsEndpoints {
 
 	/**
 	 * Crea un nuevo ítem en una lista.

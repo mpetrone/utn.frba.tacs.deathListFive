@@ -1,6 +1,6 @@
 package com.tacs.deathlist.endpoints;
 
-import java.util.ArrayList;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -15,18 +15,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.tacs.deathlist.dao.InMemoryListDao;
+import com.tacs.deathlist.domain.Lista;
 
 @Path("/users/{username}/lists")
-public class Listas {
+public class ListasEnpoints {
     
-    private List<String> list = new ArrayList<>();
     private Gson gsonParser = new Gson();
-    
-    public Listas() {
-        list.add("elemento 1");
-        list.add("elemento 2");
-        list.add("elemento 3");
-    }
+    private InMemoryListDao dao = new InMemoryListDao();
     
     /**
      * Recupera todas las listas de un usuario. 
@@ -36,10 +33,8 @@ public class Listas {
     @GET 
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllLists(@PathParam("username") String username) { 
-        System.out.println("Entró a getAllLists con Usuario " + username);
-        List<List<String>> listasDeUser1 = new ArrayList<List<String>>();
-        listasDeUser1.add(list);
-        return Response.status(Response.Status.OK).entity(gsonParser.toJson(listasDeUser1)).build();
+        List<Lista> listas = dao.getAllLists();
+        return Response.status(Response.Status.OK).entity(gsonParser.toJson(listas)).build();
     }
   
     /**
@@ -53,8 +48,14 @@ public class Listas {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getList(@PathParam("listName") String listName,
                             @PathParam("username") String username) { 
-        System.out.println("Entró a getList con Usuario " + username + " y nombre de lista " + listName);
-        return Response.status(Response.Status.OK).entity(gsonParser.toJson(list)).build();
+        Lista lista = dao.getLista(listName);
+        Response response;
+        if(lista != null){
+            response = Response.status(Response.Status.OK).entity(gsonParser.toJson(lista)).build();
+        }else{
+            response = Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return response;
     }
     
     /**
@@ -67,9 +68,16 @@ public class Listas {
     @POST 
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createList(@PathParam("listName") String listName,
+    public Response createList(String jsonBody,
+                               @PathParam("listName") String listName,
                                @PathParam("username") String username) { 
-        System.out.println("Entró a createList con Usuario " + username + " y nombre de lista " + listName);
+        Lista lista = new Lista(listName);
+        Type type = new TypeToken<List<String>>(){}.getType();
+        List<String> items = gsonParser.fromJson(jsonBody, type);
+        for (String nombreItem : items) {
+            lista.agregarItem(nombreItem);
+        }
+        dao.createLista(listName, lista);
         return Response.status(Status.CREATED).build();
     }
     
@@ -84,7 +92,7 @@ public class Listas {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteList(@PathParam("listName") String listName,
                                @PathParam("username") String username) { 
-        System.out.println("Entró a deleteList con Usuario " + username + " y nombre de lista " + listName);
+        dao.deleteLista(listName);
         return Response.status(Status.OK).build();    
     }
 }
