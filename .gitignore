@@ -4,3 +4,5 @@
 .proyect
 .settings
 .project
+/logs
+velocity.log
