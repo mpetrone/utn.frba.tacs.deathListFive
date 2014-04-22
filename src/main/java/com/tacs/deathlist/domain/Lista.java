@@ -74,7 +74,7 @@ public class Lista {
             //TODO: lanzar excepcion? el item votado no existe
         }
     }
-
+    
     @Override
     public String toString() {
         return "ListaInMemory [nombre=" + nombre + ", items=" + items + "]";
@@ -82,7 +82,12 @@ public class Lista {
 
     public boolean existeElItemConNombre(String nombre) {
         return items.contains(new Item(nombre));
-    }	
+    }
+
+	public int getVotosDelItem(String itemName) {
+		// Devuelve la cantidad de votos de un item		
+		return this.getVotosDelItemEnLaPosicion(this.posicionDelItem(new Item(itemName)));
+	}	
 
 
 }
