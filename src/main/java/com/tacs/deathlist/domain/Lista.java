@@ -37,6 +37,23 @@ public class Lista {
     public void agregarItem(String nombreDeNuevoItem) {
         Item nuevoItem = new Item(nombreDeNuevoItem);
         this.items.add(nuevoItem);
+        /* TODO: Se pueden agregar items duplicados (mismo nombre) a la lista?  
+         Sino habria que verificar si ya existe en la lista antes de agregarlo:
+         Yo lo haría así:
+        boolean itemYaExisteEnLista = false;
+        for (Item item : items) {
+        	if (item.getNombre().equals(nombreDeNuevoItem)) {
+        		itemYaExisteEnLista = true;
+        	}
+        }
+        
+        if (!itemYaExisteEnLista) {
+        	Item nuevoItem = new Item(nombreDeNuevoItem);
+            this.items.add(nuevoItem);
+        } else {
+        	// Informar que el item ya existia
+        }
+        */ 
     }
 
     /**
