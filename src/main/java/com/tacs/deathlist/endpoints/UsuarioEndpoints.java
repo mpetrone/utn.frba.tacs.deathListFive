@@ -81,6 +81,9 @@ public class UsuarioEndpoints {
     	user = dao.getUsuario(username);
     	user.modifyUsername(nuevoUsername);
     	dao.modifyUsuario(username, user);
+    	// TODO: aca queda mapeado el nombre viejo del usuario (username) y en el objeto (user)
+    	// tiene el nuevo nombre de usuario (nuevoUsername), no habría que eliminar la
+    	// entrada vieja del map y agregar una nueva con la key nuevoUsername?
         return Response.status(Response.Status.OK).build();
     }
 

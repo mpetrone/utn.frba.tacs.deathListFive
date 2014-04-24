@@ -17,6 +17,11 @@ public class InMemoryUserDao implements UserDao {
 	@Override
 	public void modifyUsuario(String username, Usuario user){
 		usuarios.put(username, user);
+		/*TODO: Yo validaría que la key username no exista en usuarios.keySet()
+		 antes de hacer el put y si existe, devolver algo como nombre de usuario no disponible
+		 Sin validar eso, cualquier usuario podría destruir otro usuario cambiando de nombre
+	     Lo mismo aplica para createUsuario
+		*/
 	}
 	
 	@Override

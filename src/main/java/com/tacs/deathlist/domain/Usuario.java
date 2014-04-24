@@ -31,6 +31,7 @@ public class Usuario {
     }
     
     public boolean existeLista(String nombreLista) {
-    	return listas.contains(new Lista(nombreLista));    	
+    	return listas.contains(new Lista(nombreLista));
+    	// TODO: para que funcione el contains hay que redefinir equals y hashcode en Lista, no?
     }
 }
