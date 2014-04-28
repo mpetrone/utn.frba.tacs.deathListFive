@@ -11,9 +11,20 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.tacs.deathlist.dao.InMemoryItemDao;
+import com.tacs.deathlist.domain.Item;
+//import com.tacs.deathlist.domain.Usuario;
+//import com.tacs.deathlist.endpoints.ListasEnpoints;
+import com.tacs.deathlist.domain.Lista;
+
 @Path("/users/{username}/lists/{listName}/items/{itemName}")
 public class ItemsEndpoints {
 
+    private Gson gsonParser = new Gson();
+    private InMemoryItemDao dao = new InMemoryItemDao();	
+	
 	/**
 	 * Crea un nuevo ítem en una lista.
 	 * 
@@ -28,6 +39,9 @@ public class ItemsEndpoints {
 	public Response createItem(@PathParam("userName") String userName,
 			                   @PathParam("listName") String listName,
 			                   @PathParam("itemName") String itemName) {
+		//TODO: Acá habría que agregarlo a la lista??
+		Item item = new Item(itemName);
+		dao.createItem(itemName, item);
 		return Response.status(Status.CREATED).build();
 	}
 
@@ -43,6 +57,8 @@ public class ItemsEndpoints {
 	public Response voteItem(@PathParam("userName") String userName,
 			                 @PathParam("listName") String listName,
 			                 @PathParam("itemName") String itemName) {
+		//TODO: Acá habría que verificar que el item corresponda al usuario y lista, no?		
+		dao.voteItem(itemName);
 		return Response.status(Status.CREATED).build();
 	}
 
@@ -57,6 +73,7 @@ public class ItemsEndpoints {
 	public Response deleteItem(@PathParam("userName") String userName,
 			                   @PathParam("listName") String listName,
 			                   @PathParam("itemName") String itemName) {
+		dao.deteleItem(itemName);
 		return Response.status(Status.OK).build();
 	}
 
