@@ -117,8 +117,7 @@ public class ItemsEndToEndTest {
 	private void voteItem(String item) {
 		Response jsonResponse = target.path("/users/usuario1/lists/milista1/items/" + item + "/vote")
 				.request(MediaType.APPLICATION_JSON).put(Entity.json("up"));
-/*		Response jsonResponse = target.path("/users/aa/lists/bb/items/cc/vote")
-				.request(MediaType.APPLICATION_JSON).put(Entity.json("up"));*/
+
 		assertNotNull(jsonResponse);
 		assertEquals(Status.CREATED.getStatusCode(), jsonResponse.getStatus());		
 	}

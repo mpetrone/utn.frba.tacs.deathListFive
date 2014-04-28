@@ -22,8 +22,11 @@ public class InMemoryItemDao implements ItemDao {
 	@Override
 	public void voteItem(String itemName) {
 		Item item = items.remove(itemName);
-		item.recibirVoto();
-		items.put(itemName, item);
+		if(item != null){
+			item.recibirVoto();
+			items.put(itemName, item);
+		}
+		
 	}
 
 }
