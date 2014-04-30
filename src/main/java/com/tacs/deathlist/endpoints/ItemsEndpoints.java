@@ -11,13 +11,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.tacs.deathlist.dao.InMemoryItemDao;
-import com.tacs.deathlist.domain.Item;
+import com.tacs.deathlist.dao.InMemoryRepository;
+import com.tacs.deathlist.dao.Repository;
 
-@Path("/users/{username}/lists/{listName}/items/{itemName}")
+@Path("/users/{userName}/lists/{listName}/items/{itemName}")
 public class ItemsEndpoints {
 
-    private InMemoryItemDao dao = new InMemoryItemDao();	
+    private Repository dao = new InMemoryRepository();	
 	
 	/**
 	 * Crea un nuevo ítem en una lista.
@@ -33,8 +33,7 @@ public class ItemsEndpoints {
 	public Response createItem(@PathParam("userName") String userName,
 			                   @PathParam("listName") String listName,
 			                   @PathParam("itemName") String itemName) {
-		Item item = new Item(itemName);
-		dao.createItem(itemName, item);
+		dao.createItem(userName, listName, itemName);
 		return Response.status(Status.CREATED).build();
 	}
 
@@ -50,7 +49,7 @@ public class ItemsEndpoints {
 	public Response voteItem(@PathParam("userName") String userName,
 			                 @PathParam("listName") String listName,
 			                 @PathParam("itemName") String itemName) {	
-		dao.voteItem(itemName);
+		dao.voteItem(userName, listName, itemName);
 		return Response.status(Status.CREATED).build();
 	}
 
@@ -65,7 +64,7 @@ public class ItemsEndpoints {
 	public Response deleteItem(@PathParam("userName") String userName,
 			                   @PathParam("listName") String listName,
 			                   @PathParam("itemName") String itemName) {
-		dao.deteleItem(itemName);
+		dao.deteleItem(userName, listName, itemName);
 		return Response.status(Status.OK).build();
 	}
 

@@ -1,9 +1,12 @@
 package com.tacs.deathlist.domain;
 
-public class Item {
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
+public class Item implements Comparable<Item>{
 	
 	private String nombre;
-	private int votos;
+	private Integer votos;
 	
 	public Item(String nombre) {
 		this.nombre = nombre;		
@@ -14,7 +17,7 @@ public class Item {
         return nombre;
     }
 
-    public int getVotos() {
+    public Integer getVotos() {
 		return this.votos;
 	}
 	
@@ -27,31 +30,27 @@ public class Item {
 		return "ItemInMemory [nombre=" + nombre + ", votos=" + votos + "]";
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
-		return result;
-	}
+    @Override
+    public int hashCode(){
+        return new HashCodeBuilder()
+            .append(nombre)
+            .toHashCode();
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Item other = (Item) obj;
-		if (nombre == null) {
-			if (other.nombre != null)
-				return false;
-		} else if (!nombre.equals(other.nombre))
-			return false;
-		return true;
-	}
-	
-	
+    @Override
+    public boolean equals(final Object obj){
+        if(obj instanceof Item){
+            final Item other = (Item) obj;
+            return new EqualsBuilder()
+                .append(nombre, other.getNombre())
+                .isEquals();
+        } else{
+            return false;
+        }
+    }
 
+    @Override
+    public int compareTo(Item o) {
+        return o.getVotos().compareTo(this.votos);
+    }
 }

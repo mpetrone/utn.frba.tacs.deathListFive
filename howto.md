@@ -8,7 +8,8 @@ Endpoints:
 
 * /deathlist/users/{username}
 	POST: createUser: Crea un nuevo usuario
-	PUT: modifyUser: Modifica un usuario existente
+	GET: getUser: Obtiene la informacion de un determinado usuario
+	DELETE: deleteUser: Elimina un usuario
 
 * /deathlist/users/{username}/lists
 	GET: getAllLists: Obtiene todas las listas de un determinado usuario
@@ -23,7 +24,7 @@ Endpoints:
 	DELETE: deleteItem: Elimina un item
 	
 * /deathlist/users/{username}/lists/{listName}/items/{itemName}/vote
-	PUT: voteItem: Vota por un item
+	PUT: voteItem: Vota item
 	
 * /deathlist/front
 	GET: Retorna la página principal de la aplicación

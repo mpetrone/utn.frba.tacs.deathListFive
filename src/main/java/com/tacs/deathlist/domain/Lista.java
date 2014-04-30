@@ -1,110 +1,76 @@
 package com.tacs.deathlist.domain;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.LinkedList;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 public class Lista {
 
     private String nombre;
-    private List<Item> items;
+    private LinkedList<Item> items;
 
     public Lista(String nombre) {
         this.nombre = nombre;
-        this.items = new ArrayList<Item>();
+        this.items = new LinkedList<Item>();
     }
 
     public String getNombre() {
         return this.nombre;
     }
 
-    public int size() {
-        return this.items.size();
-    }
-
-    public boolean existeElItem(Item item) {
-        return this.items.contains(item);
-    }
-
-    public int posicionDelItem(Item item) {
-        return this.items.indexOf(item);
-    }
-
-    private int getVotosDelItemEnLaPosicion(int posicion) {
-        return this.items.get(posicion).getVotos();
+    public boolean existeItem(String itemName) {
+        return this.items.contains(new Item(itemName));
     }
 
     public void agregarItem(String nombreDeNuevoItem) {
-        Item nuevoItem = new Item(nombreDeNuevoItem);
-        this.items.add(nuevoItem);
-        /* TODO: Se pueden agregar items duplicados (mismo nombre) a la lista?  
-         Sino habria que verificar si ya existe en la lista antes de agregarlo:
-         Yo lo haría así:
-        boolean itemYaExisteEnLista = false;
-        for (Item item : items) {
-        	if (item.getNombre().equals(nombreDeNuevoItem)) {
-        		itemYaExisteEnLista = true;
-        	}
-        }
-        
-        if (!itemYaExisteEnLista) {
-        	Item nuevoItem = new Item(nombreDeNuevoItem);
-            this.items.add(nuevoItem);
-        } else {
-        	// Informar que el item ya existia
-        }
-        */ 
-    }
-
-    /**
-     * Este metodo registra el voto de un item de la lista
-     * y asegura que permanezca ordenada por cantidad de votos.
-     * 
-     * @param nombreDelItem El nombre del item votado.
-     */
-    public void votarItem(String nombreDelItem) {
-
-        int posicionDelItemVotado = this.posicionDelItem(new Item(nombreDelItem));
-        Item itemVotado;
-        int posicionNueva;
-
-        if (posicionDelItemVotado != -1) {
-
-            itemVotado = this.items.get(posicionDelItemVotado);
-            itemVotado.recibirVoto();
-
-            // si el voto fue para el primer item del ranking, no hay que intercambiar posiciones.
-            if (posicionDelItemVotado > 0) {
-
-                posicionNueva = posicionDelItemVotado;
-                // la posicionNueva del item avanza tanto como corresponda, puede no avanzar nada
-                while (posicionNueva >= 1 && this.getVotosDelItemEnLaPosicion(posicionDelItemVotado) > this.getVotosDelItemEnLaPosicion(posicionNueva - 1)) {
-                    posicionNueva--;
-                }
-
-                Collections.swap(this.items, posicionNueva, posicionDelItemVotado);
-            }
-
-
-        }
-        else {
-            //TODO: lanzar excepcion? el item votado no existe
+        if(!items.contains(new Item(nombreDeNuevoItem))){
+            items.add(new Item(nombreDeNuevoItem));
         }
     }
     
+    public Item getItem(String itemName) {
+        for (Item item : items) {
+            if(itemName.equals(item.getNombre())){
+                return item;
+            }
+        }
+        return null;
+    }   
+    
+    public void eliminarItem(String itemName){
+        items.remove(new Item(itemName));
+    }
+    
+    public void votarItem(String itemName) {
+        if(existeItem(itemName)){
+            getItem(itemName).recibirVoto();
+            Collections.sort(items);
+        }
+    }
+
     @Override
     public String toString() {
         return "ListaInMemory [nombre=" + nombre + ", items=" + items + "]";
     }
 
-    public boolean existeElItemConNombre(String nombre) {
-        return items.contains(new Item(nombre));
+    @Override
+    public int hashCode(){
+        return new HashCodeBuilder()
+        .append(nombre)
+        .toHashCode();
     }
 
-	public int getVotosDelItem(String itemName) {
-		// Devuelve la cantidad de votos de un item		
-		return this.getVotosDelItemEnLaPosicion(this.posicionDelItem(new Item(itemName)));
-	}	
-
-
+    @Override
+    public boolean equals(final Object obj){
+        if(obj instanceof Lista){
+            final Lista other = (Lista) obj;
+            return new EqualsBuilder()
+            .append(nombre, other.getNombre())
+            .isEquals();
+        } else{
+            return false;
+        }
+    }
 }
