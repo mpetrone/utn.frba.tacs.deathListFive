@@ -9,67 +9,80 @@ import com.tacs.deathlist.domain.Usuario;
 
 public class InMemoryRepository implements Repository{
     
-    private static Map<String,Usuario> map = new HashMap<String, Usuario>();
+    private static Map<String,Usuario> usuarios = new HashMap<String, Usuario>();
 
-    @Override
-    public Usuario getUsuario(String username) {
-        return map.get(username);
-    }
+	@Override
+	public Usuario getUsuario(String username) {
 
-    @Override
-    public void createUsuario(String username, Usuario user) {
-        map.put(username, user);
-    }
+		Usuario usuario = usuarios.get(username);
+
+		if (usuario == null)
+			throw new UsuarioInexistenteException("El usuario " + username
+					+ " no existe en el sistema.");
+
+		return usuario;
+	}
+
+	@Override
+	public void createUsuario(String username, Usuario user) {
+
+		if (usuarios.containsKey(username))
+			throw new UsuarioRepetidoException(
+					"Ya existe un usuario con el nombre " + username + ".");
+
+		usuarios.put(username, user);
+	}
     
-    @Override
-    public void deleteUsuario(String username) {
-        map.remove(username);
-    }
+	@Override
+	public void deleteUsuario(String username) {
+		if (usuarios.remove(username) == null)
+			throw new UsuarioInexistenteException("El usuario " + username
+					+ " no existe en el sistema.");
+	}
 
-    @Override
-    public List<Lista> getAllLists(String username) {
-        if(map.containsKey(username)){
-            return map.get(username).getListas();
-        }
-        return null;
-    }
+	@Override
+	public List<Lista> getAllLists(String username) {
 
-    @Override
-    public Lista getLista(String username, String nombreLista) {
-        if(map.containsKey(username)){
-            return map.get(username).getLista(nombreLista);
-        }
-        return null;
-    }
+		return this.getUsuario(username).getListas(); // lanza excepcion si el usuario no existe
 
-    @Override
-    public void createLista(String username, String nombreLista) {
-        if(map.containsKey(username)){
-            map.get(username).agregarLista(nombreLista);;
-        }
-    }
+	}
 
-    @Override
-    public void deleteLista(String username, String nombreLista) {
-        if(map.containsKey(username)){
-            map.get(username).eliminarLista(nombreLista);;
-        }
-    }
+	@Override
+	public Lista getLista(String username, String nombreLista) {
+
+		return this.getUsuario(username).getLista(nombreLista);
+		// si el usuario o la lista no existen, se lanza la excepcion correspondiente.
+	}
+    
+	@Override
+	public void createLista(String username, String nombreLista) {
+
+		this.getUsuario(username).agregarLista(nombreLista);
+		// si el usuario no existe o la lista es repetida, se lanza la excepcion correspondiente.
+
+	}
+
+	@Override
+	public void deleteLista(String username, String nombreLista) {
+
+		this.getUsuario(username).eliminarLista(nombreLista);
+		// si el usuario o la lista no existen, se lanza la excepcion correspondiente.
+	}
 
     @Override
     public void createItem(String username, String nombreLista, String itemName) {
-        if(map.containsKey(username)){
-            if(map.get(username).existeLista(nombreLista)){
-                map.get(username).getLista(nombreLista).agregarItem(itemName);
+        if(usuarios.containsKey(username)){
+            if(usuarios.get(username).existeLista(nombreLista)){
+                usuarios.get(username).getLista(nombreLista).agregarItem(itemName);
             }
         }
     }
 
     @Override
     public void deteleItem(String username, String nombreLista, String itemName) {
-        if(map.containsKey(username)){
-            if(map.get(username).existeLista(nombreLista)){
-                map.get(username).getLista(nombreLista).eliminarItem(itemName);;
+        if(usuarios.containsKey(username)){
+            if(usuarios.get(username).existeLista(nombreLista)){
+                usuarios.get(username).getLista(nombreLista).eliminarItem(itemName);;
             }
         }
         
@@ -77,9 +90,9 @@ public class InMemoryRepository implements Repository{
 
     @Override
     public void voteItem(String username, String nombreLista, String itemName) {
-        if(map.containsKey(username)){
-            if(map.get(username).existeLista(nombreLista)){
-                map.get(username).getLista(nombreLista).votarItem(itemName);
+        if(usuarios.containsKey(username)){
+            if(usuarios.get(username).existeLista(nombreLista)){
+                usuarios.get(username).getLista(nombreLista).votarItem(itemName);
             }
         }
     }

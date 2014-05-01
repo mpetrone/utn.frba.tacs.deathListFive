@@ -17,7 +17,7 @@ import com.tacs.deathlist.dao.Repository;
 @Path("/users/{userName}/lists/{listName}/items/{itemName}")
 public class ItemsEndpoints {
 
-    private Repository dao = new InMemoryRepository();	
+    private Repository repository = new InMemoryRepository();	
 	
 	/**
 	 * Crea un nuevo ítem en una lista.
@@ -33,7 +33,7 @@ public class ItemsEndpoints {
 	public Response createItem(@PathParam("userName") String userName,
 			                   @PathParam("listName") String listName,
 			                   @PathParam("itemName") String itemName) {
-		dao.createItem(userName, listName, itemName);
+		repository.createItem(userName, listName, itemName);
 		return Response.status(Status.CREATED).build();
 	}
 
@@ -49,7 +49,7 @@ public class ItemsEndpoints {
 	public Response voteItem(@PathParam("userName") String userName,
 			                 @PathParam("listName") String listName,
 			                 @PathParam("itemName") String itemName) {	
-		dao.voteItem(userName, listName, itemName);
+		repository.voteItem(userName, listName, itemName);
 		return Response.status(Status.CREATED).build();
 	}
 
@@ -64,7 +64,7 @@ public class ItemsEndpoints {
 	public Response deleteItem(@PathParam("userName") String userName,
 			                   @PathParam("listName") String listName,
 			                   @PathParam("itemName") String itemName) {
-		dao.deteleItem(userName, listName, itemName);
+		repository.deteleItem(userName, listName, itemName);
 		return Response.status(Status.OK).build();
 	}
 

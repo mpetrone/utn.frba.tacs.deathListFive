@@ -48,6 +48,8 @@ public class ListasEndToEndTest {
         
         assertNotNull(lista);
         assertEquals("el nombre de la lista es erroneo", lista1, lista.getNombre());
+        
+        listasHelper.deleteList(USERNAME, "Paises");
     }
     
     @Test
@@ -68,6 +70,10 @@ public class ListasEndToEndTest {
         assertTrue(listas.contains(new Lista(lista1)));
         assertTrue(listas.contains(new Lista(lista2)));
         assertTrue(listas.contains(new Lista(lista3)));
+        
+        listasHelper.deleteList(USERNAME, "Paises");
+        listasHelper.deleteList(USERNAME, "Equipos");
+        listasHelper.deleteList(USERNAME, "Ciudades");
     }
     
     @Test

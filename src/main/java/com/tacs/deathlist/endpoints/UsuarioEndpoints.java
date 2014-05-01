@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 import com.google.gson.Gson;
 import com.tacs.deathlist.dao.InMemoryRepository;
 import com.tacs.deathlist.dao.Repository;
+import com.tacs.deathlist.dao.UsuarioInexistenteException;
 import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
 
@@ -20,7 +21,7 @@ import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
 public class UsuarioEndpoints {
 
     private Gson gsonParser = new Gson();
-    private Repository dao = new InMemoryRepository();  
+    private Repository repository = new InMemoryRepository();  
 
     /**
      * Recupera un Usuario.
@@ -30,15 +31,19 @@ public class UsuarioEndpoints {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUser(@PathParam("username") String username) {
-        Usuario user = dao.getUsuario(username);
+        Usuario user;
         Response response;
-        if (user != null){
-            response = Response.status(Response.Status.OK).entity(gsonParser.toJson(user)).build();
-        }
-        else{
-            response = Response.status(Response.Status.NOT_FOUND).build();
-        }
-        return response;
+        
+		try {
+			user = repository.getUsuario(username);
+			response = Response.status(Response.Status.OK)
+					.entity(gsonParser.toJson(user)).build();
+			return response;
+		} catch (UsuarioInexistenteException uie) {
+			response = Response.status(Response.Status.NOT_FOUND).build();
+			return response;
+		}
+        
     }
 
     /**
@@ -53,7 +58,7 @@ public class UsuarioEndpoints {
             String jsonRequest) {
         UserCreationRequest request = gsonParser.fromJson(jsonRequest, UserCreationRequest.class);
         Usuario user = new Usuario(username, request.getUid(), request.getToken());
-        dao.createUsuario(username, user);
+        repository.createUsuario(username, user);
         return Response.status(Response.Status.CREATED).build();
     }
 
@@ -64,7 +69,7 @@ public class UsuarioEndpoints {
      */
     @DELETE
     public Response deleteUser(@PathParam("username") String username) {
-        dao.deleteUsuario(username);
+        repository.deleteUsuario(username);
         return Response.status(Response.Status.OK).build();
     }
 }

@@ -18,7 +18,7 @@ import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
 public class UsuarioEndToEndTest {
 
     private static HttpServer server;
-    private UsuariosHelper userHelper = new UsuariosHelper();
+    private static UsuariosHelper userHelper = new UsuariosHelper();
 
     @BeforeClass
     public static void setUp() throws Exception {
@@ -41,9 +41,11 @@ public class UsuarioEndToEndTest {
         Usuario user = userHelper.getUserParseado(username);
         
         assertNotNull(user);
-        assertEquals("el username es invalido", username, user.getUsername());
+        assertEquals("el username es invalido", username, user.getNombre());
         assertEquals("el uid es invalido", uid, user.getUid());
         assertEquals("el token es invalido", token, user.getToken());
+        
+        userHelper.deleteUser("john snow");
     }
     
     @Test
