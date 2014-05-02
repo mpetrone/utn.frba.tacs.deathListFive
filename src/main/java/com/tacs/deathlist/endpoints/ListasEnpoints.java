@@ -14,10 +14,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.google.gson.Gson;
-import com.tacs.deathlist.dao.InMemoryRepository;
-import com.tacs.deathlist.dao.Repository;
 import com.tacs.deathlist.domain.Lista;
-import com.tacs.deathlist.domain.ListaInexistenteException;
+import com.tacs.deathlist.repository.InMemoryRepository;
+import com.tacs.deathlist.repository.Repository;
+
 
 @Path("/users/{username}/lists")
 public class ListasEnpoints {
@@ -46,20 +46,18 @@ public class ListasEnpoints {
     @Path("{listName}")
     @GET 
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getList(@PathParam("listName") String listName,
-                            @PathParam("username") String username) { 
-        Lista lista;
-        Response response;
-		try {
-			lista = repository.getLista(username, listName);
-			response = Response.status(Response.Status.OK)
-					.entity(gsonParser.toJson(lista)).build();
-			return response;
-		} catch (ListaInexistenteException lie) {
-			response = Response.status(Response.Status.NOT_FOUND).build();
-			return response;
-		}
-    }
+	public Response getList(@PathParam("listName") String listName,
+							@PathParam("username") String username) {
+		Lista lista;
+		Response response;
+
+		lista = repository.getLista(username, listName);
+		response = Response.status(Response.Status.OK)
+				.entity(gsonParser.toJson(lista)).build();
+		
+		return response;
+
+	}
     
     /**
      * Crea una nueva lista.

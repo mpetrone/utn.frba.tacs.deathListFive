@@ -49,7 +49,7 @@ public class UsuarioEndToEndTest {
     }
     
     @Test
-    public void crearUsuarioYEliminarloYChequamosQueNoExista() {
+    public void crearUsuarioYEliminarloYChequarQueNoExista() {
         String username = "john snow";
         String uid = "1234";
         String token = "a token";
@@ -59,6 +59,22 @@ public class UsuarioEndToEndTest {
         checkResponse(userHelper.getUser(username), Status.OK.getStatusCode());
         checkResponse(userHelper.deleteUser(username), Status.OK.getStatusCode());
         checkResponse(userHelper.getUser(username), Status.NOT_FOUND.getStatusCode());
+    }
+    
+    @Test
+    public void crearUsuarioRepetidoYChequearProhibicion() {
+        String username = "john snow";
+        String uid = "1234";
+        String token = "a token";
+        
+        UserCreationRequest request1 = new UserCreationRequest(uid, token);
+        checkResponse(userHelper.createUser(username, request1), Status.CREATED.getStatusCode());
+        
+        UserCreationRequest request2 = new UserCreationRequest(uid, token);
+        checkResponse(userHelper.createUser(username, request2), Status.FORBIDDEN.getStatusCode());
+        
+        userHelper.deleteUser("john snow");
+        
     }
     
     

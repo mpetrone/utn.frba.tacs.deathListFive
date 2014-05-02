@@ -11,11 +11,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
-import com.tacs.deathlist.dao.InMemoryRepository;
-import com.tacs.deathlist.dao.Repository;
-import com.tacs.deathlist.dao.UsuarioInexistenteException;
 import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
+import com.tacs.deathlist.repository.InMemoryRepository;
+import com.tacs.deathlist.repository.Repository;
 
 @Path("/users/{username}")
 public class UsuarioEndpoints {
@@ -30,21 +29,17 @@ public class UsuarioEndpoints {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUser(@PathParam("username") String username) {
-        Usuario user;
-        Response response;
-        
-		try {
-			user = repository.getUsuario(username);
-			response = Response.status(Response.Status.OK)
-					.entity(gsonParser.toJson(user)).build();
-			return response;
-		} catch (UsuarioInexistenteException uie) {
-			response = Response.status(Response.Status.NOT_FOUND).build();
-			return response;
-		}
-        
-    }
+	public Response getUser(@PathParam("username") String username) {
+		Usuario user;
+		Response response;
+
+		user = repository.getUsuario(username);
+		response = Response.status(Response.Status.OK)
+				.entity(gsonParser.toJson(user)).build();
+		
+		return response;
+
+	}
 
     /**
      * Crea un nuevo Usuario.

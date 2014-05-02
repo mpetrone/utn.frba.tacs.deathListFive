@@ -80,6 +80,18 @@ public class ItemsEndToEndTest {
         assertNotNull(lista);
         assertEquals(1, lista.getItem(itemName).getVotos().intValue());
     }
+    
+    @Test
+    public void crearItemRepetidoYChequearProhibicion() {
+        String itemName = "elefante";
+
+        Response response = itemsHelper.createItem(USERNAME, LISTA_NAME, itemName);
+        checkResponse(response, Status.CREATED.getStatusCode());
+        
+        response = itemsHelper.createItem(USERNAME, LISTA_NAME, itemName);
+        checkResponse(response, Status.FORBIDDEN.getStatusCode());
+        
+    }
 
     private void checkResponse(Response response, int statusCode) {
         assertNotNull(response);

@@ -86,6 +86,16 @@ public class ListasEndToEndTest {
         checkResponse(listasHelper.getLista(USERNAME,lista1), Status.NOT_FOUND.getStatusCode());
     }
     
+    @Test
+    public void crearListaRepetidaYChequearProhibicion() {
+        String lista1 = "Paises";
+        
+        checkResponse(listasHelper.createList(USERNAME, lista1), Status.CREATED.getStatusCode());
+        checkResponse(listasHelper.createList(USERNAME, lista1), Status.FORBIDDEN.getStatusCode());
+        
+        listasHelper.deleteList(USERNAME, "Paises");
+    }
+    
     private void checkResponse(Response response, int statusCode) {
         assertNotNull(response);
         assertEquals(statusCode, response.getStatus());

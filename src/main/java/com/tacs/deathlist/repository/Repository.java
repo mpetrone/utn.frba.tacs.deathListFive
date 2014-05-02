@@ -1,4 +1,4 @@
-package com.tacs.deathlist.dao;
+package com.tacs.deathlist.repository;
 
 import java.util.List;
 

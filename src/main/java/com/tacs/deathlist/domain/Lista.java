@@ -36,13 +36,12 @@ public class Lista {
 		if (!existeItem(nombreDeNuevoItem)) {
 			if (this.getCantidadDeItems() < MAX_ITEMS)
 				items.add(new Item(nombreDeNuevoItem));
-			// logueamos la insercion de items?
 			else
-				throw new LimiteDeItemsException("La lista " + this.getNombre()
+				throw new CustomForbiddenException("La lista " + this.getNombre()
 						+ " ya tiene el número máximo permitido de items ("
 						+ MAX_ITEMS + ").");
 		} else
-			throw new ItemRepetidoException("El item " + nombreDeNuevoItem
+			throw new CustomForbiddenException("El item " + nombreDeNuevoItem
 					+ " ya existe en la lista " + this.getNombre() + ".");
 	}
     
@@ -52,15 +51,15 @@ public class Lista {
 				return item;
 			}
 		}
-		throw new ItemInexistenteException("El item " + itemName + " no existe en la lista " + this.getNombre() + ".");
+		throw new CustomNotFoundException("El item " + itemName + " no existe en la lista " + this.getNombre() + ".");
 	}
     
     public void eliminarItem(String itemName){
         if(items.remove(new Item(itemName))) {
-        	// borrado exitoso. (lo registramos con el logger?)
+        	// borrado exitoso
         }
         else {
-        	throw new ItemInexistenteException("El item " + itemName + " no existe en la lista " + this.getNombre() + ".");
+        	throw new CustomNotFoundException("El item " + itemName + " no existe en la lista " + this.getNombre() + ".");
         }
     }
     

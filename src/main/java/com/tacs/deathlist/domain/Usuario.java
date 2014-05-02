@@ -41,7 +41,7 @@ public class Usuario {
     public void agregarLista(String nombreLista) {
     	
     	if(this.existeLista(nombreLista))
-    		throw new ListaRepetidaException("El usuario " + this.getNombre() + " ya tiene una lista con el nombre " + nombreLista + ".");
+    		throw new CustomForbiddenException("El usuario " + this.getNombre() + " ya tiene una lista con el nombre " + nombreLista + ".");
     	
     	this.listas.put(nombreLista, new Lista(nombreLista));
     }
@@ -51,7 +51,7 @@ public class Usuario {
     	Lista lista = listas.get(nombreLista);
     	
     	if (lista == null)
-    		throw new ListaInexistenteException("El usuario " + this.getNombre() + " no tiene una lista con el nombre " + nombreLista + ".");
+    		throw new CustomNotFoundException("El usuario " + this.getNombre() + " no tiene una lista con el nombre " + nombreLista + ".");
     	
     	return lista;
     }
@@ -59,7 +59,7 @@ public class Usuario {
     public void eliminarLista(String nombreLista){
         
     	if(listas.remove(nombreLista) == null)
-    		throw new ListaInexistenteException("El usuario " + this.getNombre() + " no tiene una lista con el nombre " + nombreLista + ".");
+    		throw new CustomNotFoundException("El usuario " + this.getNombre() + " no tiene una lista con el nombre " + nombreLista + ".");
     }
 
     public String getUid() {
