@@ -18,7 +18,7 @@ import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
 public class UsuarioEndToEndTest {
 
     private static HttpServer server;
-    private UsuariosHelper userHelper = new UsuariosHelper();
+    private static UsuariosHelper userHelper = new UsuariosHelper();
 
     @BeforeClass
     public static void setUp() throws Exception {
@@ -41,13 +41,15 @@ public class UsuarioEndToEndTest {
         Usuario user = userHelper.getUserParseado(username);
         
         assertNotNull(user);
-        assertEquals("el username es invalido", username, user.getUsername());
+        assertEquals("el username es invalido", username, user.getNombre());
         assertEquals("el uid es invalido", uid, user.getUid());
         assertEquals("el token es invalido", token, user.getToken());
+        
+        userHelper.deleteUser("john snow");
     }
     
     @Test
-    public void crearUsuarioYEliminarloYChequamosQueNoExista() {
+    public void crearUsuarioYEliminarloYChequarQueNoExista() {
         String username = "john snow";
         String uid = "1234";
         String token = "a token";
@@ -57,6 +59,22 @@ public class UsuarioEndToEndTest {
         checkResponse(userHelper.getUser(username), Status.OK.getStatusCode());
         checkResponse(userHelper.deleteUser(username), Status.OK.getStatusCode());
         checkResponse(userHelper.getUser(username), Status.NOT_FOUND.getStatusCode());
+    }
+    
+    @Test
+    public void crearUsuarioRepetidoYChequearProhibicion() {
+        String username = "john snow";
+        String uid = "1234";
+        String token = "a token";
+        
+        UserCreationRequest request1 = new UserCreationRequest(uid, token);
+        checkResponse(userHelper.createUser(username, request1), Status.CREATED.getStatusCode());
+        
+        UserCreationRequest request2 = new UserCreationRequest(uid, token);
+        checkResponse(userHelper.createUser(username, request2), Status.FORBIDDEN.getStatusCode());
+        
+        userHelper.deleteUser("john snow");
+        
     }
     
     

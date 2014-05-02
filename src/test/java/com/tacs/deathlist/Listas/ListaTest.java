@@ -15,7 +15,7 @@ public class ListaTest {
     
     @Test
     public void testVotarItems() throws Exception {
-        // hacemos accesible la propiesdad items para testear
+        // hacemos accesible la propiedad items para testear
         Field itemsField = Lista.class.getDeclaredField("items");
         itemsField.setAccessible(true);
     	

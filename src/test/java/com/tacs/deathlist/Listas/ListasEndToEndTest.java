@@ -48,6 +48,8 @@ public class ListasEndToEndTest {
         
         assertNotNull(lista);
         assertEquals("el nombre de la lista es erroneo", lista1, lista.getNombre());
+        
+        listasHelper.deleteList(USERNAME, "Paises");
     }
     
     @Test
@@ -68,6 +70,10 @@ public class ListasEndToEndTest {
         assertTrue(listas.contains(new Lista(lista1)));
         assertTrue(listas.contains(new Lista(lista2)));
         assertTrue(listas.contains(new Lista(lista3)));
+        
+        listasHelper.deleteList(USERNAME, "Paises");
+        listasHelper.deleteList(USERNAME, "Equipos");
+        listasHelper.deleteList(USERNAME, "Ciudades");
     }
     
     @Test
@@ -78,6 +84,16 @@ public class ListasEndToEndTest {
         checkResponse(listasHelper.getLista(USERNAME, lista1), Status.OK.getStatusCode());
         checkResponse(listasHelper.deleteList(USERNAME, lista1), Status.OK.getStatusCode());
         checkResponse(listasHelper.getLista(USERNAME,lista1), Status.NOT_FOUND.getStatusCode());
+    }
+    
+    @Test
+    public void crearListaRepetidaYChequearProhibicion() {
+        String lista1 = "Paises";
+        
+        checkResponse(listasHelper.createList(USERNAME, lista1), Status.CREATED.getStatusCode());
+        checkResponse(listasHelper.createList(USERNAME, lista1), Status.FORBIDDEN.getStatusCode());
+        
+        listasHelper.deleteList(USERNAME, "Paises");
     }
     
     private void checkResponse(Response response, int statusCode) {

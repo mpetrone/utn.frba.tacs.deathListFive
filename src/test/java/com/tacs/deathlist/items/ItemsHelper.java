@@ -31,7 +31,7 @@ public class ItemsHelper {
 
     public Response voteItem(String username, String listaName, String itemName) {
         return target.path("/users/" + username + "/lists/" + listaName + "/items/" + itemName + "/vote")
-                .request(MediaType.APPLICATION_JSON).put(Entity.json("up"));
+                .request(MediaType.APPLICATION_JSON).post(null);
     }
 
 }

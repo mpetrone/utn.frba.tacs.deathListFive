@@ -2,6 +2,7 @@ package com.tacs.deathlist.domain;
 
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -9,7 +10,10 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 public class Lista {
 
     private String nombre;
-    private LinkedList<Item> items;
+    private List<Item> items;
+    
+    // Todas las listas están limitadas a tener una cierta cantidad de items
+    private static final int MAX_ITEMS = 10;
 
     public Lista(String nombre) {
         this.nombre = nombre;
@@ -23,31 +27,45 @@ public class Lista {
     public boolean existeItem(String itemName) {
         return this.items.contains(new Item(itemName));
     }
-
-    public void agregarItem(String nombreDeNuevoItem) {
-        if(!items.contains(new Item(nombreDeNuevoItem))){
-            items.add(new Item(nombreDeNuevoItem));
-        }
-    }
     
-    public Item getItem(String itemName) {
-        for (Item item : items) {
-            if(itemName.equals(item.getNombre())){
-                return item;
-            }
-        }
-        return null;
-    }   
+    private int getCantidadDeItems() {
+    	return this.items.size();
+    }
+
+	public void agregarItem(String nombreDeNuevoItem) {
+		if (!existeItem(nombreDeNuevoItem)) {
+			if (this.getCantidadDeItems() < MAX_ITEMS)
+				items.add(new Item(nombreDeNuevoItem));
+			else
+				throw new CustomForbiddenException("La lista " + this.getNombre()
+						+ " ya tiene el número máximo permitido de items ("
+						+ MAX_ITEMS + ").");
+		} else
+			throw new CustomForbiddenException("El item " + nombreDeNuevoItem
+					+ " ya existe en la lista " + this.getNombre() + ".");
+	}
+    
+	public Item getItem(String itemName) {
+		for (Item item : items) {
+			if (itemName.equals(item.getNombre())) {
+				return item;
+			}
+		}
+		throw new CustomNotFoundException("El item " + itemName + " no existe en la lista " + this.getNombre() + ".");
+	}
     
     public void eliminarItem(String itemName){
-        items.remove(new Item(itemName));
+        if(items.remove(new Item(itemName))) {
+        	// borrado exitoso
+        }
+        else {
+        	throw new CustomNotFoundException("El item " + itemName + " no existe en la lista " + this.getNombre() + ".");
+        }
     }
     
     public void votarItem(String itemName) {
-        if(existeItem(itemName)){
-            getItem(itemName).recibirVoto();
-            Collections.sort(items);
-        }
+        getItem(itemName).recibirVoto(); // lanza excepcion si el item no existe
+        Collections.sort(items);
     }
 
     @Override

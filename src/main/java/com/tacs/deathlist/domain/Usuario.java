@@ -22,7 +22,7 @@ public class Usuario {
 		this.token = token;
 	}
 	
-	public String getUsername() {
+	public String getNombre() {
 		return this.nombre;
 	}
 	
@@ -30,24 +30,36 @@ public class Usuario {
         return new ArrayList<Lista>(listas.values());
     }
 
-    public void modifyUsername(String nombreACambiar) {
-    	this.nombre = nombreACambiar;
-    }
-    
-    public void agregarLista(String nombreNuevaLista) {
-    	this.listas.put(nombreNuevaLista, new Lista(nombreNuevaLista));
+    public void modifyUsername(String nombreNuevo) {
+    	this.nombre = nombreNuevo;
     }
     
     public boolean existeLista(String nombreLista) {
     	return listas.containsKey(nombreLista);
     }
     
+    public void agregarLista(String nombreLista) {
+    	
+    	if(this.existeLista(nombreLista))
+    		throw new CustomForbiddenException("El usuario " + this.getNombre() + " ya tiene una lista con el nombre " + nombreLista + ".");
+    	
+    	this.listas.put(nombreLista, new Lista(nombreLista));
+    }
+        
     public Lista getLista(String nombreLista){
-        return listas.get(nombreLista);
+        
+    	Lista lista = listas.get(nombreLista);
+    	
+    	if (lista == null)
+    		throw new CustomNotFoundException("El usuario " + this.getNombre() + " no tiene una lista con el nombre " + nombreLista + ".");
+    	
+    	return lista;
     }
     
     public void eliminarLista(String nombreLista){
-        listas.remove(nombreLista);
+        
+    	if(listas.remove(nombreLista) == null)
+    		throw new CustomNotFoundException("El usuario " + this.getNombre() + " no tiene una lista con el nombre " + nombreLista + ".");
     }
 
     public String getUid() {
@@ -71,7 +83,7 @@ public class Usuario {
         if(obj instanceof Lista){
             final Usuario other = (Usuario) obj;
             return new EqualsBuilder()
-            .append(nombre, other.getUsername())
+            .append(nombre, other.getNombre())
             .append(uid, other.getUid())
             .isEquals();
         } else{

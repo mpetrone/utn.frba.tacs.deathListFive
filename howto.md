@@ -24,7 +24,7 @@ Endpoints:
 	DELETE: deleteItem: Elimina un item
 	
 * /deathlist/users/{username}/lists/{listName}/items/{itemName}/vote
-	PUT: voteItem: Vota item
+	POST: voteItem: Vota item
 	
 * /deathlist/front
 	GET: Retorna la página principal de la aplicación
