@@ -14,11 +14,11 @@ Endpoints:
     
         DELETE: deleteUser: Elimina un usuario
 
-* **`/deathlist/users/{username}/lists `**
+* **`/deathlist/users/{username}/lists`**
 
         GET: getAllLists: Obtiene todas las listas de un determinado usuario
 
-* **`/deathlist/users/{username}/lists/{listName} `**
+* **`/deathlist/users/{username}/lists/{listName}`**
 
         GET: getList: Obtiene una lista de un determinado usuario
 	      
@@ -26,17 +26,17 @@ Endpoints:
 	      
         DELETE: deleteList: Elimina una lista de un determinado usuario
 
-* **`/deathlist/users/{username}/lists/{listName}/items/{itemName} `**
+* **`/deathlist/users/{username}/lists/{listName}/items/{itemName}`**
 	
         POST: createItem: Crea un nuevo item
 	
         DELETE: deleteItem: Elimina un item
 	
-* **`/deathlist/users/{username}/lists/{listName}/items/{itemName}/vote `**
+* **`/deathlist/users/{username}/lists/{listName}/items/{itemName}/vote`**
 
         POST: voteItem: Vota item
 	
-* **`/ `**
+* **`/`**
 	
         GET: Retorna la página principal de la aplicación
  
