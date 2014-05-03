@@ -1,8 +1,8 @@
 // donde vive la api
 var API_NAMESPACE = 'deathlist/';
-var GUEST_PATH = 'users/guest';
 
 // usuario de prueba, se va cuando haya FB
+var GUEST_PATH = 'users/guest';
 $.ajax({
    type: 'POST',
    url: API_NAMESPACE + GUEST_PATH,
@@ -88,6 +88,15 @@ $.ajax({
                var content = controller.get('content');
                
                controller.set('content', content.rejectBy('id', list.id));
+               
+               // si la ruta apuntaba a la lista borrada, ir a lists
+               //
+               var list_infos = App.Router.router.currentHandlerInfos.findBy('name', 'list');
+               
+               if (list_infos && list_infos.context.id == list.id)
+               {
+                  controller.transitionToRoute('lists');                  
+               }               
             });
             
          }
@@ -111,10 +120,11 @@ $.ajax({
                   // limpia el input
                   controller.set('newItem', '');
                   
-                  // actualiza la lista
+                  // actualiza la los items
                   controller.get('content').items.unshiftObject({
                      id: item,
-                     nombre: item
+                     nombre: item,
+                     votos: 0
                   });
                });
          },
@@ -136,6 +146,9 @@ $.ajax({
                controller.set('content.items', items.rejectBy('id', item.id));
             });
             
+         },
+         voteItem: function (item) {
+            // TODO: code me
          }
       }
    });

@@ -81,7 +81,7 @@
           <li href="#" class="list-group-item">
             {{item.nombre}}
             <a href="#" {{action "deleteItem" item}} class="badge">x</a>
-            <a href="#" {{action "voteItem"}} class="badge">3</a><!-- TODO: votos -->
+            <a href="#" {{action "voteItem" item}} class="badge">{{item.votos}}</a>
           </li>
           {{/each}}
         </div><!-- /.list-group -->
