@@ -52,6 +52,12 @@ $.ajax({
             });
       }
    });
+   
+   App.AboutRoute = Ember.Route.extend({
+      model: function () {
+         return $.get('/howto.md');
+      }
+   })
       
    App.ListsController = Ember.ArrayController.extend({
       actions: {
@@ -152,7 +158,15 @@ $.ajax({
          }
       }
    });
+   
+   var showdown = new Showdown.converter();
+
+   Ember.Handlebars.helper('markdown', function(data) {
+      if (data)
+      {
+         return new Handlebars.SafeString(showdown.makeHtml(data));
+      }
+   });
 
 });
-
 
