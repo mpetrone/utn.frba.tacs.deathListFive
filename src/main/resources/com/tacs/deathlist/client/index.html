@@ -48,8 +48,8 @@
               <div class="list-group">
                 {{#each}}
                 <li href="#" class="list-group-item">
-                  {{#link-to 'list' this}}{{nombre}}{{/link-to}}
-                  <a href="#" {{action "deleteList"}} class="badge">x</a>
+                  {{#link-to 'list' this.id}}{{nombre}}{{/link-to}}
+                  <a href="#" {{action "deleteList" this}} class="badge">x</a>
                 </li>
                 {{/each}}
               </div><!-- /.list-group -->
@@ -80,7 +80,7 @@
           {{#each item in items}}
           <li href="#" class="list-group-item">
             {{item.nombre}}
-            <a href="#" {{action "deleteItem"}} class="badge">x</a>
+            <a href="#" {{action "deleteItem" item}} class="badge">x</a>
             <a href="#" {{action "voteItem"}} class="badge">3</a><!-- TODO: votos -->
           </li>
           {{/each}}
