@@ -12,7 +12,6 @@
   <script type="text/x-handlebars">
     <nav class="navbar navbar-inverse" role="navigation">
       <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
           <a class="navbar-brand" href="#">Deathlist 5</a>
         </div>
@@ -33,22 +32,65 @@
   <script type="text/x-handlebars" id="lists">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-xs-3">
-          <div class="list-group">
-            {{#each}}
-            <a href="#" class="list-group-item">{{nombre}}</a>
-            {{/each}}
+        <div class="col-xs-3"> 
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Lists</h3>
+            </div>
+            <div class="panel-body">
+              <div class="input-group">
+                {{input type="text" class="form-control" value=newList placeholder="My List" action="createList"}}
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button" {{action "createList" value=newList}}>New</button>
+                </span>
+              </div><!-- /.input-group -->
+              <br/>
+              <div class="list-group">
+                {{#each}}
+                <li href="#" class="list-group-item">
+                  {{#link-to 'list' this}}{{nombre}}{{/link-to}}
+                  <a href="#" {{action "deleteList"}} class="badge">x</a>
+                </li>
+                {{/each}}
+              </div><!-- /.list-group -->
+            </div>
           </div>
         </div><!-- /.col-xs-3 -->
         <div class="col-xs-9">
           {{outlet}}
-        </div>
+        </div><!-- /.col-xs-9 -->
       </div><!-- /.row -->
     </div><!-- /.container-fluid -->
   </script>
   
+  <script type="text/x-handlebars" id="list">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{nombre}} items</h3>
+      </div>
+      <div class="panel-body">
+        <div class="input-group">
+          {{input type="text" class="form-control" value=newItem placeholder="My Item" action="createItem"}}
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" {{action "createItem" value=newItem}}>New</button>
+          </span>
+        </div><!-- /.input-group -->
+        <br/>
+        <div class="list-group">
+          {{#each item in items}}
+          <li href="#" class="list-group-item">
+            {{item.nombre}}
+            <a href="#" {{action "deleteItem"}} class="badge">x</a>
+            <a href="#" {{action "voteItem"}} class="badge">3</a><!-- TODO: votos -->
+          </li>
+          {{/each}}
+        </div><!-- /.list-group -->
+      </div>
+    </div>
+  </script>
+  
   <script type="text/x-handlebars" id="about">
-    <p>add the readme here</p>
+    <p>TODO: add some .md doc here !</p>
   </script>
 
   <script src="js/libs/jquery-1.10.2.js"></script>
