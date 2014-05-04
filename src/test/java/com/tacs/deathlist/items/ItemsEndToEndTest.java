@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tacs.deathlist.Main;
+import com.tacs.deathlist.PropertiesManager;
 import com.tacs.deathlist.Listas.ListasHelper;
 import com.tacs.deathlist.domain.Lista;
 import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
@@ -23,16 +24,19 @@ public class ItemsEndToEndTest {
     private static final String USERNAME = "user1";
     private static final String LISTA_NAME = "lista";
     private static HttpServer server;
-    private ItemsHelper itemsHelper = new ItemsHelper();
-    private static ListasHelper listasHelper = new ListasHelper();
-    private static UsuariosHelper usuariosHelper = new UsuariosHelper();
-    
+    private static ItemsHelper itemsHelper;
+    private static ListasHelper listasHelper;
+    private static UsuariosHelper usuariosHelper;
 
     @BeforeClass
     public static void setUp() throws Exception {
-        server = Main.startServer();
+        PropertiesManager propertiesManager = new PropertiesManager();
+        server = Main.startServer(propertiesManager);
+        listasHelper = new ListasHelper(propertiesManager);
+        usuariosHelper = new UsuariosHelper(propertiesManager);
         usuariosHelper.createUser(USERNAME, new UserCreationRequest("1234", "a token"));
         listasHelper.createList(USERNAME, LISTA_NAME);
+        itemsHelper = new ItemsHelper(propertiesManager);
     }
 
     @AfterClass

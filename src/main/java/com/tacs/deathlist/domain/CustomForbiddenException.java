@@ -5,7 +5,9 @@ import javax.ws.rs.core.Response;
 
 public class CustomForbiddenException extends WebApplicationException {
 	
-	/**
+    private static final long serialVersionUID = 13754947979705084L;
+
+    /**
 	  * Create a HTTP 403 (Forbidden) exception.
 	  */
 	  public CustomForbiddenException() {

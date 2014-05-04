@@ -2,20 +2,19 @@ package com.tacs.deathlist.items;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.tacs.deathlist.Main;
+import com.tacs.deathlist.PropertiesManager;
 
 public class ItemsHelper {
     
     private WebTarget target;
     
-    public ItemsHelper() {
+    public ItemsHelper(PropertiesManager propertiesManager) {
         Client c = ClientBuilder.newClient();
-        target = c.target(Main.BASE_URI);
+        target = c.target(propertiesManager.getProperty("base.uri"));
     }
 
     public Response createItem(String username, String listaName, String itemName) {          

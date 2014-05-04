@@ -19,7 +19,7 @@ public interface Repository {
 	
 	void createUsuario(String username, Usuario user);
 	
-	void deleteUsuario(String username);
+	boolean deleteUsuario(String username);
 	
     List<Lista> getAllLists(String username);
     

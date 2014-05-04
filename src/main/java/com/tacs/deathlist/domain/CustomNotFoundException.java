@@ -5,7 +5,9 @@ import javax.ws.rs.core.Response;
 
 public class CustomNotFoundException extends WebApplicationException {
 	
-	/**
+    private static final long serialVersionUID = -4741874630269920223L;
+
+    /**
 	  * Create a HTTP 404 (Not Found) exception.
 	  */
 	  public CustomNotFoundException() {

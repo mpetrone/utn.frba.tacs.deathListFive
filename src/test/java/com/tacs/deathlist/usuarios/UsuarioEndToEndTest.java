@@ -12,17 +12,20 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tacs.deathlist.Main;
+import com.tacs.deathlist.PropertiesManager;
 import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
 
 public class UsuarioEndToEndTest {
 
     private static HttpServer server;
-    private static UsuariosHelper userHelper = new UsuariosHelper();
+    private static UsuariosHelper userHelper;
 
     @BeforeClass
     public static void setUp() throws Exception {
-        server = Main.startServer();
+        PropertiesManager propertiesManager = new PropertiesManager();
+        server = Main.startServer(propertiesManager);
+        userHelper = new UsuariosHelper(propertiesManager);
     }
 
     @AfterClass

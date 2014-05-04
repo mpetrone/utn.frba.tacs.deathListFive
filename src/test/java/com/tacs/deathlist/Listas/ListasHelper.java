@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.tacs.deathlist.Main;
+import com.tacs.deathlist.PropertiesManager;
 import com.tacs.deathlist.domain.Lista;
 
 public class ListasHelper {
@@ -20,9 +20,9 @@ public class ListasHelper {
     private WebTarget target;
     private Gson gson = new Gson();
 
-    public ListasHelper() {
+    public ListasHelper(PropertiesManager propertiesManager) {
         Client c = ClientBuilder.newClient();
-        target = c.target(Main.BASE_URI);
+        target = c.target(propertiesManager.getProperty("base.uri"));
     }
 
     public Lista getListaParseada(String username, String nombreLista) {

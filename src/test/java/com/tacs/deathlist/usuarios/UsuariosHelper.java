@@ -9,7 +9,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
-import com.tacs.deathlist.Main;
+import com.tacs.deathlist.PropertiesManager;
 import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
 
@@ -18,9 +18,9 @@ public class UsuariosHelper {
     private WebTarget target;
     private Gson gson = new Gson();
     
-    public UsuariosHelper() {
+    public UsuariosHelper(PropertiesManager propertiesManager) {
         Client c = ClientBuilder.newClient();
-        target = c.target(Main.BASE_URI);
+        target = c.target(propertiesManager.getProperty("base.uri"));
     }
     
     public Usuario getUserParseado(String username) {

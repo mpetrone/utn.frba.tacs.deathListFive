@@ -7,7 +7,7 @@ $.ajax({
    type: 'POST',
    url: API_NAMESPACE + GUEST_PATH,
    contentType: "application/json; charset=utf-8",
-   data: JSON.stringify({uid:0, token:'token'})
+   data: JSON.stringify({uid:1234, token:'token'})
 }).always(function() {
 
    App = Ember.Application.create({

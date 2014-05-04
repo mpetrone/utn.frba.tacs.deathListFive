@@ -48,15 +48,8 @@ public class ListasEnpoints {
     @Produces(MediaType.APPLICATION_JSON)
 	public Response getList(@PathParam("listName") String listName,
 							@PathParam("username") String username) {
-		Lista lista;
-		Response response;
-
-		lista = repository.getLista(username, listName);
-		response = Response.status(Response.Status.OK)
-				.entity(gsonParser.toJson(lista)).build();
-		
-		return response;
-
+		Lista lista = repository.getLista(username, listName);
+		return Response.status(Response.Status.OK).entity(gsonParser.toJson(lista)).build();
 	}
     
     /**

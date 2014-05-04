@@ -30,15 +30,8 @@ public class UsuarioEndpoints {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
 	public Response getUser(@PathParam("username") String username) {
-		Usuario user;
-		Response response;
-
-		user = repository.getUsuario(username);
-		response = Response.status(Response.Status.OK)
-				.entity(gsonParser.toJson(user)).build();
-		
-		return response;
-
+		Usuario user = repository.getUsuario(username);
+		return Response.status(Response.Status.OK).entity(gsonParser.toJson(user)).build();
 	}
 
     /**
