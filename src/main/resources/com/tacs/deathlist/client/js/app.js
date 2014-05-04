@@ -66,7 +66,7 @@ $.ajax({
             
             // valor del input
             var list = this.get('newList');
-            if (!list.trim()) { return; }
+            if (!$.trim(list)) { return; }
             
             var controller = this;
             $.post(API_NAMESPACE + GUEST_PATH + '/lists/' + list)
@@ -118,7 +118,7 @@ $.ajax({
             
             // valor del input
             var item = this.get('newItem');
-            if (!item.trim()) { return; }
+            if (!$.trim(item)) { return; }
             
             var controller = this;
             $.post(API_NAMESPACE + GUEST_PATH + '/lists/' + list + '/items/' + item)
