@@ -154,7 +154,17 @@ $.ajax({
             
          },
          voteItem: function (item) {
-            // TODO: code me
+             // TODO: error handling
+	         
+        	 var controller = this;
+        	 var list = this.get('id');
+      	 
+        	 $.post(API_NAMESPACE + GUEST_PATH + '/lists/' + list + '/items/' + item.id + '/vote')     	 
+             .done(function () {
+                 // actualizar los votos      
+            	 Ember.set(item,'votos',item.votos +1);
+            	 //controller.incrementProperty('votos');
+              });
          }
       }
    });
