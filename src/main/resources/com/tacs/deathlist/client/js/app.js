@@ -82,29 +82,44 @@ $.ajax({
                });
          },
          deleteList: function (list) {
-            // TODO: confirmation con bootstrap
             // TODO: error handling
-            
-            var controller = this;
-            $.ajax({
-               url: API_NAMESPACE + GUEST_PATH + '/lists/' + list.id,
-               type: 'DELETE',
-               dataType: 'html' // la respuesta viene vacia, eso no le gusta al parser de json
-            }).done(function () {
-               var content = controller.get('content');
-               
-               controller.set('content', content.rejectBy('id', list.id));
-               
-               // si la ruta apuntaba a la lista borrada, ir a lists
-               //
-               var list_infos = App.Router.router.currentHandlerInfos.findBy('name', 'list');
-               
-               if (list_infos && list_infos.context.id == list.id)
-               {
-                  controller.transitionToRoute('lists');                  
-               }               
-            });
-            
+             var controller = this;            
+
+             BootstrapDialog.show({
+                 type: BootstrapDialog.TYPE_WARNING,
+                 title: 'Advertencia',
+                 message: '¿Querés borrar la lista ' + list.nombre +'?',
+                 buttons: [{
+                     label: 'Sí',
+                     action: function(dialogItself){
+                    	 
+                         $.ajax({
+                             url: API_NAMESPACE + GUEST_PATH + '/lists/' + list.id,
+                             type: 'DELETE',
+                             dataType: 'html' // la respuesta viene vacia, eso no le gusta al parser de json
+                          }).done(function () {
+                             var content = controller.get('content');                             
+                             controller.set('content', content.rejectBy('id', list.id));
+                             
+                             // si la ruta apuntaba a la lista borrada, ir a lists
+                             //
+                             var list_infos = App.Router.router.currentHandlerInfos.findBy('name', 'list');                             
+                             if (list_infos && list_infos.context.id == list.id)
+                             {
+                                controller.transitionToRoute('lists');                  
+                             }          
+                             
+                             dialogItself.close();
+                          });  
+                     	}
+                     },
+                     {
+                         label: 'No',
+                         action: function(dialogItself){
+                             dialogItself.close();
+                         }
+                 }]
+             }); 
          }
       }
    });
@@ -135,23 +150,38 @@ $.ajax({
                });
          },
          deleteItem: function (item) {
-            // TODO: confirmation con bootstrap
             // TODO: error handling
             
             var list = this.get('id');
             
             var controller = this;
-            $.ajax({
-               url: API_NAMESPACE + GUEST_PATH + '/lists/' + list + '/items/' + item.id,
-               type: 'DELETE',
-               dataType: 'html' // la respuesta viene vacia, eso no le gusta al parser de json
-            }).done(function () {
-               // actualiza la lista
-               var items = controller.get('content.items');
-               
-               controller.set('content.items', items.rejectBy('id', item.id));
-            });
-            
+
+            BootstrapDialog.show({
+                type: BootstrapDialog.TYPE_WARNING,
+                title: 'Advertencia',
+                message: '¿Querés borrar el item ' + item.nombre +'?',
+                buttons: [{
+                    label: 'Sí',
+                    action: function(dialogItself){                        
+                    	$.ajax({
+                    		url: API_NAMESPACE + GUEST_PATH + '/lists/' + list + '/items/' + item.id,
+                    		type: 'DELETE',
+                    		dataType: 'html' // la respuesta viene vacia, eso no le gusta al parser de json
+                    			}).done(function () {
+                    				// actualiza la lista
+                    				var items = controller.get('content.items');
+                    				controller.set('content.items', items.rejectBy('id', item.id));
+                    				});
+                    	dialogItself.close();
+                    	},
+                },
+                {
+                	label: 'No',
+                	action: function(dialogItself){
+                		dialogItself.close();
+                		}
+                }]
+            });                         
          },
          voteItem: function (item) {
              // TODO: error handling
