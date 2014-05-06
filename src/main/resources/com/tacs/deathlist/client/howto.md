@@ -1,14 +1,25 @@
-Instrucciones:
---------------
+
+</br>
+
+## Instrucciones:
 
 Para ejecutar el servidor utilizar el comando `mvn exec:java`
 
-Endpoints:
-----------
+---
+
+</br>
+
+## Endpoints:
 
 * **`/deathlist/users/{username}`**
   
-        POST: createUser: Crea un nuevo usuario
+        POST: createUser: Crea un nuevo usuario **
+        
+            Example request body:
+                {
+                    "uid": "1234",
+                    "token": "a token"
+                }
     
         GET: getUser: Obtiene la informacion de un determinado usuario
     
