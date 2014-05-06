@@ -66,7 +66,7 @@ $.ajax({
             
             // valor del input
             var list = this.get('newList');
-            if (!list.trim()) { return; }
+            if (!$.trim(list)) { return; }
             
             var controller = this;
             $.post(API_NAMESPACE + GUEST_PATH + '/lists/' + list)
@@ -118,7 +118,7 @@ $.ajax({
             
             // valor del input
             var item = this.get('newItem');
-            if (!item.trim()) { return; }
+            if (!$.trim(item)) { return; }
             
             var controller = this;
             $.post(API_NAMESPACE + GUEST_PATH + '/lists/' + list + '/items/' + item)
@@ -154,7 +154,17 @@ $.ajax({
             
          },
          voteItem: function (item) {
-            // TODO: code me
+             // TODO: error handling
+	         
+        	 var controller = this;
+        	 var list = this.get('id');
+      	 
+        	 $.post(API_NAMESPACE + GUEST_PATH + '/lists/' + list + '/items/' + item.id + '/vote')     	 
+             .done(function () {
+                 // actualizar los votos      
+            	 Ember.set(item,'votos',item.votos +1);
+            	 //controller.incrementProperty('votos');
+              });
          }
       }
    });
