@@ -17,6 +17,10 @@ Repositorio del tp del primer cuatrimestre del 2014 http://www.tacs-utn.com.ar/
 
 Para levantar el servidor realizar **mvn exec:java**  
 
+El cliente esta en http://localhost:8080/
+
+Para mas informacion acerca de las APIs ir a http://localhost:8080/#/about
+
 ## Frameworks
 
 - REST: Jersey
