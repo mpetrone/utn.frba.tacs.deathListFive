@@ -9,7 +9,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
 		<init-param>
 			<param-name>com.sun.jersey.config.property.packages</param-name>
-			<param-value>com.tacs.deathlist.enpoints</param-value>
+			<param-value>com.tacs.deathlist.endpoints</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
@@ -18,17 +18,4 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>Deathlist Web Application</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
-
-
-	<servlet-mapping>
-		<servlet-name>default</servlet-name>
-		<url-pattern>*.js</url-pattern>
-		<url-pattern>*.css</url-pattern>
-		<url-pattern>*.ico</url-pattern>
-		<url-pattern>*.png</url-pattern>
-		<url-pattern>*.jpg</url-pattern>
-		<url-pattern>*.htc</url-pattern>
-		<url-pattern>*.gif</url-pattern>
-	</servlet-mapping>
-
 </web-app>
