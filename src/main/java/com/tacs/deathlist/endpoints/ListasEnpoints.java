@@ -13,9 +13,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.google.gson.Gson;
 import com.tacs.deathlist.domain.Lista;
-import com.tacs.deathlist.repository.InMemoryRepository;
 import com.tacs.deathlist.repository.Repository;
 
 
@@ -23,7 +24,9 @@ import com.tacs.deathlist.repository.Repository;
 public class ListasEnpoints {
     
     private Gson gsonParser = new Gson();
-    private Repository repository = new InMemoryRepository();  
+    
+    @Autowired
+    private Repository repository;
     
     /**
      * Recupera todas las listas de un usuario. 

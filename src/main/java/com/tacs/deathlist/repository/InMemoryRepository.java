@@ -11,7 +11,7 @@ import com.tacs.deathlist.domain.Usuario;
 
 public class InMemoryRepository implements Repository{
     
-	private static Map<String, Usuario> usuarios = new HashMap<String, Usuario>();
+	private Map<String, Usuario> usuarios = new HashMap<String, Usuario>();
 
 	@Override
 	public Usuario getUsuario(String username) {

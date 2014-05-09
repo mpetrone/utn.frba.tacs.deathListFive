@@ -10,13 +10,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.tacs.deathlist.repository.InMemoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.tacs.deathlist.repository.Repository;
 
 @Path("/users/{userName}/lists/{listName}/items/{itemName}")
 public class ItemsEndpoints {
 
-    private Repository repository = new InMemoryRepository();	
+    @Autowired
+    private Repository repository;	
 	
 	/**
 	 * Crea un nuevo ítem en una lista.

@@ -10,17 +10,20 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.google.gson.Gson;
 import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
-import com.tacs.deathlist.repository.InMemoryRepository;
 import com.tacs.deathlist.repository.Repository;
 
 @Path("/users/{username}")
 public class UsuarioEndpoints {
 
     private Gson gsonParser = new Gson();
-    private Repository repository = new InMemoryRepository();  
+    
+    @Autowired
+    private Repository repository;
 
     /**
      * Recupera un Usuario.

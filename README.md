@@ -15,7 +15,7 @@ Repositorio del tp del primer cuatrimestre del 2014 http://www.tacs-utn.com.ar/
   
 ## Instrucciones
 
-Para levantar el servidor realizar **mvn exec:java**  
+Para levantar el servidor realizar **mvn jetty:run-war**  
 
 El cliente esta en http://localhost:8080/
 

@@ -74,6 +74,25 @@
 			<artifactId>jersey-container-servlet-core</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring3.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.jersey.ext</groupId>
+			<artifactId>jersey-spring3</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+		
 	</dependencies>
 
 	<reporting>
@@ -150,14 +169,23 @@
 					<webXml>src\main\webapp\WEB-INF\web.xml</webXml>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>8.1.14.v20131031</version>
+				<configuration>
+					<war>${basedir}/target/death-list-1.0-SNAPSHOT.war</war>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
 	<properties>
-		<jersey.version>2.7</jersey.version>
+		<jersey.version>2.8</jersey.version>
 		<junit.version>4.9</junit.version>
 		<gson.version>2.2.4</gson.version>
 		<easymock.version>3.2</easymock.version>
+		<spring3.version>3.0.5.RELEASE</spring3.version>
 		<slf4j.version>1.7.6</slf4j.version>
 		<jul-to-slf4j.version>1.7.6</jul-to-slf4j.version>
 		<apachecommons.version>3.3.2</apachecommons.version>
@@ -165,4 +193,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<appengine.target.version>1.9.4</appengine.target.version>
 	</properties>
+
+	<organization>
+		<name>UTN</name>
+	</organization>
 </project>
