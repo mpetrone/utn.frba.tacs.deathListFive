@@ -12,7 +12,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.tacs.deathlist.Main;
+import com.tacs.deathlist.ApplicationRunner;
 import com.tacs.deathlist.PropertiesManager;
 import com.tacs.deathlist.Listas.ListasHelper;
 import com.tacs.deathlist.domain.Lista;
@@ -31,7 +31,7 @@ public class ItemsEndToEndTest {
     @BeforeClass
     public static void setUp() throws Exception {
         PropertiesManager propertiesManager = new PropertiesManager();
-        server = Main.startServer(propertiesManager);
+        server = ApplicationRunner.startServer();
         listasHelper = new ListasHelper(propertiesManager);
         usuariosHelper = new UsuariosHelper(propertiesManager);
         usuariosHelper.createUser(USERNAME, new UserCreationRequest("1234", "a token"));

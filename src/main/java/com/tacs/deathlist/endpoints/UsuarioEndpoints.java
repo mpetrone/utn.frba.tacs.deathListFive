@@ -12,18 +12,15 @@ import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.google.gson.Gson;
 import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
-import com.tacs.deathlist.repository.Repository;
+import com.tacs.deathlist.repository.UsuariosDao;
 
 @Path("/users/{username}")
 public class UsuarioEndpoints {
 
-    private Gson gsonParser = new Gson();
-    
     @Autowired
-    private Repository repository;
+    private UsuariosDao dao;
 
     /**
      * Recupera un Usuario.
@@ -33,8 +30,8 @@ public class UsuarioEndpoints {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
 	public Response getUser(@PathParam("username") String username) {
-		Usuario user = repository.getUsuario(username);
-		return Response.status(Response.Status.OK).entity(gsonParser.toJson(user)).build();
+		Usuario user = dao.getUsuario(username);
+		return Response.status(Response.Status.OK).entity(user).build();
 	}
 
     /**
@@ -44,12 +41,10 @@ public class UsuarioEndpoints {
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response createUser(@PathParam("username") String username,
-            String jsonRequest) {
-        UserCreationRequest request = gsonParser.fromJson(jsonRequest, UserCreationRequest.class);
+            UserCreationRequest request) {
         Usuario user = new Usuario(username, request.getUid(), request.getToken());
-        repository.createUsuario(username, user);
+        dao.createUsuario(username, user);
         return Response.status(Response.Status.CREATED).build();
     }
 
@@ -60,7 +55,7 @@ public class UsuarioEndpoints {
      */
     @DELETE
     public Response deleteUser(@PathParam("username") String username) {
-        repository.deleteUsuario(username);
+        dao.deleteUsuario(username);
         return Response.status(Response.Status.OK).build();
     }
 }

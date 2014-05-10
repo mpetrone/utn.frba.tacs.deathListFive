@@ -6,16 +6,18 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.tacs.deathlist.CustomResourceConfig;
 import com.tacs.deathlist.PropertiesManager;
 
 public class ItemsHelper {
     
-    private WebTarget target;
-    
+    protected WebTarget target;
+
     public ItemsHelper(PropertiesManager propertiesManager) {
-        Client c = ClientBuilder.newClient();
+        Client c = ClientBuilder.newClient(CustomResourceConfig.rc);
         target = c.target(propertiesManager.getProperty("base.uri"));
     }
+    
 
     public Response createItem(String username, String listaName, String itemName) {          
         return target.path("/users/" + username + "/lists/" + listaName + "/items/" + itemName)

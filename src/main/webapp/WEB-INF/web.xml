@@ -18,8 +18,8 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>deathlist</servlet-name>
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
 		<init-param>
-			<param-name>jersey.config.server.provider.packages</param-name>
-			<param-value>com.tacs.deathlist.endpoints</param-value>
+			<param-name>javax.ws.rs.Application</param-name>
+			<param-value>com.tacs.deathlist.CustomResourceConfig</param-value>
 		</init-param>
 	</servlet>
 

@@ -11,7 +11,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.tacs.deathlist.Main;
+import com.tacs.deathlist.ApplicationRunner;
 import com.tacs.deathlist.PropertiesManager;
 import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
@@ -24,7 +24,7 @@ public class UsuarioEndToEndTest {
     @BeforeClass
     public static void setUp() throws Exception {
         PropertiesManager propertiesManager = new PropertiesManager();
-        server = Main.startServer(propertiesManager);
+        server = ApplicationRunner.startServer();
         userHelper = new UsuariosHelper(propertiesManager);
     }
 
@@ -35,7 +35,7 @@ public class UsuarioEndToEndTest {
     
     @Test
     public void crearUnUsuarioYChequearQueExista() {
-        String username = "john snow";
+        String username = "johnSnow";
         String uid = "1234";
         String token = "a token";
         UserCreationRequest request = new UserCreationRequest(uid, token);

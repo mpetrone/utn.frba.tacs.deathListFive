@@ -8,25 +8,24 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
-import com.google.gson.Gson;
+import com.tacs.deathlist.CustomResourceConfig;
 import com.tacs.deathlist.PropertiesManager;
 import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
 
 public class UsuariosHelper {
 
-    private WebTarget target;
-    private Gson gson = new Gson();
-    
+    protected WebTarget target;
+
     public UsuariosHelper(PropertiesManager propertiesManager) {
-        Client c = ClientBuilder.newClient();
+        Client c = ClientBuilder.newClient(CustomResourceConfig.rc);
         target = c.target(propertiesManager.getProperty("base.uri"));
     }
     
     public Usuario getUserParseado(String username) {
-        String response = target.path("/users/" + username).request().get(String.class);
+        Usuario response = target.path("/users/" + username).request().get(Usuario.class);
         assertNotNull(response);
-        return gson.fromJson(response, Usuario.class);
+        return response;
     }
 
     public Response getUser(String username) {
@@ -35,7 +34,7 @@ public class UsuariosHelper {
 
     public Response createUser(String username, UserCreationRequest request) {
         return target.path("/users/" + username).
-                request().post(Entity.json(gson.toJson(request)));
+                request().post(Entity.json(request));
     }
     
     public Response deleteUser(String username) {

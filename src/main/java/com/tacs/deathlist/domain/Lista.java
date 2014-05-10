@@ -10,14 +10,14 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class Lista {
 
     private String nombre;
-    private List<Item> items;
+    private List<Item> items = new LinkedList<Item>();
     
     // Todas las listas están limitadas a tener una cierta cantidad de items
-    private static final int MAX_ITEMS = 10;
-
+    //TODO: ponerlo en las properties
+    private static int MAX_ITEMS = 10;
+    
     public Lista(String nombre) {
         this.nombre = nombre;
-        this.items = new LinkedList<Item>();
     }
 
     public String getNombre() {

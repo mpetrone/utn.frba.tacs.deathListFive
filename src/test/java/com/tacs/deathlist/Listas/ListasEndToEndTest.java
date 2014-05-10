@@ -14,9 +14,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.tacs.deathlist.Main;
+import com.tacs.deathlist.ApplicationRunner;
 import com.tacs.deathlist.PropertiesManager;
 import com.tacs.deathlist.domain.Lista;
+import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
 import com.tacs.deathlist.usuarios.UsuariosHelper;
 
@@ -30,7 +31,7 @@ public class ListasEndToEndTest {
     @BeforeClass
     public static void setUp() throws Exception {
         PropertiesManager propertiesManager = new PropertiesManager();
-        server = Main.startServer(propertiesManager);
+        server = ApplicationRunner.startServer();
         usuariosHelper = new UsuariosHelper(propertiesManager);
         usuariosHelper.createUser(USERNAME, new UserCreationRequest("1234", "a token"));
         listasHelper = new ListasHelper(propertiesManager);
@@ -50,9 +51,13 @@ public class ListasEndToEndTest {
         Response response = listasHelper.createList(USERNAME, lista1);
         checkResponse(response, Status.CREATED.getStatusCode());
         Lista lista = listasHelper.getListaParseada(USERNAME, lista1);
+        Usuario usuario = usuariosHelper.getUserParseado(USERNAME);
+        
         
         assertNotNull(lista);
+        assertNotNull(usuario);
         assertEquals("el nombre de la lista es erroneo", lista1, lista.getNombre());
+        assertTrue("el usuario no tiene la lista", usuario.getListas().contains(lista1));
         
         listasHelper.deleteList(USERNAME, "Paises");
     }
@@ -68,13 +73,18 @@ public class ListasEndToEndTest {
         listasHelper.createList(USERNAME, lista3);
         listasHelper.createList("other user", "other list");
         
-        List<Lista> listas = listasHelper.getListas(USERNAME);
+        List<String> listas = listasHelper.getListasDelUsuario(USERNAME);
+        Usuario usuario = usuariosHelper.getUserParseado(USERNAME);
         
         assertNotNull(listas);
+        assertNotNull(usuario);
         assertEquals("Las listas en la respuesta no son correctas", 3, listas.size());
-        assertTrue(listas.contains(new Lista(lista1)));
-        assertTrue(listas.contains(new Lista(lista2)));
-        assertTrue(listas.contains(new Lista(lista3)));
+        assertTrue(listas.contains(lista1));
+        assertTrue(listas.contains(lista2));
+        assertTrue(listas.contains(lista3));
+        assertTrue("el usuario no tiene la lista1", usuario.getListas().contains(lista1));
+        assertTrue("el usuario no tiene la lista2", usuario.getListas().contains(lista2));
+        assertTrue("el usuario no tiene la lista3", usuario.getListas().contains(lista3));
         
         listasHelper.deleteList(USERNAME, "Paises");
         listasHelper.deleteList(USERNAME, "Equipos");

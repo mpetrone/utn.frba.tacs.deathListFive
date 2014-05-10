@@ -1,5 +1,7 @@
 package com.tacs.deathlist.endpoints.resources;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * 
  * Representacion del request en el create User.
@@ -7,6 +9,7 @@ package com.tacs.deathlist.endpoints.resources;
  * @author matias.petrone
  *
  */
+@XmlRootElement
 public class UserCreationRequest {
 
     private String uid;
