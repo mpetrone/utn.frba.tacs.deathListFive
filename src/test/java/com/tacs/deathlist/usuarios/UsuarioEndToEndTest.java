@@ -3,36 +3,18 @@ package com.tacs.deathlist.usuarios;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.glassfish.grizzly.http.server.HttpServer;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.tacs.deathlist.ApplicationRunner;
-import com.tacs.deathlist.PropertiesManager;
+import com.tacs.deathlist.DeathListTest;
 import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
 
-public class UsuarioEndToEndTest {
+public class UsuarioEndToEndTest extends DeathListTest{
 
-    private static HttpServer server;
-    private static UsuariosHelper userHelper;
-
-    @BeforeClass
-    public static void setUp() throws Exception {
-        PropertiesManager propertiesManager = new PropertiesManager();
-        server = ApplicationRunner.startServer();
-        userHelper = new UsuariosHelper(propertiesManager);
-    }
-
-    @AfterClass
-    public static void tearDown() throws Exception {
-        server.shutdownNow();
-    }
-    
     @Test
     public void crearUnUsuarioYChequearQueExista() {
         String username = "johnSnow";
@@ -40,15 +22,16 @@ public class UsuarioEndToEndTest {
         String token = "a token";
         UserCreationRequest request = new UserCreationRequest(uid, token);
         
-        checkResponse(userHelper.createUser(username, request), Status.CREATED.getStatusCode());
-        Usuario user = userHelper.getUserParseado(username);
+        checkResponse(target("/users/" + username).
+                request().post(Entity.json(request)), Status.CREATED.getStatusCode());
+        Usuario user = target("/users/" + username).request().get(Usuario.class);
         
         assertNotNull(user);
         assertEquals("el username es invalido", username, user.getNombre());
         assertEquals("el uid es invalido", uid, user.getUid());
         assertEquals("el token es invalido", token, user.getToken());
         
-        userHelper.deleteUser("john snow");
+        target("/users/" + username).request().delete();
     }
     
     @Test
@@ -58,10 +41,11 @@ public class UsuarioEndToEndTest {
         String token = "a token";
         UserCreationRequest request = new UserCreationRequest(uid, token);
         
-        checkResponse(userHelper.createUser(username, request), Status.CREATED.getStatusCode());
-        checkResponse(userHelper.getUser(username), Status.OK.getStatusCode());
-        checkResponse(userHelper.deleteUser(username), Status.OK.getStatusCode());
-        checkResponse(userHelper.getUser(username), Status.NOT_FOUND.getStatusCode());
+        checkResponse(target("/users/" + username).
+                request().post(Entity.json(request)), Status.CREATED.getStatusCode());
+        checkResponse(target("/users/" + username).request().get(), Status.OK.getStatusCode());
+        checkResponse(target("/users/" + username).request().delete(), Status.OK.getStatusCode());
+        checkResponse(target("/users/" + username).request().get(), Status.NOT_FOUND.getStatusCode());
     }
     
     @Test
@@ -71,12 +55,14 @@ public class UsuarioEndToEndTest {
         String token = "a token";
         
         UserCreationRequest request1 = new UserCreationRequest(uid, token);
-        checkResponse(userHelper.createUser(username, request1), Status.CREATED.getStatusCode());
+        checkResponse(target("/users/" + username).
+                request().post(Entity.json(request1)), Status.CREATED.getStatusCode());
         
         UserCreationRequest request2 = new UserCreationRequest(uid, token);
-        checkResponse(userHelper.createUser(username, request2), Status.FORBIDDEN.getStatusCode());
+        checkResponse(target("/users/" + username).
+                request().post(Entity.json(request2)), Status.FORBIDDEN.getStatusCode());
         
-        userHelper.deleteUser("john snow");
+        target("/users/" + username).request().delete();
         
     }
     

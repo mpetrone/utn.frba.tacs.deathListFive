@@ -24,9 +24,10 @@ Para mas informacion acerca de las APIs ir a http://localhost:8080/#/about
 ## Frameworks
 
 - REST: Jersey
+- Spring DI
 - Javascript/Frontend: jQuery, Bootstrap, Showdown, Ember
 - Persistencia: objectify-appengine, Gson
 - Unit Testing: jUnit, Easymock
 - Logging: slf4j
-- Webserver de development: Grizzly NIO server
+- Webserver de development: Jetty
 

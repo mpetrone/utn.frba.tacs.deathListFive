@@ -4,55 +4,42 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.glassfish.grizzly.http.server.HttpServer;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.tacs.deathlist.ApplicationRunner;
-import com.tacs.deathlist.PropertiesManager;
-import com.tacs.deathlist.Listas.ListasHelper;
+import com.tacs.deathlist.DeathListTest;
 import com.tacs.deathlist.domain.Lista;
 import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
-import com.tacs.deathlist.usuarios.UsuariosHelper;
 
-public class ItemsEndToEndTest {
+public class ItemsEndToEndTest extends DeathListTest{
 
     private static final String USERNAME = "user1";
     private static final String LISTA_NAME = "lista";
-    private static HttpServer server;
-    private static ItemsHelper itemsHelper;
-    private static ListasHelper listasHelper;
-    private static UsuariosHelper usuariosHelper;
 
-    @BeforeClass
-    public static void setUp() throws Exception {
-        PropertiesManager propertiesManager = new PropertiesManager();
-        server = ApplicationRunner.startServer();
-        listasHelper = new ListasHelper(propertiesManager);
-        usuariosHelper = new UsuariosHelper(propertiesManager);
-        usuariosHelper.createUser(USERNAME, new UserCreationRequest("1234", "a token"));
-        listasHelper.createList(USERNAME, LISTA_NAME);
-        itemsHelper = new ItemsHelper(propertiesManager);
+    public void setUp() throws Exception {
+        super.setUp();
+        target("/users/" + USERNAME).
+            request().post(Entity.json(new UserCreationRequest("1234", "a token")));
+        target("/users/" + USERNAME + "/lists/" + LISTA_NAME).request().post(null);
     }
 
-    @AfterClass
-    public static void tearDown() throws Exception {
-        listasHelper.deleteList(USERNAME, LISTA_NAME);
-        usuariosHelper.deleteUser(USERNAME);
-        server.shutdownNow();
+    public void tearDown() throws Exception {
+        target("/users/" + USERNAME + "/lists/" + LISTA_NAME).request().delete();
+        target("/users/" + USERNAME).request().delete();
+        super.tearDown();
     }
 
     @Test
     public void crearItemYChequearQueExista() {
         String itemName = "perro";
+        String uri = "/users/" + USERNAME + "/lists/" + LISTA_NAME + "/items/" + itemName;
 
-        Response response = itemsHelper.createItem(USERNAME, LISTA_NAME, itemName);
+        Response response = target(uri).request().post(null);
         checkResponse(response, Status.CREATED.getStatusCode());
-        Lista lista = listasHelper.getListaParseada(USERNAME, LISTA_NAME);
+        Lista lista = target("/users/" + USERNAME + "/lists/" + LISTA_NAME).request().get(Lista.class);
 
         assertNotNull(lista);
         assertTrue("No se encontro el item perro en la lista", lista.existeItem(itemName));
@@ -61,12 +48,12 @@ public class ItemsEndToEndTest {
     @Test
     public void crearItemYEliminar() {
         String itemName = "gato";
+        String uri = "/users/" + USERNAME + "/lists/" + LISTA_NAME + "/items/" + itemName;
 
-        checkResponse(itemsHelper.createItem(USERNAME, LISTA_NAME, itemName), Status.CREATED.getStatusCode());
-        checkResponse(listasHelper.getLista(USERNAME,LISTA_NAME), Status.OK.getStatusCode());
-        checkResponse(itemsHelper.deleteItem(USERNAME, LISTA_NAME, itemName), Status.OK.getStatusCode());
+        checkResponse(target(uri).request().post(null), Status.CREATED.getStatusCode());
+        checkResponse(target(uri).request().delete(), Status.OK.getStatusCode());
 
-        Lista lista = listasHelper.getListaParseada(USERNAME,LISTA_NAME);
+        Lista lista = target("/users/" + USERNAME + "/lists/" + LISTA_NAME).request().get(Lista.class);
         assertNotNull(lista);
         assertTrue("Se encontro el item gato en la lista", !lista.existeItem(itemName));
     }
@@ -74,12 +61,14 @@ public class ItemsEndToEndTest {
     @Test
     public void crearItemYVotar() {
         String itemName = "canario";
+        String uri = "/users/" + USERNAME + "/lists/" + LISTA_NAME + "/items/" + itemName;
 
-        Response response = itemsHelper.createItem(USERNAME, LISTA_NAME, itemName);
+        Response response = target(uri).request().post(null);
         checkResponse(response, Status.CREATED.getStatusCode());
-        itemsHelper.voteItem(USERNAME, LISTA_NAME, itemName);
+        response = target(uri + "/vote").request().post(null);
+        checkResponse(response, Status.CREATED.getStatusCode());
 
-        Lista lista = listasHelper.getListaParseada(USERNAME,LISTA_NAME);
+        Lista lista = target("/users/" + USERNAME + "/lists/" + LISTA_NAME).request().get(Lista.class);
 
         assertNotNull(lista);
         assertEquals(1, lista.getItem(itemName).getVotos().intValue());
@@ -88,11 +77,12 @@ public class ItemsEndToEndTest {
     @Test
     public void crearItemRepetidoYChequearProhibicion() {
         String itemName = "elefante";
-
-        Response response = itemsHelper.createItem(USERNAME, LISTA_NAME, itemName);
+        String uri = "/users/" + USERNAME + "/lists/" + LISTA_NAME + "/items/" + itemName;
+        
+        Response response = target(uri).request().post(null);
         checkResponse(response, Status.CREATED.getStatusCode());
         
-        response = itemsHelper.createItem(USERNAME, LISTA_NAME, itemName);
+        response = target(uri).request().post(null);
         checkResponse(response, Status.FORBIDDEN.getStatusCode());
         
     }
