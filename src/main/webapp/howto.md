@@ -3,7 +3,7 @@
 
 ## Instrucciones:
 
-Para ejecutar el servidor utilizar el comando `mvn exec:java`
+Para ejecutar el servidor utilizar el comando 'mvn jetty:run-war'
 
 ---
 
