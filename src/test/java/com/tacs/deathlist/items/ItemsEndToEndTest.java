@@ -116,6 +116,15 @@ public class ItemsEndToEndTest extends DeathListTest{
     	Response response = target(uri).request().post(null);
         checkResponse(response, Status.NOT_FOUND.getStatusCode());
     }
+    
+    @Test
+    public void eliminarItemQueNoExiste() {
+    	String itemName = "Perdido";
+    	String uri = "/users/" + USERNAME + "/lists/" + LISTA_NAME + "/items/" + itemName;
+    	
+    	Response response = target(uri).request().delete();
+        checkResponse(response, Status.NOT_FOUND.getStatusCode());
+    }
 
     private void checkResponse(Response response, int statusCode) {
         assertNotNull(response);
