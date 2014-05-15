@@ -60,7 +60,7 @@ public class InMemoryListasDao implements ListasDao {
     @Override
     public void voteItem(String username, String nombreLista, String itemName) {
         if(!listas.containsKey(getKey(username, nombreLista))){
-            throw new CustomNotFoundException("Se quiso votar el item " + itemName + " a la "
+            throw new CustomNotFoundException("Se quiso votar el item " + itemName + " de la "
                     + "lista " + nombreLista + " que no existe");
         }
         listas.get(getKey(username, nombreLista)).votarItem(itemName);

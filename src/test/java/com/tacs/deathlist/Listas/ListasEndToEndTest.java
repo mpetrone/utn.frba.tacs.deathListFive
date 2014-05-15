@@ -112,6 +112,14 @@ public class ListasEndToEndTest extends DeathListTest{
 
         target(uri).request().delete();
     }
+    
+    @Test
+    public void eliminarListaQueNoExiste() {
+        String uri = "/users/" + USERNAME + "/lists/" + "listafantasma";
+
+        Response response = target(uri).request().delete();
+        checkResponse(response, Status.NOT_FOUND.getStatusCode());
+    }
 
     private void checkResponse(Response response, int statusCode) {
         assertNotNull(response);

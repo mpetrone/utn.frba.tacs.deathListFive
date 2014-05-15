@@ -31,6 +31,10 @@ public class Lista {
     private int getCantidadDeItems() {
     	return this.items.size();
     }
+    
+    public int getMaxItems() {
+    	return MAX_ITEMS;
+    }
 
 	public void agregarItem(String nombreDeNuevoItem) {
 		if (!existeItem(nombreDeNuevoItem)) {

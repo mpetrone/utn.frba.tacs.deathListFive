@@ -8,15 +8,18 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import com.tacs.deathlist.DeathListTest;
+import com.tacs.deathlist.domain.CustomNotFoundException;
 import com.tacs.deathlist.domain.Lista;
 import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
 
 public class ItemsEndToEndTest extends DeathListTest{
 
-    private static final String USERNAME = "user1";
+	private static final String USERNAME = "user1";
     private static final String LISTA_NAME = "lista";
 
     public void setUp() throws Exception {
@@ -85,6 +88,33 @@ public class ItemsEndToEndTest extends DeathListTest{
         response = target(uri).request().post(null);
         checkResponse(response, Status.FORBIDDEN.getStatusCode());
         
+    }
+    
+    @Test
+    public void crearItemEnListaQueNoExiste() {
+    	String itemName = "Perdido";
+    	String uri = "/users/" + USERNAME + "/lists/" + "listafantasma" + "/items/" + itemName;
+    	
+    	Response response = target(uri).request().post(null);
+        checkResponse(response, Status.NOT_FOUND.getStatusCode());
+    }
+    
+    @Test
+    public void votarItemQueNoExiste() {
+    	String itemName = "Perdido";
+    	String uri = "/users/" + USERNAME + "/lists/" + LISTA_NAME + "/items/" + itemName + "/vote";
+    	
+    	Response response = target(uri).request().post(null);
+        checkResponse(response, Status.NOT_FOUND.getStatusCode());
+    }
+    
+    @Test
+    public void votarItemEnListaQueNoExiste() {
+    	String itemName = "Perdido";
+    	String uri = "/users/" + USERNAME + "/lists/" + "listafantasma" + "/items/" + itemName + "/vote";
+    	
+    	Response response = target(uri).request().post(null);
+        checkResponse(response, Status.NOT_FOUND.getStatusCode());
     }
 
     private void checkResponse(Response response, int statusCode) {

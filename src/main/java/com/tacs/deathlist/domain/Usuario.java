@@ -3,16 +3,13 @@ package com.tacs.deathlist.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 public class Usuario {
-	
+
 	private String uid;
 	private String nombre;
-    private String token;
+	private String token;
 	private List<String> listas = new ArrayList<String>();
-	
+
 	public Usuario(String username, String uid, String token) {
 		this.nombre = username;
 		this.uid = uid;
@@ -31,13 +28,13 @@ public class Usuario {
     	return listas.contains(nombreLista);
     }
     
-    public void agregarLista(String nombreLista) {
-    	
-    	if(this.existeLista(nombreLista))
-    		throw new CustomForbiddenException("El usuario " + this.getNombre() + " ya tiene una lista con el nombre " + nombreLista + ".");
-    	
-    	this.listas.add(nombreLista);
-    }
+	public void agregarLista(String nombreLista) {
+
+		if (this.existeLista(nombreLista))
+			throw new CustomForbiddenException("El usuario " + this.getNombre()
+					+ " ya tiene una lista con el nombre " + nombreLista + ".");
+		this.listas.add(nombreLista);
+	}
     
     public void eliminarLista(String nombreLista){
         
@@ -53,24 +50,4 @@ public class Usuario {
         return token;
     }
     
-    @Override
-    public int hashCode(){
-        return new HashCodeBuilder()
-        .append(nombre)
-        .append(uid)
-        .toHashCode();
-    }
-
-    @Override
-    public boolean equals(final Object obj){
-        if(obj instanceof Lista){
-            final Usuario other = (Usuario) obj;
-            return new EqualsBuilder()
-            .append(nombre, other.getNombre())
-            .append(uid, other.getUid())
-            .isEquals();
-        } else{
-            return false;
-        }
-    }
 }

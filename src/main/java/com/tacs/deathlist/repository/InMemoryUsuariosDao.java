@@ -36,9 +36,12 @@ public class InMemoryUsuariosDao implements UsuariosDao {
         usuarios.put(username, user);
     }
 
-    @Override
-    public boolean deleteUsuario(String username) {
-        return usuarios.remove(username) != null;
-    }
+	@Override
+	public void deleteUsuario(String username) {
+		Usuario eliminado = usuarios.remove(username);
+		if (eliminado == null)
+			throw new CustomNotFoundException("El usuario " + username
+					+ " no existe.");
+	}
 
 }

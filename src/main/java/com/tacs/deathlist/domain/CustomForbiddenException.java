@@ -7,13 +7,6 @@ public class CustomForbiddenException extends WebApplicationException {
 	
     private static final long serialVersionUID = 13754947979705084L;
 
-    /**
-	  * Create a HTTP 403 (Forbidden) exception.
-	  */
-	  public CustomForbiddenException() {
-	    super(Response.status(Response.Status.NOT_FOUND).build());
-	  }
-
 	  /**
 	  * Create a HTTP 403 (Forbidden) exception.
 	  * @param message the String that is the entity of the 403 response.

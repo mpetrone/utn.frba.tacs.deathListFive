@@ -9,5 +9,5 @@ public interface UsuariosDao {
 
     void createUsuario(String username, Usuario user);
 
-    boolean deleteUsuario(String username);
+    void deleteUsuario(String username);
 }

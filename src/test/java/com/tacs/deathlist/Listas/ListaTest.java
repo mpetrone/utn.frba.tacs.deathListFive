@@ -5,14 +5,50 @@ import static org.junit.Assert.assertEquals;
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
+import com.tacs.deathlist.domain.CustomForbiddenException;
 import com.tacs.deathlist.domain.Item;
 import com.tacs.deathlist.domain.Lista;
 
 public class ListaTest {
 
-    
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
+	
+	@Test
+	public void testCompararListas() {
+		
+		Lista lista1 = new Lista("Lenguajes");
+		lista1.agregarItem("Python");
+		lista1.agregarItem("Ruby");
+		
+		Lista lista2 = new Lista("Lenguajes");
+		lista2.agregarItem("Java");
+		lista2.agregarItem("Scala");
+		
+		// las listas se comparan por el nombre
+		assertEquals(lista1, lista2);
+	}
+	
+	
+	@Test
+    public void testLimitarItems() {
+    	Lista lista = new Lista("Numeros");
+    	
+    	// se llena la lista
+    	for(int i=1; i<=lista.getMaxItems(); i++) {
+    		lista.agregarItem(String.valueOf(i));
+    	}
+    	
+    	// agregar un item mas deberia lanzar excepcion
+    	exception.expect(CustomForbiddenException.class);
+    	lista.agregarItem("itemExtra");
+    }
+	
+	
     @Test
     public void testVotarItems() throws Exception {
         // hacemos accesible la propiedad items para testear

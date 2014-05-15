@@ -66,6 +66,11 @@ public class UsuarioEndToEndTest extends DeathListTest{
         
     }
     
+    @Test
+    public void eliminarUsuarioQueNoExiste() {
+    	checkResponse(target("/users/" + "fantasma").request().delete(), Status.NOT_FOUND.getStatusCode());
+    }
+    
     
     private void checkResponse(Response response, int statusCode) {
         assertNotNull(response);
