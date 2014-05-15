@@ -27,13 +27,13 @@ public class ApplicationConfiguration extends ResourceConfig {
         register(GsonMessageBodyHandler.class);
         
         //Para monitoriar la aplicacion desde MBEANS
-        property(ServerProperties.MONITORING_STATISTICS_MBEANS_ENABLED, true);
+        //property(ServerProperties.MONITORING_STATISTICS_MBEANS_ENABLED, true);
         
         // Para loguear todos los eventos de entrada y salida (loguea una banda)
         //registerInstances(new LoggingFilter(Logger.getLogger("Deathlist Server"), true));
         
         // El brigde para que slf4j atrape los logs de jersey
-        SLF4JBridgeHandler.removeHandlersForRootLogger();
-        SLF4JBridgeHandler.install();
+        //SLF4JBridgeHandler.removeHandlersForRootLogger();
+        //SLF4JBridgeHandler.install();
     }
 }

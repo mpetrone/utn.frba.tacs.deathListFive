@@ -1,6 +1,5 @@
 package com.tacs.deathlist.endpoints.resources;
 
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * 
@@ -9,11 +8,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author matias.petrone
  *
  */
-@XmlRootElement
 public class UserCreationRequest {
 
     private String uid;
     private String token;
+    
+    // lo pide GSON
+    UserCreationRequest(){}; 
     
     public UserCreationRequest(String uid, String token) {
         super();
