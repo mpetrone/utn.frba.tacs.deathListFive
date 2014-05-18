@@ -1,5 +1,5 @@
 // donde vive la api
-var API_NAMESPACE = 'http://localhost:8080/deathlist/';
+var API_NAMESPACE = '/deathlist/';
 
 // usuario de prueba, se va cuando haya FB
 var GUEST_PATH = 'users/guest';
