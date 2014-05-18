@@ -1,11 +1,8 @@
 package com.tacs.deathlist;
 
+import com.tacs.deathlist.endpoints.providers.GsonMessageBodyHandler;
 import org.glassfish.jersey.CommonProperties;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.ServerProperties;
-import org.slf4j.bridge.SLF4JBridgeHandler;
-
-import com.tacs.deathlist.endpoints.providers.GsonMessageBodyHandler;
 
 /**
  * 
@@ -25,6 +22,9 @@ public class ApplicationConfiguration extends ResourceConfig {
         // configuramos el parseo de jersey con gson (tenemos que deshabilitar el que viene por defecto
         property(CommonProperties.MOXY_JSON_FEATURE_DISABLE, true);
         register(GsonMessageBodyHandler.class);
+
+        // configuramos la autenticacion
+        register(AuthorizationRequestFilter.class);
         
         //Para monitoriar la aplicacion desde MBEANS
         //property(ServerProperties.MONITORING_STATISTICS_MBEANS_ENABLED, true);

@@ -1,5 +1,8 @@
 package com.tacs.deathlist.endpoints;
 
+import com.tacs.deathlist.repository.ListasDao;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -7,11 +10,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.tacs.deathlist.repository.ListasDao;
-
-@Path("/users/{userName}/lists/{listName}/items/{itemName}")
+@Path("/users/{uid}/lists/{listName}/items/{itemName}")
 public class ItemsEndpoints {
 
     @Autowired
@@ -20,16 +19,16 @@ public class ItemsEndpoints {
 	/**
 	 * Crea un nuevo ítem en una lista.
 	 * 
-	 * @param userName
+	 * @param uid
 	 * @param listName
 	 * @param itemName
 	 * @return
 	 */
 	@POST
-	public Response createItem(@PathParam("userName") String userName,
+	public Response createItem(@PathParam("uid") String uid,
 			                   @PathParam("listName") String listName,
 			                   @PathParam("itemName") String itemName) {
-		dao.createItem(userName, listName, itemName);
+		dao.createItem(uid, listName, itemName);
 		return Response.status(Status.CREATED).build();
 	}
 
@@ -41,10 +40,10 @@ public class ItemsEndpoints {
 	 */
 	@Path("vote")
 	@POST
-	public Response voteItem(@PathParam("userName") String userName,
+	public Response voteItem(@PathParam("uid") String uid,
 			                 @PathParam("listName") String listName,
 			                 @PathParam("itemName") String itemName) {	
-	    dao.voteItem(userName, listName, itemName);
+	    dao.voteItem(uid, listName, itemName);
 		return Response.status(Status.CREATED).build();
 	}
 
@@ -55,10 +54,10 @@ public class ItemsEndpoints {
 	 * @return
 	 */
 	@DELETE
-	public Response deleteItem(@PathParam("userName") String userName,
+	public Response deleteItem(@PathParam("uid") String uid,
 			                   @PathParam("listName") String listName,
 			                   @PathParam("itemName") String itemName) {
-	    dao.deteleItem(userName, listName, itemName);
+	    dao.deteleItem(uid, listName, itemName);
 		return Response.status(Status.OK).build();
 	}
 

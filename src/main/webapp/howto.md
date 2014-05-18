@@ -11,25 +11,24 @@ Para ejecutar el servidor utilizar el comando 'mvn jetty:run-war'
 
 ## Endpoints:
 
-* **`/deathlist/users/{username}`**
+* **`/deathlist/users/{uid}`**
   
         POST: createUser: Crea un nuevo usuario **
         
             Example request body:
                 {
-                    "uid": "1234",
-                    "token": "a token"
+                    "nombre": "john snow",
                 }
     
         GET: getUser: Obtiene la informacion de un determinado usuario
     
         DELETE: deleteUser: Elimina un usuario
 
-* **`/deathlist/users/{username}/lists`**
+* **`/deathlist/users/{uid}/lists`**
 
         GET: getAllLists: Obtiene todas las listas de un determinado usuario
 
-* **`/deathlist/users/{username}/lists/{listName}`**
+* **`/deathlist/users/{uid}/lists/{listName}`**
 
         GET: getList: Obtiene una lista de un determinado usuario
 	      
@@ -37,13 +36,13 @@ Para ejecutar el servidor utilizar el comando 'mvn jetty:run-war'
 	      
         DELETE: deleteList: Elimina una lista de un determinado usuario
 
-* **`/deathlist/users/{username}/lists/{listName}/items/{itemName}`**
+* **`/deathlist/users/{uid}/lists/{listName}/items/{itemName}`**
 	
         POST: createItem: Crea un nuevo item
 	
         DELETE: deleteItem: Elimina un item
 	
-* **`/deathlist/users/{username}/lists/{listName}/items/{itemName}/vote`**
+* **`/deathlist/users/{uid}/lists/{listName}/items/{itemName}/vote`**
 
         POST: voteItem: Vota item
 	

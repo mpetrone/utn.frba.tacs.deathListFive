@@ -1,22 +1,15 @@
 package com.tacs.deathlist.endpoints;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
 import com.tacs.deathlist.repository.UsuariosDao;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Path("/users/{username}")
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+@Path("/users/{uid}")
 public class UsuarioEndpoints {
 
     @Autowired
@@ -24,38 +17,38 @@ public class UsuarioEndpoints {
 
     /**
      * Recupera un Usuario.
-     * @param username
+     * @param uid
      * @return the http response
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-	public Response getUser(@PathParam("username") String username) {
-		Usuario user = dao.getUsuario(username);
+	public Response getUser(@PathParam("uid") String uid) {
+		Usuario user = dao.getUsuario(uid);
 		return Response.status(Response.Status.OK).entity(user).build();
 	}
 
     /**
      * Crea un nuevo Usuario.
-     * @param username
+     * @param uid
      * @return the http response
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createUser(@PathParam("username") String username,
+    public Response createUser(@PathParam("uid") String uid,
             UserCreationRequest request) {
-        Usuario user = new Usuario(username, request.getUid(), request.getToken());
-        dao.createUsuario(username, user);
+        Usuario user = new Usuario(uid, request.getNombre());
+        dao.createUsuario(uid, user);
         return Response.status(Response.Status.CREATED).build();
     }
 
     /**
      * Elimina un usuario.
-     * @param username
+     * @param uid
      * @return the http response
      */
     @DELETE
-    public Response deleteUser(@PathParam("username") String username) {
-        dao.deleteUsuario(username);
+    public Response deleteUser(@PathParam("uid") String uid) {
+        dao.deleteUsuario(uid);
         return Response.status(Response.Status.OK).build();
     }
 }

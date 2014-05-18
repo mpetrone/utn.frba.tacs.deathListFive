@@ -5,9 +5,9 @@ import com.tacs.deathlist.domain.Usuario;
 
 public interface UsuariosDao {
 
-    Usuario getUsuario(String username);
+    Usuario getUsuario(String uid);
 
-    void createUsuario(String username, Usuario user);
+    void createUsuario(String uid, Usuario user);
 
-    void deleteUsuario(String username);
+    void deleteUsuario(String uid);
 }

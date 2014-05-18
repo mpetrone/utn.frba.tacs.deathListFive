@@ -1,48 +1,44 @@
-package com.tacs.deathlist.Listas;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import org.junit.Test;
+package com.tacs.deathlist.lista;
 
 import com.tacs.deathlist.DeathListTest;
 import com.tacs.deathlist.domain.Lista;
 import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
+import org.junit.Test;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class ListasEndToEndTest extends DeathListTest{
 
-    private static final String USERNAME = "user1";
+    private static final String UID = "1234";
 
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        target("/users/" + USERNAME).
-                request().post(Entity.json(new UserCreationRequest("1234", "a token")));
+        target("/users/" + UID).
+                request().post(Entity.json(new UserCreationRequest("cosme fulanito")));
     }
 
     public void tearDown() throws Exception  {
-        target("/users/" + USERNAME).request().delete();
+        target("/users/" + UID).request().delete();
         super.tearDown();
     }
 
     @Test
     public void crearListaYChequearQueExista() {
         String lista1 = "Paises";
-        String uri = "/users/" + USERNAME + "/lists/" + lista1;
+        String uri = "/users/" + UID + "/lists/" + lista1;
 
         Response response = target(uri).request().post(null);
         checkResponse(response, Status.CREATED.getStatusCode());
         Lista lista = target(uri).request().get(Lista.class);
-        Usuario usuario = target("/users/" + USERNAME).request().get(Usuario.class);
+        Usuario usuario = target("/users/" + UID).request().get(Usuario.class);
 
 
         assertNotNull(lista);
@@ -56,11 +52,11 @@ public class ListasEndToEndTest extends DeathListTest{
     @Test
     public void crearVariasListasYChequearQueExistan() {
         String lista1 = "Paises";
-        String uri1 = "/users/" + USERNAME + "/lists/" + lista1;
+        String uri1 = "/users/" + UID + "/lists/" + lista1;
         String lista2 = "Equipos";
-        String uri2 = "/users/" + USERNAME + "/lists/" + lista2;
+        String uri2 = "/users/" + UID + "/lists/" + lista2;
         String lista3 = "Ciudades";
-        String uri3 = "/users/" + USERNAME + "/lists/" + lista3;
+        String uri3 = "/users/" + UID + "/lists/" + lista3;
 
         Response response = target(uri1).request().post(null);
         checkResponse(response, Status.CREATED.getStatusCode());
@@ -70,8 +66,8 @@ public class ListasEndToEndTest extends DeathListTest{
         checkResponse(response, Status.CREATED.getStatusCode());
 
         @SuppressWarnings("unchecked")
-        List<String> listas = target("/users/" + USERNAME + "/lists").request().get(List.class);
-        Usuario usuario = target("/users/" + USERNAME).request().get(Usuario.class);
+        List<String> listas = target("/users/" + UID + "/lists").request().get(List.class);
+        Usuario usuario = target("/users/" + UID).request().get(Usuario.class);
 
         assertNotNull(listas);
         assertNotNull(usuario);
@@ -91,7 +87,7 @@ public class ListasEndToEndTest extends DeathListTest{
     @Test
     public void crearListaYEliminarla() {
         String lista1 = "Paises";
-        String uri = "/users/" + USERNAME + "/lists/" + lista1;
+        String uri = "/users/" + UID + "/lists/" + lista1;
 
         Response response = target(uri).request().post(null);
         checkResponse(response, Status.CREATED.getStatusCode());
@@ -106,7 +102,7 @@ public class ListasEndToEndTest extends DeathListTest{
     @Test
     public void crearListaRepetidaYChequearProhibicion() {
         String lista1 = "Paises";
-        String uri = "/users/" + USERNAME + "/lists/" + lista1;
+        String uri = "/users/" + UID + "/lists/" + lista1;
         checkResponse(target(uri).request().post(null), Status.CREATED.getStatusCode());
         checkResponse(target(uri).request().post(null), Status.FORBIDDEN.getStatusCode());
 
@@ -115,7 +111,7 @@ public class ListasEndToEndTest extends DeathListTest{
     
     @Test
     public void eliminarListaQueNoExiste() {
-        String uri = "/users/" + USERNAME + "/lists/" + "listafantasma";
+        String uri = "/users/" + UID + "/lists/" + "listafantasma";
 
         Response response = target(uri).request().delete();
         checkResponse(response, Status.NOT_FOUND.getStatusCode());

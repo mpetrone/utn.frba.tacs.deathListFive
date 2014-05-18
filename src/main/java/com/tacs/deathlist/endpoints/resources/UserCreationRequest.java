@@ -10,21 +10,16 @@ package com.tacs.deathlist.endpoints.resources;
  */
 public class UserCreationRequest {
 
-    private String uid;
-    private String token;
+    private String nombre;
     
     // lo pide GSON
     UserCreationRequest(){}; 
     
-    public UserCreationRequest(String uid, String token) {
-        super();
-        this.uid = uid;
-        this.token = token;
+    public UserCreationRequest(String nombre) {
+        this.nombre = nombre;
     }
-    public String getUid() {
-        return uid;
-    }
-    public String getToken() {
-        return token;
+
+    public String getNombre() {
+        return nombre;
     }
 }
