@@ -50,7 +50,7 @@
               <div class="list-group">
                 {{#each}}
                 <li href="#" class="list-group-item">
-                  {{#link-to 'list' this.id}}{{nombre}}{{/link-to}}
+                  {{#link-to 'list' this.id}}{{id}}{{/link-to}}
                   <a href="#" {{action "deleteList" this}} class="badge">x</a>
                 </li>
                 {{/each}}
@@ -68,7 +68,7 @@
   <script type="text/x-handlebars" id="list">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">{{nombre}} items</h3>
+        <h3 class="panel-title">{{id}} items</h3>
       </div>
       <div class="panel-body">
         <div class="input-group">
@@ -81,7 +81,7 @@
         <div class="list-group">
           {{#each item in items}}
           <li href="#" class="list-group-item">
-            {{item.nombre}}
+            {{item.id}}
             <a href="#" {{action "deleteItem" item}} class="badge">x</a>
             <a href="#" {{action "voteItem" item}} class="badge">{{item.votos}}</a>
           </li>

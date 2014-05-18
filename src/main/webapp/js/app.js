@@ -1,5 +1,5 @@
 // donde vive la api
-var API_NAMESPACE = 'deathlist/';
+var API_NAMESPACE = '/deathlist/';
 
 // usuario de prueba, se va cuando haya FB
 var GUEST_PATH = 'users/guest';
@@ -10,9 +10,7 @@ $.ajax({
    data: JSON.stringify({uid:1234, token:'token'})
 }).always(function() {
 
-   App = Ember.Application.create({
-      LOG_TRANSITIONS: true
-   });
+   App = Ember.Application.create();
 
    App.Router.map(function() {
       this.resource('lists', { path: '/' }, function () {
@@ -29,9 +27,11 @@ $.ajax({
                alert('Error en GET lists');
             })
             .done(function(lists) {
-               return lists.forEach(function (list) {
-                  list.id = list.nombre;
-               });
+               for (var i = 0; i < lists.length; i++) {
+                  lists[i] = Ember.Object.create({
+                     id: lists[i]
+                  });
+               }
             });
       }
    });
@@ -45,10 +45,12 @@ $.ajax({
             })
             .done(function(list) {
                list.id = list.nombre;
-               list.items.forEach(function (item) {
-                  item.id = item.nombre;
-               });
-               return list;
+               for (var i = 0; i < list.items.length; i++) {
+                  list.items[i] = Ember.Object.create({
+                     id:    list.items[i].nombre,
+                     votos: list.items[i].votos
+                  })
+               }
             });
       }
    });
@@ -75,10 +77,11 @@ $.ajax({
                   controller.set('newList', '');
                   
                   // actualiza la lista
-                  controller.get('content').unshiftObject({
-                     id: list,
-                     nombre: list
-                  });
+                  controller.get('content').unshiftObject(
+                     Ember.Object.create({
+                        id: list
+                     })
+                  );
                });
          },
          deleteList: function (list) {
@@ -88,7 +91,7 @@ $.ajax({
              BootstrapDialog.show({
                  type: BootstrapDialog.TYPE_WARNING,
                  title: 'Advertencia',
-                 message: '¿Querés borrar la lista ' + list.nombre +'?',
+                 message: '¿Querés borrar la lista ' + list.id +'?',
                  buttons: [{
                      label: 'Sí',
                      action: function(dialogItself){
@@ -141,12 +144,13 @@ $.ajax({
                   // limpia el input
                   controller.set('newItem', '');
                   
-                  // actualiza la los items
-                  controller.get('content').items.unshiftObject({
-                     id: item,
-                     nombre: item,
-                     votos: 0
-                  });
+                  // actualiza los items
+                  controller.get('content').items.unshiftObject(
+                     Ember.Object.create({
+                        id: item,
+                        votos: 0
+                     })
+                  );
                });
          },
          deleteItem: function (item) {
@@ -159,7 +163,7 @@ $.ajax({
             BootstrapDialog.show({
                 type: BootstrapDialog.TYPE_WARNING,
                 title: 'Advertencia',
-                message: '¿Querés borrar el item ' + item.nombre +'?',
+                message: '¿Querés borrar el item ' + item.id +'?',
                 buttons: [{
                     label: 'Sí',
                     action: function(dialogItself){                        
@@ -191,9 +195,7 @@ $.ajax({
       	 
         	 $.post(API_NAMESPACE + GUEST_PATH + '/lists/' + list + '/items/' + item.id + '/vote')     	 
              .done(function () {
-                 // actualizar los votos      
-            	 Ember.set(item,'votos',item.votos +1);
-            	 //controller.incrementProperty('votos');
+                item.incrementProperty('votos');
               });
          }
       }
