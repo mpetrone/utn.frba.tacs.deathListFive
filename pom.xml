@@ -141,6 +141,7 @@
                             <exclude>src/main/resources/*</exclude>
                         </excludes>
                     </instrumentation>
+                    <check/>
                 </configuration>
                 <executions>
                     <execution>

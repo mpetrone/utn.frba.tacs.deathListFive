@@ -1,29 +1,25 @@
 package com.tacs.deathlist.endpoints;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.restfb.Connection;
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.types.User;
 import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
-import com.tacs.deathlist.repository.ListasDao;
 import com.tacs.deathlist.repository.UsuariosDao;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 @Path("/users/{uid}")
 public class UsuarioEndpoints {
 
     @Autowired
-    private UsuariosDao dao;
+    private UsuariosDao usuariosDao;
 
     /**
      * Recupera un Usuario.
@@ -33,7 +29,7 @@ public class UsuarioEndpoints {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
 	public Response getUser(@PathParam("uid") String uid) {
-		Usuario user = dao.getUsuario(uid);
+		Usuario user = usuariosDao.getUsuario(uid);
 		return Response.status(Response.Status.OK).entity(user).build();
 	}
 
@@ -47,7 +43,7 @@ public class UsuarioEndpoints {
     public Response createUser(@PathParam("uid") String uid,
             UserCreationRequest request) {
         Usuario user = new Usuario(uid, request.getNombre());
-        dao.createUsuario(uid, user);
+        usuariosDao.createUsuario(uid, user);
         return Response.status(Response.Status.CREATED).build();
     }
 
@@ -58,7 +54,7 @@ public class UsuarioEndpoints {
      */
     @DELETE
     public Response deleteUser(@PathParam("uid") String uid) {
-        dao.deleteUsuario(uid);
+        usuariosDao.deleteUsuario(uid);
         return Response.status(Response.Status.OK).build();
     }
     
@@ -75,35 +71,23 @@ public class UsuarioEndpoints {
     	//TODO: ACCESS TOKEN HARCODEADO, tendria que recibirlo por parametro (cookie me imagino)
     	String MY_ACCESS_TOKEN = "CAACEdEose0cBAG9nvNDXgSQSx3eqcPleUuc0KoVGZBGXqxAsJGNqPHylNM7W1pqQdfLt0kZCqZAKrFLeTgWVvXw8NjODjH5z8YsAnjnvoF951MFExfD4rbABmqxUZCiMVDBmL2boU1Bj1L8hcQ3CAyY8d7bmo3qofOZC2cuuwAdDV6KsQKFbRNhZBBqi6RWqyVhUASVsBZC2AZDZD";
     	
-    	Map<String, List<String>> allFriendsLists; 
+    	List<Usuario> friendLists = obtenerListasDeAmigosDeFacebook(MY_ACCESS_TOKEN);
     	
-    	allFriendsLists = this.obtenerListasDeAmigosDeFacebook(MY_ACCESS_TOKEN);
-    	
-		return Response.status(Response.Status.OK).entity(allFriendsLists).build();
+		return Response.status(Response.Status.OK).entity(friendLists).build();
 	}
     
-    public Map<String, List<String>> obtenerListasDeAmigosDeFacebook(String accessToken) {
-    	
-    	Map<String, List<String>> allFriendsLists = new HashMap<String, List<String>>();
-    	
-    	FacebookClient facebookClient = new DefaultFacebookClient(accessToken);
-    	Connection<User> myFriends = facebookClient.fetchConnection("me/friends", User.class); 
-		
-    	//TODO: ESTA BIEN ACCEDER AL DAO DE LISTAS DESDE ACA?
-    	ListasDao listasDao;
-		
-		for (User friend : myFriends.getData()) {
-			String friendId = friend.getId();
-			//String friendName = friend.getName();
-			
-			if (dao.getUsuario(friendId) != null) {
-				/* TODO: ERROR: NO PUEDO ACCEDER AL DAO DE LISTAS DESDE ACA
-				List<String> friendLists = listasDao.getAllLists(friendId);
-				
-				allFriendsLists.put(friendId, friendLists); 	
-				*/	
-			} 
-		}
+    public List<Usuario> obtenerListasDeAmigosDeFacebook(String accessToken) {
+
+        List<Usuario> allFriendsLists = new ArrayList<>();
+
+        FacebookClient facebookClient = new DefaultFacebookClient(accessToken);
+    	Connection<User> myFriends = facebookClient.fetchConnection("me/friends", User.class);
+
+        if(myFriends != null && myFriends.getData() != null) for (User friend : myFriends.getData()) {
+            String friendId = friend.getId();
+            Usuario userFriend = usuariosDao.getUsuario(friendId);
+            allFriendsLists.add(userFriend);
+        }
     	
     	return allFriendsLists;
     }
