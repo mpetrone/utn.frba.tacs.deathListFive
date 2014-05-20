@@ -45,6 +45,7 @@ $.ajax({
             })
             .done(function(list) {
                list.id = list.nombre;
+               list.items = list.items.sortBy('votos').reverse();
                for (var i = 0; i < list.items.length; i++) {
                   list.items[i] = Ember.Object.create({
                      id:    list.items[i].nombre,
@@ -150,7 +151,7 @@ $.ajax({
                         id: item,
                         votos: 0
                      })
-                  );
+                  ).sortBy('votos').reverse();
                });
          },
          deleteItem: function (item) {
@@ -188,15 +189,19 @@ $.ajax({
             });                         
          },
          voteItem: function (item) {
-             // TODO: error handling
-	         
+             // TODO: error handling        	 
+        	 
         	 var controller = this;
         	 var list = this.get('id');
       	 
         	 $.post(API_NAMESPACE + GUEST_PATH + '/lists/' + list + '/items/' + item.id + '/vote')     	 
              .done(function () {
                 item.incrementProperty('votos');
-              });
+                
+				var items = controller.get('content.items');
+				controller.set('content.items', items.sortBy('votos').reverse());                
+              
+             });
          }
       }
    });
