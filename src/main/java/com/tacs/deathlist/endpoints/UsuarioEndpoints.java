@@ -86,7 +86,9 @@ public class UsuarioEndpoints {
         if(myFriends != null && myFriends.getData() != null) for (User friend : myFriends.getData()) {
             String friendId = friend.getId();
             Usuario userFriend = usuariosDao.getUsuario(friendId);
-            allFriendsLists.add(userFriend);
+            if (userFriend != null) {
+            	allFriendsLists.add(userFriend);	
+            } 
         }
     	
     	return allFriendsLists;
