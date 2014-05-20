@@ -3,7 +3,6 @@ package com.tacs.deathlist;
 import com.tacs.deathlist.endpoints.providers.GsonMessageBodyHandler;
 import org.glassfish.jersey.CommonProperties;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.springframework.web.filter.RequestContextFilter;
 
 /**
  * 
@@ -26,9 +25,6 @@ public class ApplicationConfiguration extends ResourceConfig {
 
         // configuramos la autenticacion
         register(AuthorizationRequestFilter.class);
-
-        //spring
-        register(RequestContextFilter.class);
 
         //Para monitoriar la aplicacion desde MBEANS
         //property(ServerProperties.MONITORING_STATISTICS_MBEANS_ENABLED, true);
