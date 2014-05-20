@@ -1,16 +1,15 @@
 package com.tacs.deathlist.domain;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Lista {
 
     private String nombre;
-    private List<Item> items = new LinkedList<Item>();
+    private List<Item> items = new ArrayList<Item>();
     
     // Todas las listas están limitadas a tener una cierta cantidad de items
     //TODO: ponerlo en las properties
@@ -69,7 +68,6 @@ public class Lista {
     
     public void votarItem(String itemName) {
         getItem(itemName).recibirVoto(); // lanza excepcion si el item no existe
-        Collections.sort(items);
     }
 
     @Override
