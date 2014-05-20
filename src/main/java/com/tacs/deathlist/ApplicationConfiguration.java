@@ -3,6 +3,7 @@ package com.tacs.deathlist;
 import com.tacs.deathlist.endpoints.providers.GsonMessageBodyHandler;
 import org.glassfish.jersey.CommonProperties;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.springframework.web.filter.RequestContextFilter;
 
 /**
  * 
@@ -15,17 +16,20 @@ public class ApplicationConfiguration extends ResourceConfig {
     
     public ApplicationConfiguration() {
         setApplicationName("Deathlist!");
-        
+
         // el packete donde estan nuestros enpoints
         packages("com.tacs.deathlist.endpoints");
-        
+
         // configuramos el parseo de jersey con gson (tenemos que deshabilitar el que viene por defecto
         property(CommonProperties.MOXY_JSON_FEATURE_DISABLE, true);
         register(GsonMessageBodyHandler.class);
 
         // configuramos la autenticacion
         register(AuthorizationRequestFilter.class);
-        
+
+        //spring
+        register(RequestContextFilter.class);
+
         //Para monitoriar la aplicacion desde MBEANS
         //property(ServerProperties.MONITORING_STATISTICS_MBEANS_ENABLED, true);
         

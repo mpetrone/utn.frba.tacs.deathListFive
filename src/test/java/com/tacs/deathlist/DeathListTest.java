@@ -1,10 +1,5 @@
 package com.tacs.deathlist;
 
-import java.io.FileInputStream;
-import java.util.Properties;
-
-import javax.ws.rs.core.Application;
-
 import org.apache.log4j.PropertyConfigurator;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.test.JerseyTest;
@@ -12,13 +7,17 @@ import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
+import javax.ws.rs.core.Application;
+import java.io.FileInputStream;
+import java.util.Properties;
+
 public class DeathListTest extends JerseyTest {
     
     private static final String RESOURCES_PATH = "/src/main/resources/com/tacs/deathlist/";
     
     @Override
     protected Application configure() {
-        // Para loguear mas detalle todo el trafico (loguea una banda)
+        // Para loguear con mas detalle
         //enable(TestProperties.LOG_TRAFFIC);
         //enable(TestProperties.DUMP_ENTITY);
         return new ApplicationConfiguration();

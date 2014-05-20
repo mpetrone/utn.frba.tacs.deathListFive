@@ -13,7 +13,7 @@ Para ejecutar el servidor utilizar el comando 'mvn jetty:run-war'
 
 * **`/deathlist/users/{uid}`**
   
-        POST: createUser: Crea un nuevo usuario **
+        POST: createUser: Crea un nuevo usuario 
         
             Example request body:
                 {

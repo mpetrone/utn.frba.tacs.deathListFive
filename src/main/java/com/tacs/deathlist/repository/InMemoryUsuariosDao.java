@@ -18,10 +18,6 @@ public class InMemoryUsuariosDao implements UsuariosDao {
     public Usuario getUsuario(String uid) {
         LOGGER.debug("Se pidio en la base el usuario: " + uid);
         Usuario usuario = usuarios.get(uid);
-        if (usuario == null){
-            throw new CustomNotFoundException("El usuario " + uid
-                    + " no existe en el sistema.");
-        }
         return usuario;
     }
 
