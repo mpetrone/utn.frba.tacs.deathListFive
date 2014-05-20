@@ -84,7 +84,7 @@ App.ListController = Ember.ObjectController.extend({
             controller.set('newItem', '');
                
             // actualiza los items
-            controller.get('content').items.unshiftObject(
+            controller.get('content').items.pushObject(
                Ember.Object.create({
                   id: item,
                   votos: 0
