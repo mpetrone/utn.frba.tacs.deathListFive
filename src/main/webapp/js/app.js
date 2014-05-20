@@ -18,8 +18,10 @@ App = Ember.Application.create();
 
 App.Router.map(function() {
    this.resource('login', { path: '/' });
-   this.resource('lists', function () {
-      this.resource('list', { path: ':list_id' });         
+   this.resource('people', function () {
+      this.resource('lists', { path: ':user_id' }, function () {
+         this.resource('list', { path: ':list_id' });         
+      });
    });
    this.resource('about');
 });
@@ -68,6 +70,6 @@ function notifyServer(authResponse) {
    }).always(function () {
       // TODO: error handling
       // FIXME: hack
-      window.location.hash='/lists';
+      window.location.hash='/people';
    });
 }

@@ -17,7 +17,8 @@ App.ListsController = Ember.ArrayController.extend({
             // actualiza la lista
             controller.get('content').unshiftObject(
                Ember.Object.create({
-                  id: list
+                  id: list,
+                  uid: App.uid
                })
             );
          });
@@ -28,10 +29,10 @@ App.ListsController = Ember.ArrayController.extend({
 
          BootstrapDialog.show({
             type: BootstrapDialog.TYPE_WARNING,
-            title: 'Advertencia',
-            message: '¿Querés borrar la lista ' + list.id +'?',
+            title: 'Warning',
+            message: 'Do you really want to delete list ' + list.id +'?',
             buttons: [{
-               label: 'Sí',
+               label: 'Yes',
                action: function(dialogItself){
                    
                   $.ajax({
@@ -78,7 +79,8 @@ App.ListController = Ember.ObjectController.extend({
          if (!$.trim(item)) { return; }
          
          var controller = this;
-         $.post(API_NAMESPACE + 'users/' + App.uid + '/lists/' + list + '/items/' + item)
+         
+         $.post(API_NAMESPACE + 'users/' + controller.content.uid + '/lists/' + list + '/items/' + item)
          .done(function () {
             // limpia el input
             controller.set('newItem', '');
@@ -101,13 +103,13 @@ App.ListController = Ember.ObjectController.extend({
 
          BootstrapDialog.show({
             type: BootstrapDialog.TYPE_WARNING,
-            title: 'Advertencia',
-            message: '¿Querés borrar el item ' + item.id +'?',
+            title: 'Warning',
+            message: 'Do you really want to delete item ' + item.id +'?',
             buttons: [{
-               label: 'Sí',
+               label: 'Yes',
                action: function(dialogItself){                        
                   $.ajax({
-                     url: API_NAMESPACE + 'users/' + App.uid + '/lists/' + list + '/items/' + item.id,
+                     url: API_NAMESPACE + 'users/' + controller.content.uid + '/lists/' + list + '/items/' + item.id,
                      type: 'DELETE',
                      dataType: 'html' // la respuesta viene vacia, eso no le gusta al parser de json
                   }).done(function () {
@@ -132,7 +134,7 @@ App.ListController = Ember.ObjectController.extend({
          var controller = this;
          var list = this.get('id');
        
-         $.post(API_NAMESPACE + 'users/' + App.uid + '/lists/' + list + '/items/' + item.id + '/vote')         
+         $.post(API_NAMESPACE + 'users/' + controller.content.uid + '/lists/' + list + '/items/' + item.id + '/vote')         
          .done(function () {
             item.incrementProperty('votos');
              

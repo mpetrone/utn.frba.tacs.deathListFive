@@ -22,7 +22,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            {{#link-to 'lists' tagName="li"}}<a href="#" {{bind-attr href="view.href"}}>My Lists</a>{{/link-to}}
+            {{#link-to 'people' tagName="li"}}<a href="#" {{bind-attr href="view.href"}}>Lists</a>{{/link-to}}
             {{#link-to 'about' tagName="li"}}<a href="#" {{bind-attr href="view.href"}}>About</a>{{/link-to}}
           </ul>
         </div><!-- /.navbar-collapse -->
@@ -37,62 +37,82 @@
     </fb:login-button>
   </script>
   
-  <script type="text/x-handlebars" id="lists">
+  <script type="text/x-handlebars" id="people">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-xs-3"> 
+        <div class="col-xs-3">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h3 class="panel-title">Lists</h3>
+              <h3 class="panel-title">People</h3>
             </div>
             <div class="panel-body">
-              <div class="input-group">
-                {{input type="text" class="form-control" value=newList placeholder="My List" action="createList"}}
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button" {{action "createList" value=newList}}>New</button>
-                </span>
-              </div><!-- /.input-group -->
-              <br/>
               <div class="list-group">
                 {{#each}}
                 <li href="#" class="list-group-item">
-                  {{#link-to 'list' this.id}}{{id}}{{/link-to}}
-                  <a href="#" {{action "deleteList" this}} class="badge">x</a>
+                  {{#link-to 'lists' this.uid}}{{this.nombre}}{{/link-to}}
                 </li>
                 {{/each}}
               </div><!-- /.list-group -->
             </div>
           </div>
         </div><!-- /.col-xs-3 -->
-        <div class="col-xs-9">
-          {{outlet}}
-        </div><!-- /.col-xs-9 -->
+        {{outlet}}
       </div><!-- /.row -->
     </div><!-- /.container-fluid -->
   </script>
   
-  <script type="text/x-handlebars" id="list">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">{{id}} items</h3>
+  <script type="text/x-handlebars" id="lists">
+    <div class="col-xs-3">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Lists</h3>
+        </div>
+        <div class="panel-body">
+          <div class="input-group">
+            {{input type="text" class="form-control" value=newList placeholder="My List" action="createList"}}
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" {{action "createList" value=newList}}>New</button>
+            </span>
+          </div><!-- /.input-group -->
+          <br/>
+          <div class="list-group">
+            {{#each}}
+            <li href="#" class="list-group-item">
+              {{#link-to 'list' this.id}}{{id}}{{/link-to}}
+              <a href="#" {{action "deleteList" this}} class="badge">x</a>
+            </li>
+            {{/each}}
+          </div><!-- /.list-group -->
+        </div>
       </div>
-      <div class="panel-body">
-        <div class="input-group">
-          {{input type="text" class="form-control" value=newItem placeholder="My Item" action="createItem"}}
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button" {{action "createItem" value=newItem}}>New</button>
-          </span>
-        </div><!-- /.input-group -->
-        <br/>
-        <div class="list-group">
-          {{#each item in items}}
-          <li href="#" class="list-group-item">
-            {{item.id}}
-            <a href="#" {{action "deleteItem" item}} class="badge">x</a>
-            <a href="#" {{action "voteItem" item}} class="badge">{{item.votos}}</a>
-          </li>
-          {{/each}}
-        </div><!-- /.list-group -->
+    </div>
+    {{outlet}}
+  </script>
+  
+  <script type="text/x-handlebars" id="list">
+    <div class="col-xs-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{id}} items</h3>
+        </div>
+        <div class="panel-body">
+          <div class="input-group">
+            {{input type="text" class="form-control" value=newItem placeholder="My Item" action="createItem"}}
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" {{action "createItem" value=newItem}}>New</button>
+            </span>
+          </div><!-- /.input-group -->
+          <br/>
+          <div class="list-group">
+            {{#each item in items}}
+            <li href="#" class="list-group-item">
+              {{item.id}}
+              <a href="#" {{action "deleteItem" item}} class="badge">x</a>
+              <a href="#" {{action "voteItem" item}} class="badge">{{item.votos}}</a>
+            </li>
+            {{/each}}
+          </div><!-- /.list-group -->
+        </div>
       </div>
     </div>
   </script>
