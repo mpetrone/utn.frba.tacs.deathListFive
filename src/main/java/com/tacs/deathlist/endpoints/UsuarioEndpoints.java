@@ -6,7 +6,6 @@ import com.restfb.FacebookClient;
 import com.restfb.types.User;
 import com.tacs.deathlist.domain.CustomNotFoundException;
 import com.tacs.deathlist.domain.Usuario;
-import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
 import com.tacs.deathlist.repository.UsuariosDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,8 +52,22 @@ public class UsuarioEndpoints {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createUser(@PathParam("uid") String uid,
-            UserCreationRequest request) {
-        Usuario user = new Usuario(uid, request.getNombre());
+                               @Context HttpHeaders hh)  {
+        String token = getTokenInCookies(hh);
+
+        FacebookClient facebookClient = new DefaultFacebookClient(token);
+        User facebookUser = facebookClient.fetchObject("me", User.class);
+
+        if(facebookUser == null || facebookUser.getId() == null){
+            throw new CustomNotFoundException("El token es invalido");
+        }
+
+        if(!facebookUser.getId().equalsIgnoreCase(uid)){
+            throw new CustomNotFoundException("El uid usuario " + facebookUser.getId()
+                    + "es distinto al uid que fue mandado por uri " + uid);
+        }
+
+        Usuario user = new Usuario(uid, facebookUser.getName());
         usuariosDao.createUsuario(uid, user);
         return Response.status(Response.Status.CREATED).build();
     }
@@ -87,12 +100,9 @@ public class UsuarioEndpoints {
                     + " no existe en el sistema.");
         }
 
-        //el filter deberia fijarse de que en las cookies exista un token, sino deberia dar 403
-        Map<String, Cookie> pathParams = hh.getCookies();
-        Cookie cookie = pathParams.get("token");
-        cookie.getValue();
+        String token = getTokenInCookies(hh);
 
-    	List<Usuario> friendLists = obtenerListasDeAmigosDeFacebook(cookie.getValue());
+    	List<Usuario> friendLists = obtenerListasDeAmigosDeFacebook(token);
     	
 		return Response.status(Response.Status.OK).entity(friendLists).build();
 	}
@@ -113,6 +123,16 @@ public class UsuarioEndpoints {
         }
     	
     	return allFriendsLists;
+    }
+
+
+    private String getTokenInCookies(HttpHeaders hh){
+        Map<String, Cookie> pathParams = hh.getCookies();
+        Cookie cookie = pathParams.get("token");
+        if(cookie != null){
+            return cookie.getValue();
+        }
+        return null;
     }
 
     @Value("${facebook.app.id}")

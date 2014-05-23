@@ -11,15 +11,12 @@ Para ejecutar el servidor utilizar el comando 'mvn jetty:run-war'
 
 ## Endpoints:
 
+Aclaracion: para todos los endpoints se debera mandar un token valido de facebook del uid.
+
 * **`/deathlist/users/{uid}`**
   
         POST: createUser: Crea un nuevo usuario 
         
-            Example request body:
-                {
-                    "nombre": "john snow",
-                }
-    
         GET: getUser: Obtiene la informacion de un determinado usuario
     
         DELETE: deleteUser: Elimina un usuario
