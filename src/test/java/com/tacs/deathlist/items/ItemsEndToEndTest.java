@@ -2,7 +2,6 @@ package com.tacs.deathlist.items;
 
 import com.tacs.deathlist.DeathListTest;
 import com.tacs.deathlist.domain.Lista;
-import com.tacs.deathlist.endpoints.resources.UserCreationRequest;
 import org.junit.Test;
 
 import javax.ws.rs.client.Entity;
@@ -19,7 +18,7 @@ public class ItemsEndToEndTest extends DeathListTest{
     public void setUp() throws Exception {
         super.setUp();
         target("/users/" + UID).
-            request().post(Entity.json(new UserCreationRequest("cosme fulanito")));
+            request().post(Entity.json(null));
         target("/users/" + UID + "/lists/" + LISTA_NAME).request().post(null);
     }
 

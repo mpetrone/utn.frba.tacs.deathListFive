@@ -7,8 +7,13 @@ import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.ext.Provider;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Properties;
 
 public class DeathListTest extends JerseyTest {
@@ -20,13 +25,15 @@ public class DeathListTest extends JerseyTest {
         // Para loguear con mas detalle
         //enable(TestProperties.LOG_TRAFFIC);
         //enable(TestProperties.DUMP_ENTITY);
-        return new ApplicationConfiguration();
+        return new ApplicationConfiguration().property("contextConfigLocation","testApplicationContext.xml");
     }
-    
+
     @Override
     protected void configureClient(ClientConfig config) {
-        config.loadFrom(new ApplicationConfiguration());
+        config.loadFrom(new ApplicationConfiguration().register(ContainerRequestFilter.class));
     }
+
+
     
     @Override
     public TestContainerFactory getTestContainerFactory() {
@@ -52,4 +59,15 @@ public class DeathListTest extends JerseyTest {
         SLF4JBridgeHandler.install();
     }
 
+
+
+    @Provider
+    public class TokenRequestFilter implements ContainerRequestFilter {
+
+        @Override
+        public void filter(ContainerRequestContext requestContext) throws IOException {
+            Cookie cookie = new Cookie("token","1234");
+            requestContext.getCookies().put("token",cookie);
+        }
+    }
 }

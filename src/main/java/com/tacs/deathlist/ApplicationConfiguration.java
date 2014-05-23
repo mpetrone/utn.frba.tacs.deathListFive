@@ -1,5 +1,6 @@
 package com.tacs.deathlist;
 
+import com.tacs.deathlist.endpoints.providers.AuthorizationRequestFilter;
 import com.tacs.deathlist.endpoints.providers.GsonMessageBodyHandler;
 import org.glassfish.jersey.CommonProperties;
 import org.glassfish.jersey.server.ResourceConfig;

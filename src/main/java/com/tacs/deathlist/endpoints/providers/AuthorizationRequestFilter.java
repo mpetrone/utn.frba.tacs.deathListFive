@@ -1,9 +1,10 @@
-package com.tacs.deathlist;
+package com.tacs.deathlist.endpoints.providers;
 
 import com.tacs.deathlist.Service.UserService;
 import com.tacs.deathlist.domain.Usuario;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -13,6 +14,7 @@ import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 
 @Provider
+@Component
 public class AuthorizationRequestFilter implements ContainerRequestFilter {
 
     @Autowired
