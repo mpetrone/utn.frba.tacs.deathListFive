@@ -1,9 +1,6 @@
 package com.tacs.deathlist.endpoints;
 
-import com.restfb.Connection;
-import com.restfb.DefaultFacebookClient;
-import com.restfb.FacebookClient;
-import com.restfb.types.User;
+import com.tacs.deathlist.Service.UserService;
 import com.tacs.deathlist.domain.CustomNotFoundException;
 import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.repository.UsuariosDao;
@@ -13,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +19,9 @@ public class UsuarioEndpoints {
 
     @Autowired
     private UsuariosDao usuariosDao;
+
+    @Autowired
+    private UserService userService;
 
     private String appId;
 
@@ -54,20 +53,13 @@ public class UsuarioEndpoints {
     public Response createUser(@PathParam("uid") String uid,
                                @Context HttpHeaders hh)  {
         String token = getTokenInCookies(hh);
+        Usuario user = userService.getUser(token);
 
-        FacebookClient facebookClient = new DefaultFacebookClient(token);
-        User facebookUser = facebookClient.fetchObject("me", User.class);
-
-        if(facebookUser == null || facebookUser.getId() == null){
-            throw new CustomNotFoundException("El token es invalido");
-        }
-
-        if(!facebookUser.getId().equalsIgnoreCase(uid)){
-            throw new CustomNotFoundException("El uid usuario " + facebookUser.getId()
+        if(!user.getUid().equalsIgnoreCase(uid)){
+            throw new CustomNotFoundException("El uid usuario " + user.getUid()
                     + "es distinto al uid que fue mandado por uri " + uid);
         }
 
-        Usuario user = new Usuario(uid, facebookUser.getName());
         usuariosDao.createUsuario(uid, user);
         return Response.status(Response.Status.CREATED).build();
     }
@@ -102,29 +94,10 @@ public class UsuarioEndpoints {
 
         String token = getTokenInCookies(hh);
 
-    	List<Usuario> friendLists = obtenerListasDeAmigosDeFacebook(token);
+    	List<Usuario> friendLists = userService.getFriends(token);
     	
 		return Response.status(Response.Status.OK).entity(friendLists).build();
 	}
-    
-    private List<Usuario> obtenerListasDeAmigosDeFacebook(String accessToken) {
-
-        List<Usuario> allFriendsLists = new ArrayList<>();
-
-        FacebookClient facebookClient = new DefaultFacebookClient(accessToken);
-    	Connection<User> myFriends = facebookClient.fetchConnection("me/friends", User.class);
-
-        if(myFriends != null && myFriends.getData() != null) for (User friend : myFriends.getData()) {
-            String friendId = friend.getId();
-            Usuario userFriend = usuariosDao.getUsuario(friendId);
-            if (userFriend != null) {
-            	allFriendsLists.add(userFriend);	
-            } 
-        }
-    	
-    	return allFriendsLists;
-    }
-
 
     private String getTokenInCookies(HttpHeaders hh){
         Map<String, Cookie> pathParams = hh.getCookies();
