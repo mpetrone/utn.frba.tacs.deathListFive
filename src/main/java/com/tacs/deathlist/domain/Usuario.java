@@ -7,6 +7,7 @@ import com.googlecode.objectify.annotation.Unindex;
 import com.tacs.deathlist.domain.exception.CustomForbiddenException;
 import com.tacs.deathlist.domain.exception.CustomNotFoundException;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Entity
 @Cache
-public class Usuario {
+public class Usuario implements Serializable {
 
     @Id
     private String uid;

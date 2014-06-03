@@ -42,7 +42,6 @@
 			<version>${apachecommons.version}</version>
 		</dependency>
 
-
         <dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet-core</artifactId>
@@ -54,17 +53,19 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.glassfish.jersey.ext</groupId>
-			<artifactId>jersey-spring3</artifactId>
-		</dependency>
-		
-		<dependency>
             <groupId>com.restfb</groupId>
             <artifactId>restfb</artifactId>
             <version>${restfb.version}</version>
         </dependency>
 
-		<!-- Logging -->
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <version>5.0.0</version>
+        </dependency>
+
+        <!-- Logging -->
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -84,13 +85,14 @@
 		</dependency>
 
         <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <version>${ehcache.version}</version>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.1.3</version>
         </dependency>
 
 
-        <!-- Google App Engine -->
+        <!-- Google App Engine support -->
+
         <dependency>
             <groupId>com.googlecode.objectify</groupId>
             <artifactId>objectify</artifactId>
@@ -98,23 +100,15 @@
         </dependency>
 
         <dependency>
-            <groupId>com.googlecode.objectify-appengine-spring</groupId>
-            <artifactId>objectify-appengine-spring</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.google.appengine</groupId>
             <artifactId>appengine-api-1.0-sdk</artifactId>
             <version>${appengine.target.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.google.appengine</groupId>
             <artifactId>appengine-api-labs</artifactId>
             <version>${appengine.target.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -129,6 +123,13 @@
             <artifactId>appengine-testing</artifactId>
             <version>${appengine.target.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- spring support -->
+
+        <dependency>
+            <groupId>org.glassfish.jersey.ext</groupId>
+            <artifactId>jersey-spring3</artifactId>
         </dependency>
 
     </dependencies>
@@ -171,6 +172,13 @@
 				<configuration>
 					<war>${project.build.directory}/${project.build.finalName}.war</war>
 				</configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                        <version>${slf4j.version}</version>
+                    </dependency>
+                </dependencies>
 			</plugin>
 			<!-- Plugin para ver la cobertura de tests -->
 			<plugin>
@@ -210,14 +218,13 @@
 		<jersey.version>2.8</jersey.version>
 		<junit.version>4.9</junit.version>
 		<gson.version>2.2.4</gson.version>
-		<spring3.version>3.0.5.RELEASE</spring3.version>
+		<spring3.version>3.2.3.RELEASE</spring3.version>
 		<slf4j.version>1.7.6</slf4j.version>
 		<apachecommons.version>3.3.2</apachecommons.version>
 		<covertura.version>2.6</covertura.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<appengine.target.version>1.9.5</appengine.target.version>
+		<appengine.target.version>1.9.4</appengine.target.version>
 		<restfb.version>1.6.14</restfb.version>
-        <ehcache.version>2.8.2</ehcache.version>
         <objectify.version>5.0.2</objectify.version>
 	</properties>
 

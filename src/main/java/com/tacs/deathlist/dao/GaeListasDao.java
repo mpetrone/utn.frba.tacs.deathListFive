@@ -5,9 +5,11 @@ import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.domain.exception.CustomNotFoundException;
 import com.tacs.deathlist.service.ObjetifyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class GaeListasDao implements ListasDao{
 
     @Autowired

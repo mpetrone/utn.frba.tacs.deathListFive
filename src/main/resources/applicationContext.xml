@@ -7,40 +7,20 @@
 
     <context:component-scan base-package="com.tacs.deathlist.endpoint" />
 
-    <bean id="objectifyFactory" class="com.googlecode.objectify.ObjectifyFactory"/>
-
-    <bean id="objectifySpringFactory" class="com.googlecode.objectify.spring.ObjectifyFactoryBean">
-        <lookup-method name="getObject" bean="objectifyFactory"/>
-        <property name="classes">
-            <list>
-                <value>com.tacs.deathlist.domain.Usuario</value>
-                <value>com.tacs.deathlist.domain.Lista</value>
-            </list>
-        </property>
-    </bean>
-
-    <bean id="props" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <bean id="properties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations" value="classpath:com/tacs/deathlist/properties/deathlist.properties"/>
     </bean>
 
-    <bean id="objetifyService" class="com.tacs.deathlist.service.ObjetifyService" />
-
-    <bean id="usuarios" class="com.tacs.deathlist.dao.GaeUsuariosDao" />
-    <!--<bean id="usuarios" class="com.tacs.deathlist.dao.InMemoryUsuariosDao" />-->
-    <bean id="listas" class="com.tacs.deathlist.dao.GaeListasDao" />
-    <!--<bean id="listas" class="com.tacs.deathlist.dao.InMemoryListasDao" />-->
-
     <bean id="facebookUserService" class="com.tacs.deathlist.service.FacebookUserService" />
 
-    <!--cache configuration-->
+    <bean id="objetifyService" class="com.tacs.deathlist.service.ObjetifyService" />
 
-    <bean id="myCache" class="net.sf.ehcache.Cache">
-        <constructor-arg name="name" value="facebookUsersCache"/>
-        <constructor-arg name="maxElementsInMemory" value="${cache.maxElementsInMemory}"/>
-        <constructor-arg name="overflowToDisk" value="false"/>
-        <constructor-arg name="eternal" value="false"/>
-        <constructor-arg name="timeToLiveSeconds" value="${cache.timeToLiveSeconds}"/>
-        <constructor-arg name="timeToIdleSeconds" value="${cache.timeToIdleSeconds}"/>
-    </bean>
+    <!-- gae implementations -->
+    <bean id="usuarios" class="com.tacs.deathlist.dao.GaeUsuariosDao" />
+    <bean id="listas" class="com.tacs.deathlist.dao.GaeListasDao" />
+
+    <!-- in memory implementations -->
+    <!--<bean id="usuarios" class="com.tacs.deathlist.dao.InMemoryUsuariosDao" />-->
+    <!--<bean id="listas" class="com.tacs.deathlist.dao.InMemoryListasDao" />-->
 
 </beans>

@@ -5,7 +5,9 @@ import com.tacs.deathlist.domain.exception.CustomForbiddenException;
 import com.tacs.deathlist.domain.exception.CustomNotFoundException;
 import com.tacs.deathlist.service.ObjetifyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class GaeUsuariosDao implements UsuariosDao {
 
     @Autowired

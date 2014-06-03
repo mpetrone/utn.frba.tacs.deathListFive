@@ -1,14 +1,15 @@
 package com.tacs.deathlist.service;
 
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.restfb.Connection;
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.types.User;
 import com.tacs.deathlist.dao.UsuariosDao;
 import com.tacs.deathlist.domain.Usuario;
-import net.sf.ehcache.Ehcache;
-import net.sf.ehcache.Element;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,19 +19,21 @@ import java.util.List;
  * Servicio que provee la informacion de los usuarios de Facebook.
  *
  */
+@Component
 public class FacebookUserService implements UserService {
+
+    public static final String CACHE_NAME = "facebookUsersCache";
 
     @Autowired
     private UsuariosDao usuariosDao;
 
-    @Autowired
-    private Ehcache usersCache;
+    private MemcacheService cacheManager = MemcacheServiceFactory.getMemcacheService();
 
     public Usuario getUser(String token){
-        Element element = usersCache.get(token);
+        Object element = cacheManager.get(token);
 
         if(element != null){
-            return (Usuario) element.getObjectValue();
+            return (Usuario) element;
         }
 
         FacebookClient facebookClient = new DefaultFacebookClient(token);
@@ -41,8 +44,7 @@ public class FacebookUserService implements UserService {
         }
 
         Usuario user = new Usuario(facebookUser.getId(), facebookUser.getName());
-        Element elementToInsert = new Element(token, user);
-        usersCache.put(elementToInsert);
+        cacheManager.put(token, user);
         return user;
     }
 
@@ -62,4 +64,5 @@ public class FacebookUserService implements UserService {
         }
         return allFriendsLists;
     }
+
 }
