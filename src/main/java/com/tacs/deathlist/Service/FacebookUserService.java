@@ -1,11 +1,11 @@
-package com.tacs.deathlist.Service;
+package com.tacs.deathlist.service;
 
 import com.restfb.Connection;
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.types.User;
+import com.tacs.deathlist.dao.UsuariosDao;
 import com.tacs.deathlist.domain.Usuario;
-import com.tacs.deathlist.repository.UsuariosDao;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 import org.springframework.beans.factory.annotation.Autowired;

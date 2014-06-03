@@ -1,5 +1,7 @@
 package com.tacs.deathlist;
 
+import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import org.apache.log4j.PropertyConfigurator;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.test.JerseyTest;
@@ -19,6 +21,9 @@ import java.util.Properties;
 public class DeathListTest extends JerseyTest {
     
     private static final String RESOURCES_PATH = "/src/main/resources/com/tacs/deathlist/";
+
+    private final static LocalServiceTestHelper helper = new LocalServiceTestHelper(
+            new LocalDatastoreServiceTestConfig());
     
     @Override
     protected Application configure() {
@@ -33,8 +38,18 @@ public class DeathListTest extends JerseyTest {
         config.loadFrom(new ApplicationConfiguration().register(ContainerRequestFilter.class));
     }
 
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        helper.setUp();
+    }
 
-    
+    @Override
+    public void tearDown() throws Exception {
+        super.tearDown();
+        helper.tearDown();
+    }
+
     @Override
     public TestContainerFactory getTestContainerFactory() {
         configureLog4j();

@@ -24,6 +24,7 @@ public class ListasEndToEndTest extends DeathListTest{
                 request().post(Entity.json(null));
     }
 
+    @Override
     public void tearDown() throws Exception  {
         target("/users/" + UID).request().delete();
         super.tearDown();

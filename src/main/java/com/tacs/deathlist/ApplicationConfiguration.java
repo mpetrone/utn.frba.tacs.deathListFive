@@ -1,13 +1,13 @@
 package com.tacs.deathlist;
 
-import com.tacs.deathlist.endpoints.providers.AuthorizationRequestFilter;
-import com.tacs.deathlist.endpoints.providers.GsonMessageBodyHandler;
+import com.tacs.deathlist.endpoint.provider.AuthorizationRequestFilter;
+import com.tacs.deathlist.endpoint.provider.GsonMessageBodyHandler;
 import org.glassfish.jersey.CommonProperties;
 import org.glassfish.jersey.server.ResourceConfig;
 
 /**
  * 
- * Configuracion de jersey, esta enlazado en el web.xml y en los test en {@link DeathListTest}.
+ * Configuracion de jersey, esta enlazado en el web.xml.
  * 
  * @author matias.petrone
  *
@@ -18,7 +18,7 @@ public class ApplicationConfiguration extends ResourceConfig {
         setApplicationName("Deathlist!");
 
         // el packete donde estan nuestros enpoints
-        packages("com.tacs.deathlist.endpoints");
+        packages("com.tacs.deathlist.endpoint");
 
         // configuramos el parseo de jersey con gson (tenemos que deshabilitar el que viene por defecto
         property(CommonProperties.MOXY_JSON_FEATURE_DISABLE, true);

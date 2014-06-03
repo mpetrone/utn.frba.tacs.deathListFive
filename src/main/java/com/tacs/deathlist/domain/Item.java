@@ -1,13 +1,19 @@
 package com.tacs.deathlist.domain;
 
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+@Entity
 public class Item implements Comparable<Item>{
-	
+
+    @Id
 	private String nombre;
 	private Integer votos;
-	
+
+    public Item(){}
+
 	public Item(String nombre) {
 		this.nombre = nombre;		
 		this.votos = 0;
@@ -27,7 +33,7 @@ public class Item implements Comparable<Item>{
 
 	@Override
 	public String toString() {
-		return "ItemInMemory [nombre=" + nombre + ", votos=" + votos + "]";
+		return "Item [nombre=" + nombre + ", votos=" + votos + "]";
 	}
 
     @Override

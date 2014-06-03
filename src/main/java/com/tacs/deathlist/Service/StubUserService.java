@@ -1,4 +1,4 @@
-package com.tacs.deathlist.Service;
+package com.tacs.deathlist.service;
 
 import com.tacs.deathlist.domain.Usuario;
 

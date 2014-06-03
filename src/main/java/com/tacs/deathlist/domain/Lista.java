@@ -1,22 +1,35 @@
 package com.tacs.deathlist.domain;
 
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Unindex;
+import com.tacs.deathlist.domain.exception.CustomForbiddenException;
+import com.tacs.deathlist.domain.exception.CustomNotFoundException;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Cache
 public class Lista {
 
+    @Id
+    private String id;
     private String nombre;
+    @Unindex
     private List<Item> items = new ArrayList<Item>();
-    
-    // Todas las listas están limitadas a tener una cierta cantidad de items
+
     //TODO: ponerlo en las properties
     private static int MAX_ITEMS = 10;
+
+    public Lista(){}
     
-    public Lista(String nombre) {
+    public Lista(String id, String nombre) {
         this.nombre = nombre;
+        this.id = id;
     }
 
     public String getNombre() {
@@ -58,10 +71,7 @@ public class Lista {
 	}
     
     public void eliminarItem(String itemName){
-        if(items.remove(new Item(itemName))) {
-        	// borrado exitoso
-        }
-        else {
+        if(!items.remove(new Item(itemName))) {
         	throw new CustomNotFoundException("El item " + itemName + " no existe en la lista " + this.getNombre() + ".");
         }
     }
@@ -72,13 +82,14 @@ public class Lista {
 
     @Override
     public String toString() {
-        return "ListaInMemory [nombre=" + nombre + ", items=" + items + "]";
+        return "Lista [nombre=" + nombre + ", items=" + items + "]";
     }
 
     @Override
     public int hashCode(){
         return new HashCodeBuilder()
         .append(nombre)
+        .append(id)
         .toHashCode();
     }
 
@@ -87,6 +98,7 @@ public class Lista {
         if(obj instanceof Lista){
             final Lista other = (Lista) obj;
             return new EqualsBuilder()
+            .append(id, other.id)
             .append(nombre, other.getNombre())
             .isEquals();
         } else{

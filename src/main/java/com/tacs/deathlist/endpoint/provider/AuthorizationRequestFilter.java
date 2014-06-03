@@ -1,7 +1,7 @@
-package com.tacs.deathlist.endpoints.providers;
+package com.tacs.deathlist.endpoint.provider;
 
-import com.tacs.deathlist.Service.UserService;
 import com.tacs.deathlist.domain.Usuario;
+import com.tacs.deathlist.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

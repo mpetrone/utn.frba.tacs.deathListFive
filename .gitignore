@@ -4,5 +4,7 @@
 .proyect
 .settings
 .project
+.idea
+death-list.iml
 /logs
 velocity.log

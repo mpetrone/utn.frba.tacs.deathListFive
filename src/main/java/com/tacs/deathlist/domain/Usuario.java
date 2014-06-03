@@ -1,19 +1,35 @@
 package com.tacs.deathlist.domain;
 
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Unindex;
+import com.tacs.deathlist.domain.exception.CustomForbiddenException;
+import com.tacs.deathlist.domain.exception.CustomNotFoundException;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Entity
+@Cache
 public class Usuario {
 
+    @Id
     private String uid;
     private String nombre;
+    @Unindex
     private String fechaCreacion;
+    @Unindex
     private String fechaLastLogin;
+    @Unindex
     private List<String> listas = new ArrayList<>();
+
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
+    public Usuario(){}
 
     public Usuario(String uid, String nombre) {
         this.nombre = nombre;
@@ -66,4 +82,8 @@ public class Usuario {
         this.fechaLastLogin = DATE_FORMAT.format(date);
     }
 
+    @Override
+    public String toString() {
+        return "Usuerio [uid= " + uid + "nombre=" + nombre + ", listas=" + listas + "]";
+    }
 }

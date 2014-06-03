@@ -1,8 +1,8 @@
-package com.tacs.deathlist.repository;
+package com.tacs.deathlist.dao;
 
-import com.tacs.deathlist.domain.CustomForbiddenException;
-import com.tacs.deathlist.domain.CustomNotFoundException;
 import com.tacs.deathlist.domain.Usuario;
+import com.tacs.deathlist.domain.exception.CustomForbiddenException;
+import com.tacs.deathlist.domain.exception.CustomNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,23 +12,22 @@ import java.util.Map;
 public class InMemoryUsuariosDao implements UsuariosDao {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(InMemoryUsuariosDao.class);
-    private Map<String, Usuario> usuarios = new HashMap<String, Usuario>();
+    private Map<String, Usuario> usuarios = new HashMap<>();
 
     @Override
     public Usuario getUsuario(String uid) {
         LOGGER.debug("Se pidio en la base el usuario: " + uid);
-        Usuario usuario = usuarios.get(uid);
-        return usuario;
+        return usuarios.get(uid);
     }
 
     @Override
-    public void createUsuario(String uid, Usuario user) {
-        LOGGER.debug("Se va a crear el usuario: " + uid);
-        if (usuarios.containsKey(uid)){
+    public void createUsuario(Usuario user) {
+        LOGGER.debug("Se va a crear el usuario: " + user.getUid());
+        if (usuarios.containsKey(user.getUid())){
             throw new CustomForbiddenException(
-                    "Ya existe un usuario con el uid " + uid + ".");
+                    "Ya existe un usuario con el uid " + user.getUid() + ".");
         }
-        usuarios.put(uid, user);
+        usuarios.put(user.getUid(), user);
     }
 
 	@Override
