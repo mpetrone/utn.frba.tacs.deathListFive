@@ -54,7 +54,7 @@ public class InMemoryListasDao implements ListasDao {
     }
 
     @Override
-    public void deteleItem(String uid, String nombreLista, String itemName) {
+    public void deleteItem(String uid, String nombreLista, String itemName) {
         getLista(uid, nombreLista).eliminarItem(itemName);
     }
 

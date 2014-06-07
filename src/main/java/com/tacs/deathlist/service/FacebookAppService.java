@@ -1,30 +1,40 @@
 package com.tacs.deathlist.service;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.FacebookClient.AccessToken;
 import com.restfb.Parameter;
 import com.restfb.exception.FacebookOAuthException;
 import com.restfb.types.FacebookType;
-import com.tacs.deathlist.PropertiesManager;
 
-public class FacebookAppService {
+@Component
+public class FacebookAppService implements AppService {
 	
-	private static final PropertiesManager propertiesManager = new PropertiesManager();
+	private String appId;
+    private String appSecret;
+    
+    @Value("${facebook.app.id}")
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+    @Value("${facebook.app.secret}")
+    public void setAppSecret(String appSecret) {
+        this.appSecret = appSecret;
+    }
 	
-	
-	
-	public void enviarNotificacion(String fbUserId, String mensaje) {
+	@Override
+    public void enviarNotificacion(String uidReceptor, String mensaje) {
 	    
-	    AccessToken appAccessToken = new DefaultFacebookClient().obtainAppAccessToken(propertiesManager.getProperty("facebook.app.id"), propertiesManager.getProperty("facebook.app.secret"));
-	    
+	    AccessToken appAccessToken = new DefaultFacebookClient().obtainAppAccessToken(this.appId, this.appSecret);	    
 	    FacebookClient facebookClient = new DefaultFacebookClient(appAccessToken.getAccessToken());
 	    
-	    try {
-	        
-	        facebookClient.publish(fbUserId + "/notifications", FacebookType.class, Parameter.with("template", mensaje));
-	    }
-	    
+	    try {	        
+	        facebookClient.publish(uidReceptor + "/notifications", FacebookType.class, Parameter.with("template", mensaje));
+	    }	    
 	    catch (FacebookOAuthException e) {
 	        
 	        if (e.getErrorCode() == 200) {
@@ -33,6 +43,12 @@ public class FacebookAppService {
 	            // El mensaje supera los 180 caracteres
 	        }
 	    }
+	}
+	
+	@Override
+	public void publicarEnNewsfeed(String uid, String mensaje) {
+		
+		// TODO: Decidir si esto se hace en el frontend (botón compartir)
 	}
 
 }

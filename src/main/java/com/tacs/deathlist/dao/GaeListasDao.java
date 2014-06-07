@@ -55,7 +55,7 @@ public class GaeListasDao implements ListasDao{
     }
 
     @Override
-    public void deteleItem(String uid, String nombreLista, String itemName) {
+    public void deleteItem(String uid, String nombreLista, String itemName) {
         Lista lista = getLista(uid, nombreLista);
         lista.eliminarItem(itemName);
         objetifyService.save(lista);

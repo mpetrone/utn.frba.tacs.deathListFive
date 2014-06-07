@@ -11,6 +11,9 @@
         <property name="locations" value="classpath:com/tacs/deathlist/properties/deathlist.properties"/>
     </bean>
 
+    <bean id="stubUserService" class="com.tacs.deathlist.service.StubUserService" />
+    <bean id="stubAppService" class="com.tacs.deathlist.service.StubAppService" />
+    
     <bean id="objetifyService" class="com.tacs.deathlist.service.ObjetifyService" />
 
     <!-- gae implementations -->
@@ -20,8 +23,5 @@
     <!-- in memory implementations -->
     <!--<bean id="usuarios" class="com.tacs.deathlist.dao.InMemoryUsuariosDao" />-->
     <!--<bean id="listas" class="com.tacs.deathlist.dao.InMemoryListasDao" />-->
-
-
-    <bean id="stubUserService" class="com.tacs.deathlist.service.StubUserService" />
 
 </beans>

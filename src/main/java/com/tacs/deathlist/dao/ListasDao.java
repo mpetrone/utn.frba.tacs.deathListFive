@@ -16,7 +16,7 @@ public interface ListasDao {
 
     void createItem(String uid, String nombreLista, String itemName);
 
-    void deteleItem(String uid, String nombreLista, String itemName);
+    void deleteItem(String uid, String nombreLista, String itemName);
 
     void voteItem(String uid, String nombreLista, String itemName);
 }

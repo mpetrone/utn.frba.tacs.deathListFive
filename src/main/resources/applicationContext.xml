@@ -5,13 +5,14 @@
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-    <context:component-scan base-package="com.tacs.deathlist.endpoint" />
+    <context:component-scan base-package="com.tacs.deathlist.endpoint, com.tacs.deathlist.service" />
 
     <bean id="properties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations" value="classpath:com/tacs/deathlist/properties/deathlist.properties"/>
     </bean>
 
     <bean id="facebookUserService" class="com.tacs.deathlist.service.FacebookUserService" />
+    <bean id="facebookAppService" class="com.tacs.deathlist.service.FacebookAppService" />
 
     <bean id="objetifyService" class="com.tacs.deathlist.service.ObjetifyService" />
 
