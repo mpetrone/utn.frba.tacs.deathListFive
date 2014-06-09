@@ -1,6 +1,21 @@
-App.PeopleRoute = Ember.Route.extend({
+// administra el proceso de autenticacion
+App.AuthenticatedRoute = Ember.Route.extend({
+
+  beforeModel: function(transition) {
+    if (!App.get('authenticated')) {
+      this.redirectToLogin(transition);
+    }
+  },
+
+  redirectToLogin: function(transition) {
+    App.set('attemptedTransition', transition);
+    this.transitionTo('login');
+  },
+});
+
+App.PeopleRoute = App.AuthenticatedRoute.extend({
    model: function() {
-      return $.getJSON(API_NAMESPACE + 'users/' + App.uid + '/friends')
+      return $.getJSON(API_NAMESPACE + 'users/' + App.FBUser.id + '/friends')
       .fail(function() {
          // TODO: mostrar en la pagina
          alert('Error en GET friends');
@@ -15,15 +30,15 @@ App.PeopleRoute = Ember.Route.extend({
          }
          
          friends.unshift(Ember.Object.create({
-            id: App.uid,
-            uid: App.uid,
+            id: App.FBUser.id,
+            uid: App.FBUser.id,
             nombre: 'me',
          }));
       });
    }
 });
 
-App.ListsRoute = Ember.Route.extend({
+App.ListsRoute = App.AuthenticatedRoute.extend({
    model: function(params) {
       return $.getJSON(API_NAMESPACE + 'users/' + params.user_id + '/lists')
       .fail(function() {
@@ -41,7 +56,7 @@ App.ListsRoute = Ember.Route.extend({
    }
 });
 
-App.ListRoute = Ember.Route.extend({
+App.ListRoute = App.AuthenticatedRoute.extend({
    model: function(params) {
       var uid = this.modelFor('lists').findBy('id', params.list_id).uid;
       
@@ -71,4 +86,3 @@ App.AboutRoute = Ember.Route.extend({
    }
 })
 
-// la ruta de login no necesita customizarse, no tiene modelo.

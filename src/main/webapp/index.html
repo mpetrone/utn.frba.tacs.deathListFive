@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
 </head>
 <body>
-  
   <script type="text/x-handlebars">
     <nav class="navbar navbar-inverse" role="navigation">
       <div class="container-fluid">
@@ -25,6 +24,9 @@
             {{#link-to 'people' tagName="li"}}<a href="#" {{bind-attr href="view.href"}}>Lists</a>{{/link-to}}
             {{#link-to 'about' tagName="li"}}<a href="#" {{bind-attr href="view.href"}}>About</a>{{/link-to}}
           </ul>
+          <ul class="nav navbar-nav navbar-right">
+            {{#link-to 'login' tagName="li"}}<a href="#" {{bind-attr href="view.href"}}>Status</a>{{/link-to}}
+          </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
@@ -33,32 +35,54 @@
   </script>
   
   <script type="text/x-handlebars" id="login">
-    <fb:login-button scope="public_profile,user_friends" onlogin="checkLoginState();">
-    </fb:login-button>
+    {{#if App.FBloading}}
+      <div>Waiting for Facebook</div>
+    {{else}}
+      {{#if App.FBUser}}
+        <div>
+          <img {{bind-attr src="App.FBUser.picture" alt="App.FBUser.name"}} />
+          {{App.FBUser.name}}
+          <a href="#" {{action "logout" target="FB"}}>Logout</a>
+        </div>
+      {{else}}
+        {{#view Em.FacebookView type="login-button" data-size="xlarge"
+                                data-scope="public_profile,user_friends"}}
+          Connect to Facebook
+        {{/view}}
+      {{/if}}
+    {{/if}}
   </script>
   
   <script type="text/x-handlebars" id="people">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-xs-3">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">People</h3>
-            </div>
-            <div class="panel-body">
-              <div class="list-group">
-                {{#each}}
-                <li href="#" class="list-group-item">
-                  {{#link-to 'lists' this.uid}}{{this.nombre}}{{/link-to}}
-                </li>
-                {{/each}}
-              </div><!-- /.list-group -->
-            </div>
-          </div>
-        </div><!-- /.col-xs-3 -->
-        {{outlet}}
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+    {{#if App.FBloading}}
+      <div>Waiting for Facebook</div>
+    {{else}}
+      {{#if App.FBUser}}
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-xs-3">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">People</h3>
+                </div>
+                <div class="panel-body">
+                  <div class="list-group">
+                    {{#each}}
+                    <li href="#" class="list-group-item">
+                      {{#link-to 'lists' this.uid}}{{this.nombre}}{{/link-to}}
+                    </li>
+                    {{/each}}
+                  </div><!-- /.list-group -->
+                </div>
+              </div>
+            </div><!-- /.col-xs-3 -->
+            {{outlet}}
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      {{else}}
+        <div>Please login</div>
+      {{/if}}
+    {{/if}}
   </script>
   
   <script type="text/x-handlebars" id="lists">
@@ -126,10 +150,10 @@
   <script src="js/libs/ember-1.5.1.js"></script>
   <script src="js/libs/bootstrap-dialog.js"></script>
   <script src="js/libs/bootstrap-dialog.min.js"></script>
+  <script src="js/libs/ember-facebook.js"></script>
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
-  <script src="//connect.facebook.net/en_US/sdk.js"></script>
-
+  
   <script src="js/app.js"></script>
   <script src="js/routes.js"></script>
   <script src="js/controllers.js"></script>

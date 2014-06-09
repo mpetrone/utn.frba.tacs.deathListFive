@@ -125,12 +125,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>com.google.appengine</groupId>
-			<artifactId>appengine-maven-plugin</artifactId>
-			<version>${appengine.target.version}</version>
-		</dependency>
-
 		<!-- spring support -->
 
 		<dependency>
@@ -220,6 +214,9 @@
 				<groupId>com.google.appengine</groupId>
 				<artifactId>appengine-maven-plugin</artifactId>
 				<version>${appengine.target.version}</version>
+				<configuration>
+					<fullScanSeconds>1</fullScanSeconds>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -233,7 +230,7 @@
 		<apachecommons.version>3.3.2</apachecommons.version>
 		<covertura.version>2.6</covertura.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<appengine.target.version>1.9.6</appengine.target.version>
+		<appengine.target.version>1.9.4</appengine.target.version>
 		<restfb.version>1.6.14</restfb.version>
         <objectify.version>5.0.2</objectify.version>
 	</properties>

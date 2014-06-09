@@ -9,7 +9,7 @@ App.ListsController = Ember.ArrayController.extend({
          if (!$.trim(list)) { return; }
          
          var controller = this;
-         $.post(API_NAMESPACE + 'users/' + App.uid + '/lists/' + list)
+         $.post(API_NAMESPACE + 'users/' + App.FBUser.id + '/lists/' + list)
          .done(function () {
             // limpia el input
             controller.set('newList', '');
@@ -18,7 +18,7 @@ App.ListsController = Ember.ArrayController.extend({
             controller.get('content').unshiftObject(
                Ember.Object.create({
                   id: list,
-                  uid: App.uid
+                  uid: App.FBUser.id
                })
             );
          });
@@ -36,7 +36,7 @@ App.ListsController = Ember.ArrayController.extend({
                action: function(dialogItself){
                    
                   $.ajax({
-                     url: API_NAMESPACE + 'users/' + App.uid + '/lists/' + list.id,
+                     url: API_NAMESPACE + 'users/' + App.FBUser.id + '/lists/' + list.id,
                      type: 'DELETE',
                      dataType: 'html' // la respuesta viene vacia, eso no le gusta al parser de json
                   }).done(function () {
