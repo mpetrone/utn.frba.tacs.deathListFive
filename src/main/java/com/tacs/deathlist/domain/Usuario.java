@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 @Entity
 @Cache
 public class Usuario implements Serializable {
@@ -28,16 +32,16 @@ public class Usuario implements Serializable {
     @Unindex
     private List<String> listas = new ArrayList<>();
 
-    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.forPattern("YYYY/MM/dd HH:mm:ss");
+    
     public Usuario(){}
 
     public Usuario(String uid, String nombre) {
         this.nombre = nombre;
         this.uid = uid;
-        Date date = new Date();
-        this.fechaCreacion = DATE_FORMAT.format(date);
-        this.fechaLastLogin = DATE_FORMAT.format(date);
+        DateTime date = new DateTime();        
+        this.fechaCreacion = DATE_FORMAT.print(date);
+        this.fechaLastLogin = DATE_FORMAT.print(date);
     }
 
     public String getNombre() {
@@ -79,8 +83,8 @@ public class Usuario implements Serializable {
     }
 
     public void updateFechaLogin() {
-        Date date = new Date();
-        this.fechaLastLogin = DATE_FORMAT.format(date);
+        DateTime date = new DateTime(); 
+        this.fechaLastLogin = DATE_FORMAT.print(date);
     }
 
     @Override
