@@ -30,7 +30,7 @@ App.ListsController = Ember.ArrayController.extend({
          BootstrapDialog.show({
             type: BootstrapDialog.TYPE_WARNING,
             title: 'Warning',
-            message: 'Do you really want to delete list ' + list.id +'?',
+            message: 'Do you really want to delete list "' + list.id +'"?',
             buttons: [{
                label: 'Yes',
                action: function(dialogItself){
@@ -104,7 +104,7 @@ App.ListController = Ember.ObjectController.extend({
          BootstrapDialog.show({
             type: BootstrapDialog.TYPE_WARNING,
             title: 'Warning',
-            message: 'Do you really want to delete item ' + item.id +'?',
+            message: 'Do you really want to delete item "' + item.id +'"?',
             buttons: [{
                label: 'Yes',
                action: function(dialogItself){                        

@@ -17,7 +17,7 @@ App.PeopleRoute = App.AuthenticatedRoute.extend({
    model: function() {
       return $.getJSON(API_NAMESPACE + 'users/' + App.FBUser.id + '/friends')
       .fail(function() {
-    	  BootstrapDialog.alert({
+    	  BootstrapDialog.show({
               title: 'ERROR',
               message: 'A Users related error has ocurred. :-(',
               type: BootstrapDialog.TYPE_DANGER,
@@ -51,7 +51,7 @@ App.ListsRoute = App.AuthenticatedRoute.extend({
    model: function(params) {
       return $.getJSON(API_NAMESPACE + 'users/' + params.user_id + '/lists')
       .fail(function() {
-    	  BootstrapDialog.alert({
+    	  BootstrapDialog.show({
               title: 'ERROR',
               message: 'A User Lists related error has ocurred. :-(',
               type: BootstrapDialog.TYPE_DANGER,
@@ -80,7 +80,7 @@ App.ListRoute = App.AuthenticatedRoute.extend({
       
       return $.getJSON(API_NAMESPACE + 'users/' + uid + '/lists/' + params.list_id)
       .fail(function() {
-    	  BootstrapDialog.alert({
+    	  BootstrapDialog.show({
               title: 'ERROR',
               message: 'A List related error has ocurred. :-(',
               type: BootstrapDialog.TYPE_DANGER,
