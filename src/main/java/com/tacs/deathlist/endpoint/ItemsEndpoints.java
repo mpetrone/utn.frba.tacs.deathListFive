@@ -5,8 +5,8 @@ import java.util.Map;
 
 import com.tacs.deathlist.dao.ListasDao;
 import com.tacs.deathlist.domain.Usuario;
-import com.tacs.deathlist.service.AppService;
 import com.tacs.deathlist.service.FacebookUserService;
+import com.tacs.deathlist.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ public class ItemsEndpoints {
     private ListasDao dao;
     
     @Autowired
-    private AppService appService;
+    private UserService userService;
 	
     /**
 	 * Crea un nuevo ítem en una lista.
@@ -47,8 +47,8 @@ public class ItemsEndpoints {
 		String uidActivo = getUidInCookies(hh);
 		String token = getTokenInCookies(hh);
 		
-		/* TODO: Comentado porque rompe los tests
-		if (!esElMismoUsuario(uidActivo,uid) || !esAmigoDeUsuario(token, uid))
+		/* TODO: Comentado porque rompe los tests al no tener cookies
+		if (!userService.esElMismoUsuario(uidActivo,uid) && !userService.esAmigoDeUsuario(token, uid))
 			return Response.status(Status.FORBIDDEN).build();
 		else {*/
 			notificarSiCorresponde(uidActivo, uid, "One of your friends added an item to your list!");
@@ -75,8 +75,8 @@ public class ItemsEndpoints {
 		String uidActivo = getUidInCookies(hh);
 		String token = getTokenInCookies(hh);
 		
-		/* TODO: Comentado porque rompe los tests
-		if (!esElMismoUsuario(uidActivo,uid) || !esAmigoDeUsuario(token, uid))
+		/* TODO: Comentado porque rompe los tests al no tener cookies
+		if (!userService.esElMismoUsuario(uidActivo,uid) && !userService.esAmigoDeUsuario(token, uid))
 			return Response.status(Status.FORBIDDEN).build();
 		else {*/
 			notificarSiCorresponde(uidActivo, uid, "One of your friends voted for an item on your list!");
@@ -104,7 +104,7 @@ public class ItemsEndpoints {
 		// TODO: comento la validacion porque sino rompen los tests
 		// (no hay cookies => uidActivo es null => prohibe)
 		/*
-		if (!esElMismoUsuario(uidActivo,uid))
+		if (!userService.esElMismoUsuario(uidActivo,uid))
 			return Response.status(Status.FORBIDDEN).build();
 		else { */
 			dao.deleteItem(uid, listName, itemName);
@@ -129,31 +129,11 @@ public class ItemsEndpoints {
         }
         return null;
 	}    
-	
-	private boolean esElMismoUsuario(String uid1, String uid2) {
-		// TODO: cambiar null por excepcion
-		return uid1 != null && uid1.equalsIgnoreCase(uid2);
-	}
-	
-	private boolean esAmigoDeUsuario(String token, String uidFriend) {
 		
-		FacebookUserService facebookUserService = new FacebookUserService();
-		List<Usuario> friends;
-		
-		friends = facebookUserService.getFriends(token);
-		
-		for (Usuario friend : friends) {
-			if (friend.getUid() == uidFriend) {
-				return true;
-			}   
-		}
-		
-		return false;
-	}
 	
 	private void notificarSiCorresponde(String uidActivo, String uidDuenio, String mensaje) {
-		if(!esElMismoUsuario(uidActivo,uidDuenio))
-			appService.enviarNotificacion(uidDuenio, mensaje);			
+		if(!userService.esElMismoUsuario(uidActivo,uidDuenio))
+			userService.enviarNotificacion(uidDuenio, mensaje);			
 	}
 
 }

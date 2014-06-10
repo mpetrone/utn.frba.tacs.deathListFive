@@ -3,7 +3,7 @@ package com.tacs.deathlist.dao;
 import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.domain.exception.CustomForbiddenException;
 import com.tacs.deathlist.domain.exception.CustomNotFoundException;
-import com.tacs.deathlist.service.ObjetifyService;
+import com.tacs.deathlist.service.ObjectifyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class GaeUsuariosDao implements UsuariosDao {
 
     @Autowired
-    private ObjetifyService objetifyService;
+    private ObjectifyService objetifyService;
 
     @Override
     public Usuario getUsuario(String uid) {

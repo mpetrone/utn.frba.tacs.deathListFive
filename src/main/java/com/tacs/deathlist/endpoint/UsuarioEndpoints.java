@@ -6,7 +6,6 @@ import com.tacs.deathlist.domain.exception.CustomNotFoundException;
 import com.tacs.deathlist.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
@@ -25,10 +24,6 @@ public class UsuarioEndpoints {
 
     @Autowired
     private UserService userService;
-
-    private String appId;
-
-    private String appSecret;
 
     /**
      * Recupera un Usuario.
@@ -78,7 +73,7 @@ public class UsuarioEndpoints {
         String uidActivo = getUidInCookies(hh); 
     	
         /* TODO: Comentado porque rompe los tests
-    	if (!esElMismoUsuario(uidActivo,uid))
+    	if (!userService.esElMismoUsuario(uidActivo,uid))
     		return Response.status(Status.FORBIDDEN).build();
     	else {*/
     		usuariosDao.deleteUsuario(uid);
@@ -94,12 +89,12 @@ public class UsuarioEndpoints {
     @Path("friends")
     @GET 
     @Produces(MediaType.APPLICATION_JSON)
-	public Response getFriendLists(@PathParam("uid") String uid,
+	public Response getFriendsList(@PathParam("uid") String uid,
                                    @Context HttpHeaders hh) {
         String uidActivo = getUidInCookies(hh); 
     	
         /* TODO: Comentado porque rompe los tests
-    	if (!esElMismoUsuario(uidActivo,uid))
+    	if (!userService.esElMismoUsuario(uidActivo,uid))
     		return Response.status(Status.FORBIDDEN).build();
     	else {*/ 
             Usuario usuario = usuariosDao.getUsuario(uid);
@@ -110,9 +105,9 @@ public class UsuarioEndpoints {
 
             String token = getTokenInCookies(hh);
 
-        	List<Usuario> friendLists = userService.getFriends(token);
+        	List<Usuario> friendsList = userService.getFriends(token);
         	
-    		return Response.status(Response.Status.OK).entity(friendLists).build();
+    		return Response.status(Response.Status.OK).entity(friendsList).build();
     	//}
 	}
 
@@ -124,16 +119,6 @@ public class UsuarioEndpoints {
         }
         return null;
     }
-
-    @Value("${facebook.app.id}")
-    public void setAppId(String appId) {
-        this.appId = appId;
-    }
-
-    @Value("${facebook.app.secret}")
-    public void setAppSecret(String appSecret) {
-        this.appSecret = appSecret;
-    }
      
 	private String getUidInCookies(HttpHeaders hh){
         Map<String, Cookie> pathParams = hh.getCookies();
@@ -143,9 +128,5 @@ public class UsuarioEndpoints {
         }
         return null;
     }
-	 
-	private boolean esElMismoUsuario(String uid1, String uid2) {
-		// TODO: cambiar null por excepcion
-		return uid1 != null && uid1.equalsIgnoreCase(uid2);
-	}	
+	 	
 }

@@ -4,6 +4,7 @@ import com.tacs.deathlist.dao.ListasDao;
 import com.tacs.deathlist.domain.Lista;
 import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.service.FacebookUserService;
+import com.tacs.deathlist.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,9 @@ public class ListasEnpoints {
     @Autowired
     private ListasDao dao;
     
+    @Autowired
+    private UserService userService;
+    
     /**
      * Recupera todas las listas de un usuario. 
      * @param uid
@@ -39,8 +43,8 @@ public class ListasEnpoints {
     	
     	String uidActivo = getUidInCookies(hh);
 		String token = getTokenInCookies(hh);
-    	/* TODO: Comentado porque rompe los tests
-		if (!esElMismoUsuario(uidActivo,uid) || !esAmigoDeUsuario(token, uid))
+    	/* TODO: Comentado porque rompe los tests al no tener cookies
+		if (!userService.esElMismoUsuario(uidActivo,uid) && !userService.esAmigoDeUsuario(token, uid))
 			return Response.status(Status.FORBIDDEN).build();
 		else {*/
 	        List<String> listas = dao.getAllLists(uid);
@@ -64,8 +68,8 @@ public class ListasEnpoints {
     	String uidActivo = getUidInCookies(hh);
 		String token = getTokenInCookies(hh);
 		
-    	/* TODO: Comentado porque rompe los tests
-		if (!esElMismoUsuario(uidActivo,uid) || !esAmigoDeUsuario(token, uid))
+    	/* TODO: Comentado porque rompe los tests al no tener cookies
+		if (!userService.esElMismoUsuario(uidActivo,uid) && !userService.esAmigoDeUsuario(token, uid))
 			return Response.status(Status.FORBIDDEN).build();
 		else {*/    	
 			Lista lista = dao.getLista(uid, listName);
@@ -87,8 +91,8 @@ public class ListasEnpoints {
 		
     	String uidActivo = getUidInCookies(hh); 
 		
-		/* TODO: Comentado porque rompe los tests
-		if (!esElMismoUsuario(uidActivo,uid))
+		/* TODO: Comentado porque rompe los tests al no tener cookies
+		if (!userService.esElMismoUsuario(uidActivo,uid))
 			return Response.status(Status.FORBIDDEN).build();
 		else { */
 			dao.createLista(uid, listName);
@@ -110,7 +114,7 @@ public class ListasEnpoints {
     	String uidActivo = getUidInCookies(hh); 
 		
 		/* TODO: Comentado porque rompe los tests
-		if (!esElMismoUsuario(uidActivo,uid))
+		if (!userService.esElMismoUsuario(uidActivo,uid))
 			return Response.status(Status.FORBIDDEN).build();
 		else { */
         	dao.deleteLista(uid, listName);
@@ -135,26 +139,6 @@ public class ListasEnpoints {
         }
         return null;
 	}    
-	
-	private boolean esElMismoUsuario(String uid1, String uid2) {
-		// TODO: cambiar null por excepcion
-		return uid1 != null && uid1.equalsIgnoreCase(uid2);
-	}
-	
-	private boolean esAmigoDeUsuario(String token, String uidFriend) {
-		
-		FacebookUserService facebookUserService = new FacebookUserService();
-		List<Usuario> friends;
-		
-		friends = facebookUserService.getFriends(token);
-		
-		for (Usuario friend : friends) {
-			if (friend.getUid() == uidFriend) {
-				return true;
-			}   
-		}
-		
-		return false;
-	}       
+	       
 }
 

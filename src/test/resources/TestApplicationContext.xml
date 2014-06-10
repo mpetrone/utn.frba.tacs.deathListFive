@@ -12,9 +12,8 @@
     </bean>
 
     <bean id="stubUserService" class="com.tacs.deathlist.service.StubUserService" />
-    <bean id="stubAppService" class="com.tacs.deathlist.service.StubAppService" />
     
-    <bean id="objetifyService" class="com.tacs.deathlist.service.ObjetifyService" />
+    <bean id="objectifyService" class="com.tacs.deathlist.service.ObjectifyService" />
 
     <!-- gae implementations -->
     <bean id="usuarios" class="com.tacs.deathlist.dao.GaeUsuariosDao" />

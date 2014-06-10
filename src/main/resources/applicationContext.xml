@@ -12,9 +12,8 @@
     </bean>
 
     <bean id="facebookUserService" class="com.tacs.deathlist.service.FacebookUserService" />
-    <bean id="facebookAppService" class="com.tacs.deathlist.service.FacebookAppService" />
 
-    <bean id="objetifyService" class="com.tacs.deathlist.service.ObjetifyService" />
+    <bean id="objectifyService" class="com.tacs.deathlist.service.ObjectifyService" />
 
     <!-- gae implementations -->
     <bean id="usuarios" class="com.tacs.deathlist.dao.GaeUsuariosDao" />

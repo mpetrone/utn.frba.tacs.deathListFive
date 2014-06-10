@@ -3,7 +3,7 @@ package com.tacs.deathlist.dao;
 import com.tacs.deathlist.domain.Lista;
 import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.domain.exception.CustomNotFoundException;
-import com.tacs.deathlist.service.ObjetifyService;
+import com.tacs.deathlist.service.ObjectifyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +13,7 @@ import java.util.List;
 public class GaeListasDao implements ListasDao{
 
     @Autowired
-    private ObjetifyService objetifyService;
+    private ObjectifyService objetifyService;
 
     @Override
     public List<String> getAllLists(String uid) {

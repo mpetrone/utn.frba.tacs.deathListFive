@@ -11,15 +11,15 @@ import org.slf4j.LoggerFactory;
 
 
 
-public class ObjetifyService {
+public class ObjectifyService {
 
     public static final String GENERIC_ERROR_MESSAGE = "Tenemos un problema interno, sepa disculpar";
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(ObjetifyService.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(ObjectifyService.class);
 
     private ObjectifyFactory objectifyFactory;
 
-    public ObjetifyService() {
+    public ObjectifyService() {
         this.objectifyFactory = new ObjectifyFactory();
         objectifyFactory.register(Usuario.class);
         objectifyFactory.register(Lista.class);
