@@ -17,8 +17,17 @@ App.PeopleRoute = App.AuthenticatedRoute.extend({
    model: function() {
       return $.getJSON(API_NAMESPACE + 'users/' + App.FBUser.id + '/friends')
       .fail(function() {
-         // TODO: mostrar en la pagina
-         alert('Error en GET friends');
+    	  BootstrapDialog.alert({
+              title: 'ERROR',
+              message: 'A Users related error has ocurred. :-(',
+              type: BootstrapDialog.TYPE_DANGER,
+              buttons: [{
+                  label: 'Close',
+                  action: function(dialogRef){
+                      dialogRef.close();
+                  }
+              }]
+          }); 
       })
       .done(function(friends) {
          for (var i = 0; i < friends.length; i++) {
@@ -28,11 +37,11 @@ App.PeopleRoute = App.AuthenticatedRoute.extend({
                nombre: friends[i].nombre,
             });
          }
-         
+               
          friends.unshift(Ember.Object.create({
             id: App.FBUser.id,
             uid: App.FBUser.id,
-            nombre: 'me',
+            nombre: App.FBUser.name + " (myself)",
          }));
       });
    }
@@ -42,8 +51,17 @@ App.ListsRoute = App.AuthenticatedRoute.extend({
    model: function(params) {
       return $.getJSON(API_NAMESPACE + 'users/' + params.user_id + '/lists')
       .fail(function() {
-         // TODO: mostrar en la pagina
-         alert('Error en GET lists');
+    	  BootstrapDialog.alert({
+              title: 'ERROR',
+              message: 'A User Lists related error has ocurred. :-(',
+              type: BootstrapDialog.TYPE_DANGER,
+              buttons: [{
+                  label: 'Close',
+                  action: function(dialogRef){
+                      dialogRef.close();
+                  }
+              }]
+          });
       })
       .done(function(lists) {
          for (var i = 0; i < lists.length; i++) {
@@ -62,8 +80,17 @@ App.ListRoute = App.AuthenticatedRoute.extend({
       
       return $.getJSON(API_NAMESPACE + 'users/' + uid + '/lists/' + params.list_id)
       .fail(function() {
-         // TODO: mostrar en la pagina
-         alert('Error en GET lists');
+    	  BootstrapDialog.alert({
+              title: 'ERROR',
+              message: 'A List related error has ocurred. :-(',
+              type: BootstrapDialog.TYPE_DANGER,
+              buttons: [{
+                  label: 'Close',
+                  action: function(dialogRef){
+                      dialogRef.close();
+                  }
+              }]
+          });
       })
       .done(function(list) {
          list.id = list.nombre;
