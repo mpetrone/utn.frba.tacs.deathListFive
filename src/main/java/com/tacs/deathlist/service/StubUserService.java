@@ -5,6 +5,8 @@ import com.tacs.deathlist.domain.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.core.HttpHeaders;
+
 /**
  *
  * Version stub de la obtencion de users.
@@ -50,5 +52,17 @@ public class StubUserService implements UserService{
 	public boolean esElMismoUsuario(String uid1, String uid2) {
 		
 		return uid1 != null && uid1.equalsIgnoreCase(uid2);
+	}
+
+	@Override
+	public String getTokenInCookies(HttpHeaders hh) {
+		// TODO Auto-generated method stub
+		return "elToken";
+	}
+
+	@Override
+	public String getUidInCookies(HttpHeaders hh) {
+		// TODO Auto-generated method stub
+		return "1234";
 	}
 }

@@ -19,6 +19,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.HttpHeaders;
 
 /**
  *
@@ -101,6 +105,24 @@ public class FacebookUserService implements UserService {
 		// TODO: cambiar null por excepcion
 		return uid1 != null && uid1.equalsIgnoreCase(uid2);
 	}
+    
+    public String getTokenInCookies(HttpHeaders hh){
+        Map<String, Cookie> pathParams = hh.getCookies();
+        Cookie cookie = pathParams.get("token");
+        if(cookie != null){
+            return cookie.getValue();
+        }
+        return null;
+    }
+     
+	public String getUidInCookies(HttpHeaders hh){
+        Map<String, Cookie> pathParams = hh.getCookies();
+        Cookie cookie = pathParams.get("uid");
+        if(cookie != null){
+            return cookie.getValue();
+        }
+        return null;
+    }
     
     @Override
     public void enviarNotificacion(String uidReceptor, String mensaje) {

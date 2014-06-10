@@ -55,9 +55,13 @@ public class UsuarioEndToEndTest extends DeathListTest{
     
     @Test
     public void eliminarUsuarioQueNoExiste() {
-    	checkResponse(target("/users/" + "fantasma").request().delete(), Status.NOT_FOUND.getStatusCode());
+    	/* antes era correcto que devuelva Not Found, pero
+    	 * ahora lo correcto es Forbidden, porque el fantasma
+    	 * no es amigo del usuario de prueba.
+    	 */
+    	checkResponse(target("/users/" + "fantasma").request().delete(), Status.FORBIDDEN.getStatusCode());
     }
-    
+        
     
     private void checkResponse(Response response, int statusCode) {
         assertNotNull(response);

@@ -13,7 +13,6 @@ import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
 
 import java.util.List;
-import java.util.Map;
 
 @Path("/users/{uid}")
 @Component
@@ -50,7 +49,7 @@ public class UsuarioEndpoints {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createUser(@PathParam("uid") String uid,
                                @Context HttpHeaders hh)  {
-        String token = getTokenInCookies(hh);
+        String token = userService.getTokenInCookies(hh);
         Usuario user = userService.getUser(token);
 
         if(!user.getUid().equalsIgnoreCase(uid)){
@@ -70,15 +69,15 @@ public class UsuarioEndpoints {
     @DELETE
     public Response deleteUser(@PathParam("uid") String uid,
     						   @Context HttpHeaders hh) {
-        String uidActivo = getUidInCookies(hh); 
+        String uidActivo = userService.getUidInCookies(hh); 
     	
-        /* TODO: Comentado porque rompe los tests
+        /* TODO: Comentado porque rompe los tests */
     	if (!userService.esElMismoUsuario(uidActivo,uid))
     		return Response.status(Status.FORBIDDEN).build();
-    	else {*/
+    	else {
     		usuariosDao.deleteUsuario(uid);
     		return Response.status(Response.Status.OK).build();
-    	//}
+    	}
     }
     
     /**
@@ -91,42 +90,24 @@ public class UsuarioEndpoints {
     @Produces(MediaType.APPLICATION_JSON)
 	public Response getFriendsList(@PathParam("uid") String uid,
                                    @Context HttpHeaders hh) {
-        String uidActivo = getUidInCookies(hh); 
+        String uidActivo = userService.getUidInCookies(hh); 
     	
-        /* TODO: Comentado porque rompe los tests
+        /* TODO: Comentado porque rompe los tests */
     	if (!userService.esElMismoUsuario(uidActivo,uid))
     		return Response.status(Status.FORBIDDEN).build();
-    	else {*/ 
+    	else {
             Usuario usuario = usuariosDao.getUsuario(uid);
             if (usuario == null){
                 throw new CustomNotFoundException("El usuario " + uid
                         + " no existe en el sistema.");
             }
 
-            String token = getTokenInCookies(hh);
+            String token = userService.getTokenInCookies(hh);
 
         	List<Usuario> friendsList = userService.getFriends(token);
         	
     		return Response.status(Response.Status.OK).entity(friendsList).build();
-    	//}
+    	}
 	}
-
-    private String getTokenInCookies(HttpHeaders hh){
-        Map<String, Cookie> pathParams = hh.getCookies();
-        Cookie cookie = pathParams.get("token");
-        if(cookie != null){
-            return cookie.getValue();
-        }
-        return null;
-    }
-     
-	private String getUidInCookies(HttpHeaders hh){
-        Map<String, Cookie> pathParams = hh.getCookies();
-        Cookie cookie = pathParams.get("uid");
-        if(cookie != null){
-            return cookie.getValue();
-        }
-        return null;
-    }
 	 	
 }

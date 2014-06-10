@@ -44,19 +44,19 @@ public class ItemsEndpoints {
 			                   @PathParam("listName") String listName,
 			                   @PathParam("itemName") String itemName,
 			                   @Context HttpHeaders hh) {
-		String uidActivo = getUidInCookies(hh);
-		String token = getTokenInCookies(hh);
+		String uidActivo = userService.getUidInCookies(hh);
+		String token = userService.getTokenInCookies(hh);
 		
-		/* TODO: Comentado porque rompe los tests al no tener cookies
+		/* TODO: Comentado porque rompe los tests al no tener cookies*/
 		if (!userService.esElMismoUsuario(uidActivo,uid) && !userService.esAmigoDeUsuario(token, uid))
 			return Response.status(Status.FORBIDDEN).build();
-		else {*/
+		else {
 			notificarSiCorresponde(uidActivo, uid, "One of your friends added an item to your list!");
 			// TODO: que diga el nombre del amigo y de la lista
 			
 			dao.createItem(uid, listName, itemName);
 			return Response.status(Status.CREATED).build();
-		//}
+		}
 		
 	}
 
@@ -72,19 +72,19 @@ public class ItemsEndpoints {
 			                 @PathParam("listName") String listName,
 			                 @PathParam("itemName") String itemName,
 			                 @Context HttpHeaders hh) {	
-		String uidActivo = getUidInCookies(hh);
-		String token = getTokenInCookies(hh);
+		String uidActivo = userService.getUidInCookies(hh);
+		String token = userService.getTokenInCookies(hh);
 		
-		/* TODO: Comentado porque rompe los tests al no tener cookies
+		/* TODO: Comentado porque rompe los tests al no tener cookies */
 		if (!userService.esElMismoUsuario(uidActivo,uid) && !userService.esAmigoDeUsuario(token, uid))
 			return Response.status(Status.FORBIDDEN).build();
-		else {*/
+		else {
 			notificarSiCorresponde(uidActivo, uid, "One of your friends voted for an item on your list!");
 			// TODO: que diga el nombre del amigo y de la lista
 			
 			dao.voteItem(uid, listName, itemName);
 			return Response.status(Status.CREATED).build();			
-		//}
+		}
 	}
 
 	/**
@@ -98,37 +98,19 @@ public class ItemsEndpoints {
 			                   @PathParam("listName") String listName,
 			                   @PathParam("itemName") String itemName,
 			                   @Context HttpHeaders hh) {
-		String uidActivo = getUidInCookies(hh);
+		String uidActivo = userService.getUidInCookies(hh);
 		
 		// No se permite borrar items de listas ajenas
 		// TODO: comento la validacion porque sino rompen los tests
 		// (no hay cookies => uidActivo es null => prohibe)
-		/*
+		
 		if (!userService.esElMismoUsuario(uidActivo,uid))
 			return Response.status(Status.FORBIDDEN).build();
-		else { */
+		else { 
 			dao.deleteItem(uid, listName, itemName);
 			return Response.status(Status.OK).build();
-		//}
-	}
-	
-	private String getUidInCookies(HttpHeaders hh){
-        Map<String, Cookie> pathParams = hh.getCookies();
-        Cookie cookie = pathParams.get("uid");
-        if(cookie != null){
-            return cookie.getValue();
-        }
-        return null;
-    }
-	
-	private String getTokenInCookies(HttpHeaders hh){
-        Map<String, Cookie> pathParams = hh.getCookies();
-        Cookie cookie = pathParams.get("token");
-        if(cookie != null){
-            return cookie.getValue();
-        }
-        return null;
-	}    
+		}
+	}  
 		
 	
 	private void notificarSiCorresponde(String uidActivo, String uidDuenio, String mensaje) {
