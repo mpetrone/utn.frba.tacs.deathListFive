@@ -13,7 +13,11 @@ import static org.junit.Assert.assertNotNull;
 
 public class UsuarioEndToEndTest extends DeathListTest{
 
-    @Test
+    /* testeamos distintas acciones que puede realizar
+     * un usuario de prueba con uid = "1234".
+     */
+	
+	@Test
     public void crearUnUsuarioYChequearQueExista() {
         String uid = "1234";
         
@@ -56,8 +60,9 @@ public class UsuarioEndToEndTest extends DeathListTest{
     @Test
     public void eliminarUsuarioQueNoExiste() {
     	/* antes era correcto que devuelva Not Found, pero
-    	 * ahora lo correcto es Forbidden, porque el fantasma
-    	 * no es amigo del usuario de prueba.
+    	 * ahora lo correcto es Forbidden, porque el usuario
+    	 * de prueba (el de uid 1234, dado por el mock de la cookie en StubUserService)
+    	 * no tiene permiso para borrar otros usuarios.
     	 */
     	checkResponse(target("/users/" + "fantasma").request().delete(), Status.FORBIDDEN.getStatusCode());
     }

@@ -56,13 +56,13 @@ public class StubUserService implements UserService{
 
 	@Override
 	public String getTokenInCookies(HttpHeaders hh) {
-		// TODO Auto-generated method stub
+		
 		return "elToken";
 	}
 
 	@Override
 	public String getUidInCookies(HttpHeaders hh) {
-		// TODO Auto-generated method stub
+		
 		return "1234";
 	}
 }
