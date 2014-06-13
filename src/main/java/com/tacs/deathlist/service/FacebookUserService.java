@@ -52,7 +52,7 @@ public class FacebookUserService implements UserService {
     public Usuario getUsuario(String requestorToken, String uid){
         User requestorFacebookUser = getFacebookUser(requestorToken);
 
-        if(!requestorFacebookUser.getId().equalsIgnoreCase(uid) & !esAmigoDeUsuario(requestorToken, uid)){
+        if(!requestorFacebookUser.getId().equalsIgnoreCase(uid) && !esAmigoDeUsuario(requestorToken, uid)){
             throw new CustomForbiddenException("el usuario solicitante no es amigo del usuario requerido");
         }
         return usuariosDao.getUsuario(uid);
