@@ -27,7 +27,6 @@ public class UsuarioEndToEndTest extends DeathListTest{
         
         assertNotNull(user);
         assertEquals("el uid es invalido", uid, user.getUid());
-        assertEquals("el nombre es invalido", "user1", user.getNombre());
         
         target("/users/" + uid).request().delete();
     }
@@ -64,7 +63,7 @@ public class UsuarioEndToEndTest extends DeathListTest{
     	 * de prueba (el de uid 1234, dado por el mock de la cookie en StubUserService)
     	 * no tiene permiso para borrar otros usuarios.
     	 */
-    	checkResponse(target("/users/" + "fantasma").request().delete(), Status.FORBIDDEN.getStatusCode());
+    	checkResponse(target("/users/" + "fantasma").request().delete(), Status.NOT_FOUND.getStatusCode());
     }
         
     

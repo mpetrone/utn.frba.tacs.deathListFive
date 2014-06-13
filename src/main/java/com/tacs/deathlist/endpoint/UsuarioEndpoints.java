@@ -1,25 +1,22 @@
 package com.tacs.deathlist.endpoint;
 
-import com.tacs.deathlist.dao.UsuariosDao;
 import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.domain.exception.CustomNotFoundException;
 import com.tacs.deathlist.service.UserService;
-
+import com.tacs.deathlist.util.RequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
-import javax.ws.rs.core.Response.Status;
-
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/users/{uid}")
 @Component
 public class UsuarioEndpoints {
-
-    @Autowired
-    private UsuariosDao usuariosDao;
 
     @Autowired
     private UserService userService;
@@ -31,8 +28,11 @@ public class UsuarioEndpoints {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-	public Response getUser(@PathParam("uid") String uid) {
-		Usuario usuario = usuariosDao.getUsuario(uid);
+	public Response getUser(@PathParam("uid") String uid,
+                            @Context HttpHeaders hh) {
+        String requestorToken = RequestUtils.getTokenInCookies(hh);
+
+		Usuario usuario = userService.getUsuario(requestorToken, uid);
         if (usuario == null){
             throw new CustomNotFoundException("El usuario " + uid
                     + " no existe en el sistema.");
@@ -49,15 +49,9 @@ public class UsuarioEndpoints {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createUser(@PathParam("uid") String uid,
                                @Context HttpHeaders hh)  {
-        String token = userService.getTokenInCookies(hh);
-        Usuario user = userService.getUser(token);
+        String requestorToken = RequestUtils.getTokenInCookies(hh);
 
-        if(!user.getUid().equalsIgnoreCase(uid)){
-            throw new CustomNotFoundException("El uid usuario " + user.getUid()
-                    + "es distinto al uid que fue mandado por uri " + uid);
-        }
-
-        usuariosDao.createUsuario(user);
+        userService.createUsuario(requestorToken, uid);
         return Response.status(Response.Status.CREATED).build();
     }
 
@@ -69,15 +63,11 @@ public class UsuarioEndpoints {
     @DELETE
     public Response deleteUser(@PathParam("uid") String uid,
     						   @Context HttpHeaders hh) {
-        String uidActivo = userService.getUidInCookies(hh); 
-    	
-        /* TODO: Comentado porque rompe los tests */
-    	if (!userService.esElMismoUsuario(uidActivo,uid))
-    		return Response.status(Status.FORBIDDEN).build();
-    	else {
-    		usuariosDao.deleteUsuario(uid);
-    		return Response.status(Response.Status.OK).build();
-    	}
+        String requestorToken = RequestUtils.getTokenInCookies(hh);
+
+        userService.deleteUsuario(requestorToken, uid);
+        return Response.status(Response.Status.OK).build();
+
     }
     
     /**
@@ -90,24 +80,11 @@ public class UsuarioEndpoints {
     @Produces(MediaType.APPLICATION_JSON)
 	public Response getFriendsList(@PathParam("uid") String uid,
                                    @Context HttpHeaders hh) {
-        String uidActivo = userService.getUidInCookies(hh); 
+        String requestorToken = RequestUtils.getTokenInCookies(hh);
     	
-        /* TODO: Comentado porque rompe los tests */
-    	if (!userService.esElMismoUsuario(uidActivo,uid))
-    		return Response.status(Status.FORBIDDEN).build();
-    	else {
-            Usuario usuario = usuariosDao.getUsuario(uid);
-            if (usuario == null){
-                throw new CustomNotFoundException("El usuario " + uid
-                        + " no existe en el sistema.");
-            }
-
-            String token = userService.getTokenInCookies(hh);
-
-        	List<Usuario> friendsList = userService.getFriends(token);
+        List<Usuario> friendsList = userService.getFriends(requestorToken, uid);
         	
-    		return Response.status(Response.Status.OK).entity(friendsList).build();
-    	}
+    	return Response.status(Response.Status.OK).entity(friendsList).build();
 	}
 	 	
 }

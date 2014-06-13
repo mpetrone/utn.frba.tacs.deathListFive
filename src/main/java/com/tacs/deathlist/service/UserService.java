@@ -4,23 +4,20 @@ import com.tacs.deathlist.domain.Usuario;
 
 import java.util.List;
 
-import javax.ws.rs.core.HttpHeaders;
-
 public interface UserService {
 
-    public Usuario getUser(String token);
+    Usuario getUsuario(String requestorToken, String uid);
 
-    public List<Usuario> getFriends(String token);
+    void createUsuario(String requestorToken, String uid);
+
+    void deleteUsuario(String requestorToken, String uid);
+
+    List<Usuario> getFriends(String requestorToken, String uid);
+
+    void validateToken(String token);
     
-    public boolean esAmigoDeUsuario(String token, String uidFriend);
-    
-    public boolean esElMismoUsuario(String uid1, String uid2);
-    
-    public String getTokenInCookies(HttpHeaders hh);
-    
-    public String getUidInCookies(HttpHeaders hh);
-    
-    public void enviarNotificacion(String uidReceptor, String mensaje);
+    void enviarNotificacion(String uidReceptor, String mensaje);
 	
-	public void publicarEnNewsfeed(String uid, String mensaje);
+	void publicarEnNewsfeed(String uid, String mensaje);
+
 }

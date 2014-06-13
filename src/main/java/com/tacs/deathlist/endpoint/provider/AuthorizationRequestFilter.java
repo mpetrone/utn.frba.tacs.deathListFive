@@ -1,6 +1,5 @@
 package com.tacs.deathlist.endpoint.provider;
 
-import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +28,6 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
                     entity("No se encontro el token").build());
         }
 
-        Usuario user = userService.getUser(tokenCookie.getValue());
-
-        if (user == null) {
-            requestContext.abortWith(Response.status(Response.Status.BAD_REQUEST).
-                    entity("El token es invalido").build());
-        }
+        userService.validateToken(tokenCookie.getValue());
     }
 }
