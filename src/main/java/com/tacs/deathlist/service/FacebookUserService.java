@@ -90,7 +90,7 @@ public class FacebookUserService implements UserService {
             return (User) element;
         }
 
-        FacebookClient facebookClient = new DefaultFacebookClient(token);
+        FacebookClient facebookClient = new DefaultFacebookClient(token,this.appSecret);
         User facebookUser = facebookClient.fetchObject("me", User.class);
 
         if(facebookUser == null || facebookUser.getId() == null){
@@ -111,7 +111,7 @@ public class FacebookUserService implements UserService {
 
         List<Usuario> allFriendsLists = new ArrayList<>();
 
-        FacebookClient facebookClient = new DefaultFacebookClient(requestorToken);
+        FacebookClient facebookClient = new DefaultFacebookClient(requestorToken,this.appSecret);
         Connection<User> myFriends = facebookClient.fetchConnection("me/friends", User.class);
 
         if(myFriends != null && myFriends.getData() != null) {
@@ -129,7 +129,7 @@ public class FacebookUserService implements UserService {
 
     private boolean esAmigoDeUsuario(String requestorToken, String uidFriend) {
 
-        FacebookClient facebookClient = new DefaultFacebookClient(requestorToken);
+        FacebookClient facebookClient = new DefaultFacebookClient(requestorToken,this.appSecret);
         Connection<User> myFriends = facebookClient.fetchConnection("me/friends", User.class);
 
         if(myFriends != null && myFriends.getData() != null) {
