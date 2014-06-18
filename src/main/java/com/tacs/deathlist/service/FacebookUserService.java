@@ -55,7 +55,7 @@ public class FacebookUserService implements UserService {
         if(!requestorFacebookUser.getId().equalsIgnoreCase(uid) && !esAmigoDeUsuario(requestorToken, uid)){
             throw new CustomForbiddenException("el usuario solicitante no es amigo del usuario requerido");
         }
-        return usuariosDao.getUsuario(uid);
+        return usuariosDao.getUsuario(requestorFacebookUser.getId());
     }
 
     @Override
@@ -71,7 +71,7 @@ public class FacebookUserService implements UserService {
         if(!requestorFacebookUser.getId().equalsIgnoreCase(uid)){
             throw new CustomForbiddenException("el usuario solicitante no puede eliminar a otro usuario");
         }
-        usuariosDao.deleteUsuario(uid);
+        usuariosDao.deleteUsuario(requestorFacebookUser.getId());
     }
 
     @Override

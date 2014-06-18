@@ -79,11 +79,6 @@ public class ItemsEndpoints {
 
         dao.voteItem(uid, listName, itemName);
 
-        if (!usuario.getUid().equalsIgnoreCase(uid)) {
-            userService.enviarNotificacion(uid,
-                    usuario.getNombre() + " ha votado el item " + itemName + " en la lista " + listName);
-        }
-
         return Response.status(Status.CREATED).build();
     }
 
