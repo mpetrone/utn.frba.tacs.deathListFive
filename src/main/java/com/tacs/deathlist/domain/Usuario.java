@@ -89,6 +89,6 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "Usuerio [uid= " + uid + "nombre=" + nombre + ", listas=" + listas + "]";
+        return "Usuario [uid= " + uid + "nombre=" + nombre + ", listas=" + listas + "]";
     }
 }
