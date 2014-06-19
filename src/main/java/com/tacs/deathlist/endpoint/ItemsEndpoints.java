@@ -41,7 +41,7 @@ public class ItemsEndpoints {
 			                   @Context HttpHeaders hh) {
         String requestorToken = RequestUtils.getTokenInCookies(hh);
 
-        Usuario usuario = userService.getUsuario(requestorToken, uid);
+        Usuario usuario = userService.getUsuario(requestorToken,uid);
 
         if(usuario == null){
             return Response.status(Status.NOT_FOUND).entity("el usuario no existe").build();
