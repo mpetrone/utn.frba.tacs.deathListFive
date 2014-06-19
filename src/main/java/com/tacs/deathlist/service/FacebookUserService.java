@@ -175,9 +175,10 @@ public class FacebookUserService implements UserService {
 	}
 	
 	@Override
-	public void publicarEnNewsfeed(String uid, String mensaje) {
+	public void publicarEnNewsfeed(String requestorToken, String mensaje) {
 		
-		// TODO: Decidir si esto se hace en el frontend (botón compartir)
+		FacebookClient facebookClient = new DefaultFacebookClient(requestorToken,this.appSecret);
+		
+		facebookClient.publish("me/feed", FacebookType.class, Parameter.with("message", mensaje));
 	}
-
 }

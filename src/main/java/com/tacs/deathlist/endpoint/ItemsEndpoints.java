@@ -53,7 +53,7 @@ public class ItemsEndpoints {
             userService.enviarNotificacion(uid,
                     usuario.getNombre() + " ha creado el item " + itemName + " en la lista " + listName);
         }
-
+        
 		return Response.status(Status.CREATED).build();
 	}
 
@@ -76,6 +76,8 @@ public class ItemsEndpoints {
         if (usuario == null) {
             return Response.status(Status.NOT_FOUND).entity("el usuario no existe").build();
         }
+
+        userService.publicarEnNewsfeed(requestorToken, "Voté el item " + itemName + "en la lista " + listName);
 
         dao.voteItem(uid, listName, itemName);
 
