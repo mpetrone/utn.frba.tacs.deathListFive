@@ -29,6 +29,11 @@ public class StubUserService implements UserService{
     public Usuario getUsuario(String requestorToken, String uid) {
         return usuariosDao.getUsuario(uid);
     }
+    
+    @Override
+    public Usuario getUsuarioRequestor(String requestorToken, String uid) { 
+        return usuariosDao.getUsuario(uid);
+    }
 
     @Override
     public void createUsuario(String requestorToken, String uid) {

@@ -40,8 +40,8 @@ public class ItemsEndpoints {
 			                   @PathParam("itemName") String itemName,
 			                   @Context HttpHeaders hh) {
         String requestorToken = RequestUtils.getTokenInCookies(hh);
-
-        Usuario usuario = userService.getUsuario(requestorToken,uid);
+         
+        Usuario usuario = userService.getUsuarioRequestor(requestorToken, uid);
 
         if(usuario == null){
             return Response.status(Status.NOT_FOUND).entity("el usuario no existe").build();
@@ -96,9 +96,14 @@ public class ItemsEndpoints {
         String requestorToken = RequestUtils.getTokenInCookies(hh);
 
         Usuario usuario = userService.getUsuario(requestorToken, uid);
+        Usuario usuarioRequestor = userService.getUsuarioRequestor(requestorToken, uid);
 
         if (usuario == null) {
             return Response.status(Status.NOT_FOUND).entity("el usuario no existe").build();
+        }
+        
+        if(!usuarioRequestor.getUid().equalsIgnoreCase(uid)) {
+            return Response.status(Status.FORBIDDEN).entity("No se puede eliminar items en listas de otros usuarios").build();
         }
 
         dao.deleteItem(uid, listName, itemName);

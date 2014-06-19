@@ -7,6 +7,8 @@ import java.util.List;
 public interface UserService {
 
     Usuario getUsuario(String requestorToken, String uid);
+    
+    Usuario getUsuarioRequestor(String requestorToken, String uid);
 
     void createUsuario(String requestorToken, String uid);
 
