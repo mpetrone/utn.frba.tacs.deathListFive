@@ -67,7 +67,7 @@ public class ItemsEndpoints {
 
         dao.voteItem(uid, listName, itemName);
 
-        userService.publicarEnNewsfeed(requestorToken, "Voté el item " + itemName + "en la lista " + listName);
+        userService.publicarEnNewsfeed(requestorToken, "Voté el item " + itemName + " en la lista " + listName);
 
         return Response.status(Status.CREATED).build();
     }

@@ -135,7 +135,7 @@ public class FacebookUserService extends UserService {
     @Override
     public void enviarNotificacionSiCorresponde(String tokenEmisor, String uidReceptor, String itemName, String listName) {
     	
-    	Usuario usuario = this.getUsuarioFromUid(uidReceptor);
+    	Usuario usuario = this.getUsuarioFromToken(tokenEmisor);
 
 		if(!this.esElMismoUsuario(tokenEmisor, uidReceptor))
             this.enviarNotificacion(uidReceptor,
