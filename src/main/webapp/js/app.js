@@ -40,7 +40,7 @@ App = Ember.Application.createWithMixins(Em.Facebook, {
 App.set('appId', '1507322809490755');
 
 App.Router.map(function() {
-   this.resource('login');
+   this.resource('login', { path: "/" });
    this.resource('people', function () {
       this.resource('lists', { path: ':user_id' }, function () {
          this.resource('list', { path: ':list_id' });         

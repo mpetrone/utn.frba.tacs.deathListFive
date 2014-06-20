@@ -45,8 +45,7 @@
           <a href="#" {{action "logout" target="FB"}}>Logout</a>
         </div>
       {{else}}
-        {{#view Em.FacebookView type="login-button" data-size="xlarge"
-                                data-scope="public_profile,user_friends,publish_actions,manage_pages,status_update,publish_stream"}}
+        {{#view Em.FacebookView type="login-button" data-size="xlarge" data-scope="public_profile,user_friends,publish_actions,status_update,publish_stream"}}
           Connect to Facebook
         {{/view}}
       {{/if}}
