@@ -91,7 +91,7 @@ public class FacebookUserService extends UserService {
     @Override
     public List<Usuario> getFriends(String requestorToken){
         
-    	List<Usuario> allFriendsLists = new ArrayList<>();
+    	List<Usuario> listaDeAmigos = new ArrayList<>();
 
         FacebookClient facebookClient = new DefaultFacebookClient(requestorToken,this.appSecret);
         Connection<User> myFriends = facebookClient.fetchConnection("me/friends", User.class);
@@ -99,14 +99,18 @@ public class FacebookUserService extends UserService {
         if(myFriends != null && myFriends.getData() != null) {
             for (User friend : myFriends.getData()) {
                 String friendId = friend.getId();
-                Usuario userFriend = usuariosDao.getUsuario(friendId);
-                if (userFriend != null) {
-                    allFriendsLists.add(userFriend);
+                
+                try {
+                	Usuario userFriend = this.getUsuarioFromUid(friendId);
+                    listaDeAmigos.add(userFriend);
+                }
+                catch (CustomNotFoundException e) {
+                	// ese amigo no usa nuestra app, lo descartamos
                 }
             }
         }
 
-        return allFriendsLists;
+        return listaDeAmigos;
     }
 
     @Override
