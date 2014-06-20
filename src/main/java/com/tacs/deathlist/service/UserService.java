@@ -19,7 +19,7 @@ public abstract class UserService {
 	/**
      * Este método obtiene un usuario desde su id.
      * 
-     * @param uid el id del usuario     * 
+     * @param uid el id del usuario
      * @return el usuario con el id especificado
      * 
      */	
@@ -84,7 +84,7 @@ public abstract class UserService {
      */	
     protected boolean sonAmigos(String token, String uid) {
         
-        /* Esta opcion funciona.
+        /* Esta opcion funciona. */
         
     	for (Usuario usuario : this.getFriends(token)) {
         	if (usuario.getUid().equals(uid)) {
@@ -93,10 +93,12 @@ public abstract class UserService {
         } 
         
         return false;
-        */
-    	
-    	// TODO: si esta también funciona, dejar esta.
+        
+    	/* Esta opción es más objetosa, pero delega en
+    	 * usuariosDao y por ende imposibilita los tests
+    	 * en UserServiceTest
     	return this.getFriends(token).contains(this.getUsuarioFromUid(uid));
+    	*/
 	}
     
     /**

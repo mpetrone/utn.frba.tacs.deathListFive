@@ -69,8 +69,7 @@ public class UsuarioEndToEndTest extends DeathListTest{
     	String uri = "/users/" + uid + "/friends";
     	
     	checkResponse(target(uri).request().get(), Status.OK.getStatusCode());
-    }
-        
+    }        
     
     private void checkResponse(Response response, int statusCode) {
         assertNotNull(response);
