@@ -8,10 +8,7 @@ import com.tacs.deathlist.domain.exception.CustomForbiddenException;
 import com.tacs.deathlist.domain.exception.CustomNotFoundException;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -56,6 +53,14 @@ public class Usuario implements Serializable {
         return listas.contains(nombreLista);
     }
 
+    /**
+     * Este método crea una nueva lista al usuario.
+     * 
+     * @param nombreLista el nombre de la lista
+     * 
+     * @throws CustomNotFoundException si el usuario ya tiene una lista con ese nombre
+     * 
+     */	
     public void agregarLista(String nombreLista) {
 
         if (this.existeLista(nombreLista))
@@ -64,6 +69,14 @@ public class Usuario implements Serializable {
         this.listas.add(nombreLista);
     }
 
+    /**
+     * Este método elimina una lista de un usuario.
+     * 
+     * @param itemName el nombre de la lista
+     * 
+     * @throws CustomNotFoundException si el usuario no tiene una lista con ese nombre
+     * 
+     */	
     public void eliminarLista(String nombreLista) {
 
         if (!listas.remove(nombreLista))
@@ -91,4 +104,29 @@ public class Usuario implements Serializable {
     public String toString() {
         return "Usuario [uid= " + uid + "nombre=" + nombre + ", listas=" + listas + "]";
     }
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((uid == null) ? 0 : uid.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Usuario other = (Usuario) obj;
+		if (uid == null) {
+			if (other.uid != null)
+				return false;
+		} else if (!uid.equals(other.uid))
+			return false;
+		return true;
+	}
 }

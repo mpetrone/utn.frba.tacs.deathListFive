@@ -51,7 +51,7 @@ public class UsuarioEndpoints {
                                @Context HttpHeaders hh)  {
         String requestorToken = userService.getTokenInCookies(hh);
 
-        userService.createUsuario(requestorToken);
+        userService.createUsuarioFromToken(requestorToken);
         return Response.status(Response.Status.CREATED).build();
     }
 

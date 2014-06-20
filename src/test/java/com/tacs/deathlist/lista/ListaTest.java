@@ -28,6 +28,17 @@ public class ListaTest {
 		assertEquals(lista1, lista2);
 	}
 	
+	@Test
+	public void testAgregarItemRepetido() {
+		
+		Lista lista1 = new Lista("1234", "Lenguajes");
+		lista1.agregarItem("Python");
+		lista1.agregarItem("Ruby");
+		
+		// agregar un item repetido deberia lanzar excepcion
+    	exception.expect(CustomForbiddenException.class);
+		lista1.agregarItem("Ruby");
+	}
 	
 	@Test
     public void testLimitarItems() {

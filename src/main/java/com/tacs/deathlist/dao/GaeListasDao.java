@@ -13,8 +13,8 @@ import java.util.List;
 public class GaeListasDao implements ListasDao{
 
     @Autowired
-    private ObjectifyService objetifyService;
-
+    private ObjectifyService objectifyService;
+    
     @Override
     public List<String> getAllLists(String uid) {
         Usuario usuario = getUsuario(uid);
@@ -23,7 +23,7 @@ public class GaeListasDao implements ListasDao{
 
     @Override
     public Lista getLista(String uid, String nombreLista) {
-        Lista lista = (Lista) objetifyService.load(getKey(uid,nombreLista), Lista.class);
+        Lista lista = (Lista) objectifyService.load(getKey(uid,nombreLista), Lista.class);
         if (lista == null){
             throw new CustomNotFoundException("La lista " + nombreLista + " del usuario " + uid + " no existe");
         }
@@ -34,48 +34,66 @@ public class GaeListasDao implements ListasDao{
     public void createLista(final String uid, final String nombreLista) {
         Usuario usuario = getUsuario(uid);
         usuario.agregarLista(nombreLista);
-        objetifyService.save(usuario);
+        objectifyService.save(usuario);
         Lista lista = new Lista(getKey(uid,nombreLista),nombreLista);
-        objetifyService.save(lista);
+        objectifyService.save(lista);
     }
 
     @Override
     public void deleteLista(final String uid, final String nombreLista) {
         Usuario usuario = getUsuario(uid);
         usuario.eliminarLista(nombreLista);
-        objetifyService.save(usuario);
-        objetifyService.delete(getKey(uid,nombreLista), Lista.class);
+        objectifyService.save(usuario);
+        objectifyService.delete(getKey(uid,nombreLista), Lista.class);
     }
 
     @Override
-    public void createItem(String uid, String nombreLista, String itemName) {
+    public void createItem(String uid, String nombreLista, String nombreItem) {
         Lista lista = getLista(uid, nombreLista);
-        lista.agregarItem(itemName);
-        objetifyService.save(lista);
+        lista.agregarItem(nombreItem);
+        objectifyService.save(lista);
     }
 
     @Override
-    public void deleteItem(String uid, String nombreLista, String itemName) {
+    public void deleteItem(String uid, String nombreLista, String nombreItem) {
         Lista lista = getLista(uid, nombreLista);
-        lista.eliminarItem(itemName);
-        objetifyService.save(lista);
+        lista.eliminarItem(nombreItem);
+        objectifyService.save(lista);
     }
 
     @Override
-    public void voteItem(String uid, String nombreLista, String itemName) {
+    public void voteItem(String uid, String nombreLista, String nombreItem) {
         Lista lista = getLista(uid, nombreLista);
-        lista.votarItem(itemName);
-        objetifyService.save(lista);
+        lista.votarItem(nombreItem);
+        objectifyService.save(lista);
     }
 
+    /**
+     * Este método traduce una identificación unívoca de una lista
+     * a un formato que actúa como clave en un mapa clave-valor
+     * provisto por el servicio de almacenamiento de GAE.
+     * 
+     * @param uid el id del usuario que posee la lista
+     * @param nombreLista el nombre de la lista
+     * @return el String asociado a la lista correspondiente
+     * 
+     */	
     private String getKey(String uid, String nombreLista) {
         return uid + "-" + nombreLista;
     }
 
+    /**
+     * Este método obtiene el usuario con un cierto uid.
+     * 
+     * @param uid El id del usuario
+     * @return el usuario con el uid correspondiente
+     * @throws CustomNotFoundException si el usuario no existe
+     * 
+     */	
     private Usuario getUsuario(String uid) {
-        Usuario usuario = (Usuario) objetifyService.load(uid, Usuario.class);
+        Usuario usuario = (Usuario) objectifyService.load(uid, Usuario.class);
         if(usuario == null) {
-            throw new CustomNotFoundException("el usuario " + uid + " no existe");
+            throw new CustomNotFoundException("El usuario " + uid + " no existe");
         }
         return usuario;
     }

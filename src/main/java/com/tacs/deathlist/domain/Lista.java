@@ -48,7 +48,16 @@ public class Lista {
     	return MAX_ITEMS;
     }
 
-	public void agregarItem(String nombreDeNuevoItem) {
+    /**
+     * Este método agrega un nuevo item a la lista.
+     * 
+     * @param nombreDeNuevoItem el nombre del item
+     * 
+     * @throws CustomForbiddenException si el item excede la capacidad máxima
+     * de la lista o si un item con ese nombre ya existe en la lista
+     * 
+     */	
+    public void agregarItem(String nombreDeNuevoItem) {
 		if (!existeItem(nombreDeNuevoItem)) {
 			if (this.getCantidadDeItems() < MAX_ITEMS)
 				items.add(new Item(nombreDeNuevoItem));
@@ -61,6 +70,14 @@ public class Lista {
 					+ " ya existe en la lista " + this.getNombre() + ".");
 	}
     
+	/**
+     * Este método obtiene un item de la lista.
+     * 
+     * @param itemName el nombre del item
+     * @return el item buscado
+     * @throws CustomNotFoundException si el item no existe en la lista
+     * 
+     */	
 	public Item getItem(String itemName) {
 		for (Item item : items) {
 			if (itemName.equals(item.getNombre())) {
@@ -70,14 +87,30 @@ public class Lista {
 		throw new CustomNotFoundException("El item " + itemName + " no existe en la lista " + this.getNombre() + ".");
 	}
     
-    public void eliminarItem(String itemName){
+	/**
+     * Este método elimina un item de la lista.
+     * 
+     * @param itemName el nombre del item
+     * 
+     * @throws CustomNotFoundException si el item no existe en la lista
+     * 
+     */	
+	public void eliminarItem(String itemName){
         if(!items.remove(new Item(itemName))) {
         	throw new CustomNotFoundException("El item " + itemName + " no existe en la lista " + this.getNombre() + ".");
         }
     }
     
-    public void votarItem(String itemName) {
-        getItem(itemName).recibirVoto(); // lanza excepcion si el item no existe
+	/**
+     * Este método suma un voto a un item de la lista.
+     * 
+     * @param itemName el nombre del item
+     * 
+     * @throws CustomNotFoundException si el item no existe en la lista
+     * 
+     */	
+	public void votarItem(String itemName) {
+        getItem(itemName).recibirVoto();
     }
 
     @Override

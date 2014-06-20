@@ -18,19 +18,13 @@ import javax.ws.rs.core.HttpHeaders;
 public class StubUserService extends UserService{
     
 	@Override
-    public Usuario getUsuarioFromToken(String token) { 
-        return this.getUsuarioFromUid(this.getUidFromToken(token));
-    }
-
-	
-	@Override
     protected String getUidFromToken(String token) {
     	return StringUtils.right(token, 1);
     }
     
 	@Override
-	public void createUsuario(String requestorToken) {
-		usuariosDao.createUsuario(new Usuario(this.getUidFromToken(requestorToken), requestorToken));
+	public void createUsuarioFromToken(String requestorToken) {
+		this.createUsuario(new Usuario(this.getUidFromToken(requestorToken), requestorToken));
 	}
 
     @Override
@@ -43,26 +37,7 @@ public class StubUserService extends UserService{
     			new Usuario("9", "user9"),
     		}));
     	
-    }    
-
-    @Override
-    public void validateToken(String token) {
-        //todos son validos
     }
-
-    @Override
-	public void enviarNotificacion(String uidReceptor, String mensaje) {
-
-	}
-    
-    public void enviarNotificacionSiCorresponde(String tokenEmisor, String uidReceptor, String itemName, String listName) {
-    	
-    }
-
-	@Override
-	public void publicarEnNewsfeed(String uid, String mensaje) {
-
-	}
 	
 	@Override
 	public String getTokenInCookies(HttpHeaders hh){

@@ -52,24 +52,27 @@ public class FacebookUserService extends UserService {
     }
     
     @Override
-    public Usuario getUsuarioFromToken(String token){
-
-        return this.getUsuarioFromUid(getFacebookUser(token).getId());
-    }
-    
-    @Override
     protected String getUidFromToken(String token) {
     	
     	return this.getFacebookUser(token).getId();
     }
     
     @Override
-    public void createUsuario(String requestorToken) {
+    public void createUsuarioFromToken(String requestorToken) {
         User requestorFacebookUser = getFacebookUser(requestorToken);
         Usuario usuario = new Usuario(requestorFacebookUser.getId(), requestorFacebookUser.getName());
-        usuariosDao.createUsuario(usuario);
+        this.createUsuario(usuario);
     }
     
+    /**
+     * Este método obtiene un usuario de facebook como instancia de
+     * la clase User del framework restfb. Se utiliza un cache
+     * de GAE para evitar requests innecesarios a facebook.
+     * 
+     * @param token el token de un usuario
+     * @throws CustomNotFoundException si no se pudo obtener el usuario
+     * 
+     */	
     private User getFacebookUser(String token){
         Object element = cacheManager.get(token);
 
@@ -89,11 +92,11 @@ public class FacebookUserService extends UserService {
     }
 
     @Override
-    public List<Usuario> getFriends(String requestorToken){
+    public List<Usuario> getFriends(String token){
         
     	List<Usuario> listaDeAmigos = new ArrayList<>();
 
-        FacebookClient facebookClient = new DefaultFacebookClient(requestorToken,this.appSecret);
+        FacebookClient facebookClient = new DefaultFacebookClient(token,this.appSecret);
         Connection<User> myFriends = facebookClient.fetchConnection("me/friends", User.class);
 
         if(myFriends != null && myFriends.getData() != null) {
@@ -114,7 +117,7 @@ public class FacebookUserService extends UserService {
     }
 
     @Override
-    public void enviarNotificacion(String uidReceptor, String mensaje) {
+    protected void enviarNotificacion(String uidReceptor, String mensaje) {
 	    
 	    AccessToken appAccessToken = new DefaultFacebookClient().obtainAppAccessToken(this.appId, this.appSecret);	    
 	    FacebookClient facebookClient = new DefaultFacebookClient(appAccessToken.getAccessToken());
