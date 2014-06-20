@@ -60,6 +60,16 @@ public class UsuarioEndToEndTest extends DeathListTest{
     	 */
     	checkResponse(target("/users/" + "fantasma").request().delete(), Status.FORBIDDEN.getStatusCode());
     }
+    
+    @Test
+    public void obtenerListaDeAmigos() {
+    	
+    	String uid = "1";
+    	
+    	String uri = "/users/" + uid + "/friends";
+    	
+    	checkResponse(target(uri).request().get(), Status.OK.getStatusCode());
+    }
         
     
     private void checkResponse(Response response, int statusCode) {

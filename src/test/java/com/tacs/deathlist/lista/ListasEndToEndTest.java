@@ -20,8 +20,8 @@ public class ListasEndToEndTest extends DeathListTest{
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        target("/users/" + UID).
-                request().post(Entity.json(null));
+        target("/users/" + UID).request().post(Entity.json(null));
+        
     }
 
     @Override
@@ -115,16 +115,18 @@ public class ListasEndToEndTest extends DeathListTest{
 
         Response response = target(uri).request().delete();
         checkResponse(response, Status.NOT_FOUND.getStatusCode());
-    }
+    }    
         
     @Test
     public void crearListaAUnAmigo() {
+    	
     	
     	String lista1 = "Materias";
         String uri = "/users/" + "3" + "/lists/" + lista1;
 
         Response response = target(uri).request().post(null);
         checkResponse(response, Status.FORBIDDEN.getStatusCode());
+        
     }
 
     private void checkResponse(Response response, int statusCode) {

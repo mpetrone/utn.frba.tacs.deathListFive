@@ -10,13 +10,11 @@ import com.restfb.Parameter;
 import com.restfb.exception.FacebookOAuthException;
 import com.restfb.types.FacebookType;
 import com.restfb.types.User;
-import com.tacs.deathlist.dao.UsuariosDao;
 import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.domain.exception.CustomForbiddenException;
 import com.tacs.deathlist.domain.exception.CustomInternalServerErrorException;
 import com.tacs.deathlist.domain.exception.CustomNotFoundException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -38,9 +36,6 @@ public class FacebookUserService extends UserService {
 
     public static final String CACHE_NAME = "facebookUsersCache";
 
-    @Autowired
-    private UsuariosDao usuariosDao;
-
     private MemcacheService cacheManager = MemcacheServiceFactory.getMemcacheService();
     
     private String appId;
@@ -55,23 +50,17 @@ public class FacebookUserService extends UserService {
     public void setAppSecret(String appSecret) {
         this.appSecret = appSecret;
     }
-
-    @Override
-    public Usuario getUsuarioFromUid(String uid){
-    	
-        Usuario usuario = usuariosDao.getUsuario(uid);
-        
-        if (usuario == null) {
-            throw new CustomNotFoundException("El usuario de uid = " + uid.toString() + " no existe.");
-        }
-        
-        return usuario;
-    }
-
+    
     @Override
     public Usuario getUsuarioFromToken(String token){
 
-        return usuariosDao.getUsuario(getFacebookUser(token).getId());
+        return this.getUsuarioFromUid(getFacebookUser(token).getId());
+    }
+    
+    @Override
+    protected String getUidFromToken(String token) {
+    	
+    	return this.getFacebookUser(token).getId();
     }
     
     @Override
@@ -80,27 +69,7 @@ public class FacebookUserService extends UserService {
         Usuario usuario = new Usuario(requestorFacebookUser.getId(), requestorFacebookUser.getName());
         usuariosDao.createUsuario(usuario);
     }
-
-    @Override
-    public void deleteUsuario(String uid) {
-        
-        usuariosDao.deleteUsuario(uid);
-    }
-
-    @Override
-    public void validateToken(String token) {
-        User user = getFacebookUser(token);
-        if(user == null){
-            throw new CustomForbiddenException("el token es invalido");
-        }
-    }
     
-    private String getUidFromToken(String token) {
-    	
-    	return this.getFacebookUser(token).getId();
-    }
-    
-
     private User getFacebookUser(String token){
         Object element = cacheManager.get(token);
 
@@ -139,18 +108,6 @@ public class FacebookUserService extends UserService {
 
         return allFriendsLists;
     }
-    
-    @Override
-    protected boolean esElMismoUsuario(String token, String uid) {
-    	
-    	return this.getUidFromToken(token).equalsIgnoreCase(uid);
-    }
-
-    @Override
-    protected boolean sonAmigos(String token, String uid) {
-        
-        return this.getFriends(token).contains(this.getUsuarioFromUid(uid));
-	}
 
     @Override
     public void enviarNotificacion(String uidReceptor, String mensaje) {
@@ -200,4 +157,12 @@ public class FacebookUserService extends UserService {
         }
         return cookie.getValue();
     }
+	
+	 @Override
+	 public void validateToken(String token) {
+		 User user = getFacebookUser(token);
+		 if(user == null)
+			 throw new CustomForbiddenException("el token es invalido");
+		 
+	}
 }
