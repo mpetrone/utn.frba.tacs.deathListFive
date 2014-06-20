@@ -39,7 +39,13 @@ public abstract class UserService {
         
     protected boolean sonAmigos(String token, String uid) {
         
-        return this.getFriends(token).contains(this.getUsuarioFromUid(uid));
+        for (Usuario usuario : this.getFriends(token)) {
+        	if (usuario.getUid().equals(uid)) {
+        		return true;
+        	}
+        } 
+        
+        return false;
 	}
     
 	public void validateIdentity(String token, String uid) {
