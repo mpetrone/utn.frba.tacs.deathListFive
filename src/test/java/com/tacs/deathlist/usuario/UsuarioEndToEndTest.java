@@ -53,6 +53,21 @@ public class UsuarioEndToEndTest extends DeathListTest{
     }
     
     @Test
+    public void loguearUnUsuarioYVerificarQueNoFalle() {
+        String uid = "1";
+
+        checkResponse(target("/users/" + uid).
+                request().post(Entity.json(null)), Status.CREATED.getStatusCode());
+
+        checkResponse(target("/users/" + uid + "/login").
+                request().post(Entity.json(null)), Status.OK.getStatusCode());
+        
+        checkResponse(target("/users/" + uid).request().get(), Status.OK.getStatusCode());
+        
+        target("/users/" + uid).request().delete();
+    }
+    
+    @Test
     public void eliminarUsuarioQueNoExiste() {
     	/* La repuesta correcta de la aplicación en este caso es Forbidden,
     	 * ya que el usuario que no existe no es el usuario activo

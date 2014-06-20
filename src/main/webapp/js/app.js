@@ -13,10 +13,9 @@ App = Ember.Application.createWithMixins(Em.Facebook, {
 
          $.ajax({
             type: 'POST',
-            url: API_NAMESPACE + 'users/' + FBUser.id,
-            contentType: "application/json; charset=utf-8",
-            data: '{nombre: "user"}' // TODO: no usado
-         }).always(function() {
+            url: API_NAMESPACE + 'users/' + FBUser.id + '/login',
+            contentType: "application/json; charset=utf-8"
+         }).done(function() {
             self.set('authenticated', true);
 
             var attemptedTransition = self.get('attemptedTransition');
