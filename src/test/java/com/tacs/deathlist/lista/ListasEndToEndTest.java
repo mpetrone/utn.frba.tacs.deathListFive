@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 
 public class ListasEndToEndTest extends DeathListTest{
 
-    private static final String UID = "1234";
+    private static final String UID = "1";
 
 
     @Override
@@ -115,6 +115,16 @@ public class ListasEndToEndTest extends DeathListTest{
 
         Response response = target(uri).request().delete();
         checkResponse(response, Status.NOT_FOUND.getStatusCode());
+    }
+        
+    @Test
+    public void crearListaAUnAmigo() {
+    	
+    	String lista1 = "Materias";
+        String uri = "/users/" + "3" + "/lists/" + lista1;
+
+        Response response = target(uri).request().post(null);
+        checkResponse(response, Status.FORBIDDEN.getStatusCode());
     }
 
     private void checkResponse(Response response, int statusCode) {

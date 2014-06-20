@@ -1,9 +1,8 @@
 package com.tacs.deathlist.endpoint;
 
 import com.tacs.deathlist.domain.Usuario;
-import com.tacs.deathlist.domain.exception.CustomNotFoundException;
 import com.tacs.deathlist.service.UserService;
-import com.tacs.deathlist.util.RequestUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,13 +11,14 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import java.util.List;
 
 @Path("/users/{uid}")
 @Component
 public class UsuarioEndpoints {
-
-    @Autowired
+	
+	@Autowired
     private UserService userService;
 
     /**
@@ -30,13 +30,13 @@ public class UsuarioEndpoints {
     @Produces(MediaType.APPLICATION_JSON)
 	public Response getUser(@PathParam("uid") String uid,
                             @Context HttpHeaders hh) {
-        String requestorToken = RequestUtils.getTokenInCookies(hh);
+        String requestorToken = userService.getTokenInCookies(hh);
+        
+        // si la validación falla se lanza excepción
+        userService.validateIdentity(requestorToken, uid);
 
-		Usuario usuario = userService.getUsuario(requestorToken, uid);
-        if (usuario == null){
-            throw new CustomNotFoundException("El usuario " + uid
-                    + " no existe en el sistema.");
-        }
+		Usuario usuario = userService.getUsuarioFromUid(uid);
+		
 		return Response.status(Response.Status.OK).entity(usuario).build();
 	}
 
@@ -49,9 +49,9 @@ public class UsuarioEndpoints {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createUser(@PathParam("uid") String uid,
                                @Context HttpHeaders hh)  {
-        String requestorToken = RequestUtils.getTokenInCookies(hh);
+        String requestorToken = userService.getTokenInCookies(hh);
 
-        userService.createUsuario(requestorToken, uid);
+        userService.createUsuario(requestorToken);
         return Response.status(Response.Status.CREATED).build();
     }
 
@@ -63,9 +63,12 @@ public class UsuarioEndpoints {
     @DELETE
     public Response deleteUser(@PathParam("uid") String uid,
     						   @Context HttpHeaders hh) {
-        String requestorToken = RequestUtils.getTokenInCookies(hh);
+        String requestorToken = userService.getTokenInCookies(hh);
+        
+        userService.validateIdentity(requestorToken, uid);
 
-        userService.deleteUsuario(requestorToken, uid);
+        userService.deleteUsuario(uid);
+        
         return Response.status(Response.Status.OK).build();
 
     }
@@ -80,9 +83,11 @@ public class UsuarioEndpoints {
     @Produces(MediaType.APPLICATION_JSON)
 	public Response getFriendsList(@PathParam("uid") String uid,
                                    @Context HttpHeaders hh) {
-        String requestorToken = RequestUtils.getTokenInCookies(hh);
+        String requestorToken = userService.getTokenInCookies(hh);
+        
+        userService.validateIdentity(requestorToken, uid);
     	
-        List<Usuario> friendsList = userService.getFriends(requestorToken, uid);
+        List<Usuario> friendsList = userService.getFriends(requestorToken);
         	
     	return Response.status(Response.Status.OK).entity(friendsList).build();
 	}

@@ -13,12 +13,20 @@ import com.restfb.types.User;
 import com.tacs.deathlist.dao.UsuariosDao;
 import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.domain.exception.CustomForbiddenException;
+import com.tacs.deathlist.domain.exception.CustomInternalServerErrorException;
+import com.tacs.deathlist.domain.exception.CustomNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.HttpHeaders;
+
 
 /**
  *
@@ -26,7 +34,7 @@ import java.util.List;
  *
  */
 @Component
-public class FacebookUserService implements UserService {
+public class FacebookUserService extends UserService {
 
     public static final String CACHE_NAME = "facebookUsersCache";
 
@@ -49,40 +57,33 @@ public class FacebookUserService implements UserService {
     }
 
     @Override
-    public Usuario getUsuario(String requestorToken, String uid){
-        User requestorFacebookUser = getFacebookUser(requestorToken);
-
-        if(!requestorFacebookUser.getId().equalsIgnoreCase(uid) && !esAmigoDeUsuario(requestorToken, uid)){
-            throw new CustomForbiddenException("el usuario solicitante no es amigo del usuario requerido");
+    public Usuario getUsuarioFromUid(String uid){
+    	
+        Usuario usuario = usuariosDao.getUsuario(uid);
+        
+        if (usuario == null) {
+            throw new CustomNotFoundException("El usuario de uid = " + uid.toString() + " no existe.");
         }
-        return usuariosDao.getUsuario(uid);
+        
+        return usuario;
     }
 
     @Override
-    public Usuario getUsuarioRequestor(String requestorToken, String uid){
+    public Usuario getUsuarioFromToken(String token){
 
-        User requestorFacebookUser = getFacebookUser(requestorToken);
- 
-        if(!requestorFacebookUser.getId().equalsIgnoreCase(uid) && !esAmigoDeUsuario(requestorToken, uid)){
-            throw new CustomForbiddenException("el usuario solicitante no es amigo del usuario requerido");
-        }        
-        
-        return usuariosDao.getUsuario(requestorFacebookUser.getId());
+        return usuariosDao.getUsuario(getFacebookUser(token).getId());
     }
     
     @Override
-    public void createUsuario(String requestorToken, String uid) {
+    public void createUsuario(String requestorToken) {
         User requestorFacebookUser = getFacebookUser(requestorToken);
         Usuario usuario = new Usuario(requestorFacebookUser.getId(), requestorFacebookUser.getName());
         usuariosDao.createUsuario(usuario);
     }
 
     @Override
-    public void deleteUsuario(String requestorToken, String uid) {
-        User requestorFacebookUser = getFacebookUser(requestorToken);
-        if(!requestorFacebookUser.getId().equalsIgnoreCase(uid)){
-            throw new CustomForbiddenException("el usuario solicitante no puede eliminar a otro usuario");
-        }
+    public void deleteUsuario(String uid) {
+        
         usuariosDao.deleteUsuario(uid);
     }
 
@@ -93,7 +94,12 @@ public class FacebookUserService implements UserService {
             throw new CustomForbiddenException("el token es invalido");
         }
     }
-
+    
+    private String getUidFromToken(String token) {
+    	
+    	return this.getFacebookUser(token).getId();
+    }
+    
 
     private User getFacebookUser(String token){
         Object element = cacheManager.get(token);
@@ -106,7 +112,7 @@ public class FacebookUserService implements UserService {
         User facebookUser = facebookClient.fetchObject("me", User.class);
 
         if(facebookUser == null || facebookUser.getId() == null){
-            return null;
+        	throw new CustomNotFoundException("No se pudo obtener el usuario de facebook con token = " + token.toString());
         }
 
         cacheManager.put(token, facebookUser);
@@ -114,14 +120,9 @@ public class FacebookUserService implements UserService {
     }
 
     @Override
-    public List<Usuario> getFriends(String requestorToken, String uid){
-        User requestorFacebookUser = getFacebookUser(requestorToken);
-
-        if(!requestorFacebookUser.getId().equalsIgnoreCase(uid)){
-            throw new CustomForbiddenException("el solicitante no puede ver los amigos de otros usuarios");
-        }
-
-        List<Usuario> allFriendsLists = new ArrayList<>();
+    public List<Usuario> getFriends(String requestorToken){
+        
+    	List<Usuario> allFriendsLists = new ArrayList<>();
 
         FacebookClient facebookClient = new DefaultFacebookClient(requestorToken,this.appSecret);
         Connection<User> myFriends = facebookClient.fetchConnection("me/friends", User.class);
@@ -138,21 +139,17 @@ public class FacebookUserService implements UserService {
 
         return allFriendsLists;
     }
+    
+    @Override
+    protected boolean esElMismoUsuario(String token, String uid) {
+    	
+    	return this.getUidFromToken(token).equalsIgnoreCase(uid);
+    }
 
-    private boolean esAmigoDeUsuario(String requestorToken, String uidFriend) {
-
-        FacebookClient facebookClient = new DefaultFacebookClient(requestorToken,this.appSecret);
-        Connection<User> myFriends = facebookClient.fetchConnection("me/friends", User.class);
-
-        if(myFriends != null && myFriends.getData() != null) {
-            for (User friend : myFriends.getData()) {
-                if(friend.getId().equalsIgnoreCase(uidFriend)){
-                    return true;
-                }
-            }
-        }
-
-        return false;
+    @Override
+    protected boolean sonAmigos(String token, String uid) {
+        
+        return this.getFriends(token).contains(this.getUsuarioFromUid(uid));
 	}
 
     @Override
@@ -173,6 +170,17 @@ public class FacebookUserService implements UserService {
 	        }
 	    }
 	}
+    
+    @Override
+    public void enviarNotificacionSiCorresponde(String tokenEmisor, String uidReceptor, String itemName, String listName) {
+    	
+    	Usuario usuario = this.getUsuarioFromUid(uidReceptor);
+
+		if(!this.esElMismoUsuario(tokenEmisor, uidReceptor))
+            this.enviarNotificacion(uidReceptor,
+                    usuario.getNombre() + " ha creado el item " + itemName + " en la lista " + listName);
+        
+    }
 	
 	@Override
 	public void publicarEnNewsfeed(String requestorToken, String mensaje) {
@@ -181,4 +189,15 @@ public class FacebookUserService implements UserService {
 		
 		facebookClient.publish("me/feed", FacebookType.class, Parameter.with("message", mensaje));
 	}
+	
+	@Override
+	public String getTokenInCookies(HttpHeaders hh){
+        Map<String, Cookie> pathParams = hh.getCookies();
+        Cookie cookie = pathParams.get("token");
+        
+        if(cookie == null){
+            throw new CustomInternalServerErrorException("Se produjo un error al obtener la cookie de los headers");
+        }
+        return cookie.getValue();
+    }
 }

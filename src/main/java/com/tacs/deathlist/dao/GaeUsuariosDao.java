@@ -15,24 +15,38 @@ public class GaeUsuariosDao implements UsuariosDao {
 
     @Override
     public Usuario getUsuario(String uid) {
-        return (Usuario) objetifyService.load(uid, Usuario.class);
+        
+    	if (!this.existeElUsuario(uid))
+    		throw new CustomNotFoundException("El usuario de uid = " + uid + " no existe");
+    	
+    	return (Usuario) objetifyService.load(uid, Usuario.class);
     }
 
     @Override
     public void createUsuario(Usuario user) {
-        if (getUsuario(user.getUid()) != null){
+        if (this.existeElUsuario(user.getUid()))
             throw new CustomForbiddenException(
                     "Ya existe un usuario con el uid " + user.getUid() + ".");
-        }
+        
         objetifyService.save(user);
     }
 
     @Override
     public void deleteUsuario(String uid) {
-        if (getUsuario(uid) == null){
+        if (!existeElUsuario(uid)){
             throw new CustomNotFoundException
                     ("el usuario " + uid + " no existe");
         }
         objetifyService.delete(uid, Usuario.class);
+    }
+    
+    private boolean existeElUsuario(String uid) {
+    	Usuario usuario = (Usuario) objetifyService.load(uid, Usuario.class);
+    	
+    	if (usuario == null)
+    		return false;
+    	
+    	return true;
+    	
     }
 }

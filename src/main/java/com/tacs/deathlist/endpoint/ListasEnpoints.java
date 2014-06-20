@@ -2,9 +2,7 @@ package com.tacs.deathlist.endpoint;
 
 import com.tacs.deathlist.dao.ListasDao;
 import com.tacs.deathlist.domain.Lista;
-import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.service.UserService;
-import com.tacs.deathlist.util.RequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,13 +35,9 @@ public class ListasEnpoints {
     public Response getAllLists(@PathParam("uid") String uid, 
     							@Context HttpHeaders hh) {
 
-        String requestorToken = RequestUtils.getTokenInCookies(hh);
+        String requestorToken = userService.getTokenInCookies(hh);
 
-        Usuario usuario = userService.getUsuario(requestorToken, uid);
-
-        if(usuario == null){
-            return Response.status(Status.NOT_FOUND).entity("el usuario no existe").build();
-        }
+        userService.validateIdentityOrFriendship(requestorToken, uid);
 
         List<String> listas = dao.getAllLists(uid);
         return Response.status(Response.Status.OK).entity(listas).build();
@@ -62,13 +56,9 @@ public class ListasEnpoints {
 							@PathParam("uid") String uid,
 							@Context HttpHeaders hh) {
 
-        String requestorToken = RequestUtils.getTokenInCookies(hh);
+        String requestorToken = userService.getTokenInCookies(hh);
 
-        Usuario usuario = userService.getUsuario(requestorToken, uid);
-
-        if(usuario == null){
-            return Response.status(Status.NOT_FOUND).entity("el usuario no existe").build();
-        }
+        userService.validateIdentityOrFriendship(requestorToken, uid);
 
         Lista lista = dao.getLista(uid, listName);
 
@@ -87,19 +77,12 @@ public class ListasEnpoints {
                                @PathParam("uid") String uid,
                                @Context HttpHeaders hh) {
 
-        String requestorToken = RequestUtils.getTokenInCookies(hh);
+        String requestorToken = userService.getTokenInCookies(hh);
 
-        Usuario usuario = userService.getUsuario(requestorToken, uid);
-
-        if(usuario == null){
-            return Response.status(Status.NOT_FOUND).entity("el usuario no existe").build();
-        }
-
-        if(!usuario.getUid().equalsIgnoreCase(uid)) {
-            return Response.status(Status.FORBIDDEN).entity("No se puede crear listas en otros usuarios").build();
-        }
+        userService.validateIdentity(requestorToken, uid);
 
         dao.createLista(uid, listName);
+        
         return Response.status(Status.CREATED).build();
     }
     
@@ -114,19 +97,12 @@ public class ListasEnpoints {
     public Response deleteList(@PathParam("listName") String listName,
                                @PathParam("uid") String uid,
                                @Context HttpHeaders hh) {
-        String requestorToken = RequestUtils.getTokenInCookies(hh);
+        String requestorToken = userService.getTokenInCookies(hh);
 
-        Usuario usuario = userService.getUsuario(requestorToken, uid);
-
-        if(usuario == null){
-            return Response.status(Status.NOT_FOUND).entity("el usuario no existe").build();
-        }
-
-        if(!usuario.getUid().equalsIgnoreCase(uid)) {
-            return Response.status(Status.FORBIDDEN).entity("No se puede eliminar listas en otros usuarios").build();
-        }
+        userService.validateIdentity(requestorToken, uid);
 
         dao.deleteLista(uid, listName);
+        
         return Response.status(Status.OK).build();
     }
 	       

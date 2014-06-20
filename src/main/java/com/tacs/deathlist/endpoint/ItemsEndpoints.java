@@ -1,9 +1,7 @@
 package com.tacs.deathlist.endpoint;
 
 import com.tacs.deathlist.dao.ListasDao;
-import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.service.UserService;
-import com.tacs.deathlist.util.RequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -39,20 +37,14 @@ public class ItemsEndpoints {
 			                   @PathParam("listName") String listName,
 			                   @PathParam("itemName") String itemName,
 			                   @Context HttpHeaders hh) {
-        String requestorToken = RequestUtils.getTokenInCookies(hh);
+        String requestorToken = userService.getTokenInCookies(hh);
          
-        Usuario usuario = userService.getUsuarioRequestor(requestorToken, uid);
-
-        if(usuario == null){
-            return Response.status(Status.NOT_FOUND).entity("el usuario no existe").build();
-        }
-
-		dao.createItem(uid, listName, itemName);
-
-        if(!usuario.getUid().equalsIgnoreCase(uid)){
-            userService.enviarNotificacion(uid,
-                    usuario.getNombre() + " ha creado el item " + itemName + " en la lista " + listName);
-        }
+        // si la validación falla se lanza excepción
+        userService.validateIdentityOrFriendship(requestorToken, uid);
+        
+        dao.createItem(uid, listName, itemName);
+        
+        userService.enviarNotificacionSiCorresponde(requestorToken, uid, itemName, listName);
         
 		return Response.status(Status.CREATED).build();
 	}
@@ -69,17 +61,13 @@ public class ItemsEndpoints {
 			                 @PathParam("listName") String listName,
 			                 @PathParam("itemName") String itemName,
 			                 @Context HttpHeaders hh) {
-        String requestorToken = RequestUtils.getTokenInCookies(hh);
-
-        Usuario usuario = userService.getUsuario(requestorToken, uid);
-
-        if (usuario == null) {
-            return Response.status(Status.NOT_FOUND).entity("el usuario no existe").build();
-        }
-
-        userService.publicarEnNewsfeed(requestorToken, "Voté el item " + itemName + "en la lista " + listName);
+        String requestorToken = userService.getTokenInCookies(hh);
+        
+        userService.validateIdentityOrFriendship(requestorToken, uid);
 
         dao.voteItem(uid, listName, itemName);
+
+        userService.publicarEnNewsfeed(requestorToken, "Voté el item " + itemName + "en la lista " + listName);
 
         return Response.status(Status.CREATED).build();
     }
@@ -95,18 +83,9 @@ public class ItemsEndpoints {
 			                   @PathParam("listName") String listName,
 			                   @PathParam("itemName") String itemName,
 			                   @Context HttpHeaders hh) {
-        String requestorToken = RequestUtils.getTokenInCookies(hh);
-
-        Usuario usuario = userService.getUsuario(requestorToken, uid);
-        Usuario usuarioRequestor = userService.getUsuarioRequestor(requestorToken, uid);
-
-        if (usuario == null) {
-            return Response.status(Status.NOT_FOUND).entity("el usuario no existe").build();
-        }
+        String requestorToken = userService.getTokenInCookies(hh);
         
-        if(!usuarioRequestor.getUid().equalsIgnoreCase(uid)) {
-            return Response.status(Status.FORBIDDEN).entity("No se puede eliminar items en listas de otros usuarios").build();
-        }
+        userService.validateIdentity(requestorToken, uid);      
 
         dao.deleteItem(uid, listName, itemName);
 

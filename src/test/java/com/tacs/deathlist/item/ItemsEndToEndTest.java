@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 
 public class ItemsEndToEndTest extends DeathListTest{
 
-	private static final String UID = "1234";
+	private static final String UID = "1";
     private static final String LISTA_NAME = "lista";
 
     public void setUp() throws Exception {
