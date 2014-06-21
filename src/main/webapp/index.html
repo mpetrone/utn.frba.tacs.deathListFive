@@ -59,7 +59,7 @@
       {{#if App.FBUser}}
         <div class="container-fluid">
           <div class="row">
-            <div class="col-xs-3">
+            <div class="col-xs-4">
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h3 class="panel-title">People</h3>
@@ -85,24 +85,28 @@
   </script>
   
   <script type="text/x-handlebars" id="lists">
-    <div class="col-xs-3">
+    <div class="col-xs-4">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">Lists</h3>
         </div>
         <div class="panel-body">
-          <div class="input-group">
-            {{input type="text" class="form-control" value=newList placeholder="My List" action="createList"}}
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="button" {{action "createList" value=newList}}>New</button>
-            </span>
-          </div><!-- /.input-group -->
-          <br/>
+          {{#if canCreate}}
+            <div class="input-group">
+              {{input type="text" class="form-control" value=newList placeholder="My List" action="createList"}}
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button" {{action "createList" value=newList}}>New</button>
+              </span>
+            </div><!-- /.input-group -->
+            <br/>
+          {{/if}}
           <div class="list-group">
-            {{#each}}
+            {{#each list in lists}}
             <li href="#" class="list-group-item">
-              {{#link-to 'list' this.id}}{{id}}{{/link-to}}
-              <a href="#" {{action "deleteList" this}} class="badge">x</a>
+              {{#link-to 'list' list.id}}{{list.id}}{{/link-to}}
+              {{#if canCreate}}
+                <a href="#" {{action "deleteList" list}} class="badge">x</a>
+              {{/if}}
             </li>
             {{/each}}
           </div><!-- /.list-group -->
@@ -113,7 +117,7 @@
   </script>
   
   <script type="text/x-handlebars" id="list">
-    <div class="col-xs-6">
+    <div class="col-xs-4">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">{{id}} items</h3>

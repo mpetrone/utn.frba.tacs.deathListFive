@@ -1,12 +1,10 @@
 // administra el proceso de autenticacion
 App.AuthenticatedRoute = Ember.Route.extend({
-
   beforeModel: function(transition) {
     if (!App.get('authenticated')) {
       this.redirectToLogin(transition);
     }
   },
-
   redirectToLogin: function(transition) {
     App.set('attemptedTransition', transition);
     this.transitionTo('login');
@@ -48,7 +46,12 @@ App.PeopleRoute = App.AuthenticatedRoute.extend({
 });
 
 App.ListsRoute = App.AuthenticatedRoute.extend({
+   setupController: function (controller, model) {
+      controller.set('model', { lists: model, uid: this.get('uid')});
+   },
    model: function(params) {
+      this.set('uid', params.user_id);
+      
       return $.getJSON(API_NAMESPACE + 'users/' + params.user_id + '/lists')
       .fail(function() {
     	  BootstrapDialog.show({

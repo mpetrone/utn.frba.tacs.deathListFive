@@ -1,5 +1,8 @@
 // controller para la vista de listas
-App.ListsController = Ember.ArrayController.extend({
+App.ListsController = Ember.ObjectController.extend({
+   canCreate: function () {
+      return App.FBUser.id == this.get('model.uid');
+   }.property('model.uid'),
    actions: {
       createList: function() {
          // TODO: error handling
@@ -15,7 +18,7 @@ App.ListsController = Ember.ArrayController.extend({
             controller.set('newList', '');
                
             // actualiza la lista
-            controller.get('content').unshiftObject(
+            controller.get('model.lists').unshiftObject(
                Ember.Object.create({
                   id: list,
                   uid: App.FBUser.id
@@ -40,8 +43,8 @@ App.ListsController = Ember.ArrayController.extend({
                      type: 'DELETE',
                      dataType: 'html' // la respuesta viene vacia, eso no le gusta al parser de json
                   }).done(function () {
-                     var content = controller.get('content');                             
-                     controller.set('content', content.rejectBy('id', list.id));
+                     var content = controller.get('model.lists');                             
+                     controller.set('model.lists', content.rejectBy('id', list.id));
                           
                      // si la ruta apuntaba a la lista borrada, ir a lists
                      //
@@ -86,12 +89,15 @@ App.ListController = Ember.ObjectController.extend({
             controller.set('newItem', '');
                
             // actualiza los items
-            controller.get('content').items.pushObject(
+            controller.get('model').items.pushObject(
                Ember.Object.create({
                   id: item,
                   votos: 0
                })
-            ).sortBy('votos').reverse();
+            );
+            
+            var items = controller.get('model.items');
+            controller.set('model.items', items.sortBy('votos').reverse());
          });
       },
       deleteItem: function (item) {
@@ -109,13 +115,13 @@ App.ListController = Ember.ObjectController.extend({
                label: 'Yes',
                action: function(dialogItself){                        
                   $.ajax({
-                     url: API_NAMESPACE + 'users/' + controller.content.uid + '/lists/' + list + '/items/' + item.id,
+                     url: API_NAMESPACE + 'users/' + controller.model.uid + '/lists/' + list + '/items/' + item.id,
                      type: 'DELETE',
                      dataType: 'html' // la respuesta viene vacia, eso no le gusta al parser de json
                   }).done(function () {
                      // actualiza la lista
-                     var items = controller.get('content.items');
-                     controller.set('content.items', items.rejectBy('id', item.id));
+                     var items = controller.get('model.items');
+                     controller.set('model.items', items.rejectBy('id', item.id));
                   });
                   dialogItself.close();
                },
@@ -138,8 +144,8 @@ App.ListController = Ember.ObjectController.extend({
          .done(function () {
             item.incrementProperty('votos');
              
-            var items = controller.get('content.items');
-            controller.set('content.items', items.sortBy('votos').reverse());                
+            var items = controller.get('model.items');
+            controller.set('model.items', items.sortBy('votos').reverse());                
            
          });
       }
