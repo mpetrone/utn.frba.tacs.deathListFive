@@ -1,5 +1,15 @@
 package com.tacs.deathlist.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.HttpHeaders;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.restfb.Connection;
@@ -14,16 +24,6 @@ import com.tacs.deathlist.domain.Usuario;
 import com.tacs.deathlist.domain.exception.CustomForbiddenException;
 import com.tacs.deathlist.domain.exception.CustomInternalServerErrorException;
 import com.tacs.deathlist.domain.exception.CustomNotFoundException;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.ws.rs.core.Cookie;
-import javax.ws.rs.core.HttpHeaders;
 
 
 /**
@@ -145,14 +145,6 @@ public class FacebookUserService extends UserService {
                     usuario.getNombre() + " ha creado el item " + itemName + " en la lista " + listName);
         
     }
-	
-	@Override
-	public void publicarEnNewsfeed(String requestorToken, String mensaje) {
-		
-		FacebookClient facebookClient = new DefaultFacebookClient(requestorToken,this.appSecret);
-		
-		facebookClient.publish("me/feed", FacebookType.class, Parameter.with("message", mensaje));
-	}
 	
 	@Override
 	public String getTokenInCookies(HttpHeaders hh){

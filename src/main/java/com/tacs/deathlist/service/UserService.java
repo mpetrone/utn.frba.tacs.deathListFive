@@ -1,15 +1,14 @@
 package com.tacs.deathlist.service;
 
-import com.tacs.deathlist.dao.UsuariosDao;
-import com.tacs.deathlist.domain.Usuario;
-import com.tacs.deathlist.domain.exception.CustomForbiddenException;
-import com.tacs.deathlist.domain.exception.CustomNotFoundException;
-
 import java.util.List;
 
 import javax.ws.rs.core.HttpHeaders;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.tacs.deathlist.dao.UsuariosDao;
+import com.tacs.deathlist.domain.Usuario;
+import com.tacs.deathlist.domain.exception.CustomForbiddenException;
 
 public abstract class UserService {
 
@@ -144,10 +143,6 @@ public abstract class UserService {
     	// por defecto no se hace nada; ver implementaciones.
     }
 
-	public void publicarEnNewsfeed(String uid, String mensaje) {
-		// por defecto no se hace nada; ver implementaciones.
-	}
-	
 	public abstract String getTokenInCookies(HttpHeaders hh);
 	
     public void validateToken(String token) {

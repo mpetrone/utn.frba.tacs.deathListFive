@@ -1,10 +1,5 @@
 package com.tacs.deathlist.endpoint;
 
-import com.tacs.deathlist.dao.ListasDao;
-import com.tacs.deathlist.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -13,6 +8,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.tacs.deathlist.dao.ListasDao;
+import com.tacs.deathlist.service.UserService;
 
 @Path("/users/{uid}/lists/{listName}/items/{itemName}")
 @Component
@@ -66,8 +67,6 @@ public class ItemsEndpoints {
         userService.validateIdentityOrFriendship(requestorToken, uid);
 
         dao.voteItem(uid, listName, itemName);
-
-        userService.publicarEnNewsfeed(requestorToken, "Voté el item " + itemName + " en la lista " + listName);
 
         return Response.status(Status.CREATED).build();
     }
