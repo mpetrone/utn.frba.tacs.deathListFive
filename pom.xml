@@ -193,6 +193,9 @@
 					<instrumentation>
 						<excludes>
 							<exclude>src/main/resources/*</exclude>
+                            <exclude>com/**/InMemoryListasDao.class</exclude>
+                            <exclude>com/**/InMemoryUsuariosDao.class</exclude>
+                            <exclude>com/**/FacebookUserService.class</exclude>
 						</excludes>
 					</instrumentation>
 					<check />
