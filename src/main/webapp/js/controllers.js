@@ -158,6 +158,22 @@ App.ListController = Ember.ObjectController.extend({
                   })
                });
             });
-      }
+      },
+      shareItems: function(item) {
+          // TODO: error handling           
+
+          var controller = this;
+          var list = this.get('id');
+          var items = controller.get('model.items');
+          
+          FB.ui({
+              method: 'share_open_graph',
+              action_type: 'utn_deathlist:share',
+              action_properties: JSON.stringify({
+                 website: document.URL,
+              })
+           });
+
+       }
    }
 });

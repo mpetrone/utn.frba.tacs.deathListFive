@@ -120,7 +120,12 @@
     <div class="col-xs-4">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">{{id}} items</h3>
+          <span class="panel-title">{{id}} items</h3>
+            <button class="btn btn-default" type="button" {{action "shareItems" }}>Share
+		      <span class="glyphicon glyphicon-share">
+			  </span>
+		    </button>
+		  </span>
         </div>
         <div class="panel-body">
           <div class="input-group">
