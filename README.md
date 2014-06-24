@@ -27,9 +27,10 @@ Para mas informacion acerca de las APIs ir a http://localhost:8080/#/about
 
 - REST: Jersey
 - Spring DI
-- Javascript/Frontend: jQuery, Bootstrap, Showdown, Ember
+- Javascript/Frontend: jQuery, Bootstrap, Showdown, Ember, Spin
 - Persistencia: objectify-appengine, Gson
 - Unit Testing: jUnit, Easymock
 - Logging: slf4j
-- Webserver de development: Jetty
+- RestFB
+- Webserver de development: Jetty via Appengine
 
