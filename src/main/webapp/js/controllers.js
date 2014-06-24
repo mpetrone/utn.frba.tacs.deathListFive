@@ -27,6 +27,7 @@ App.ListsController = Ember.ObjectController.extend({
                      uid: App.FBUser.id
                   })
                );
+               FB.api('me/feed', 'post', { message: 'Ha creado una lista ' + list });
             });
       },
 
