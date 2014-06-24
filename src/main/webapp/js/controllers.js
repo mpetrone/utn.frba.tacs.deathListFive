@@ -148,7 +148,7 @@ App.ListController = Ember.ObjectController.extend({
         
          if(item.id){
          BootstrapDialog.show({
-            type: BootstrapDialog.TYPE_INFO,
+            type: BootstrapDialog.TYPE_WARNING,
             title: 'Warning',
             message: 'Do you really want to delete Item "' + item.id + '"?',
             buttons: [{
