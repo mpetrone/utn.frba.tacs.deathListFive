@@ -3,7 +3,9 @@
 
 ## Instrucciones:
 
-Para ejecutar el servidor utilizar el comando 'mvn jetty:run-war'
+Para ejecutar la aplicación localmente utilizar el comando 'mvn appengine:devserver' 
+
+La aplicación se encuentra online en https://utn-tacs.appspot.com o también se puede acceder directamente desde facebook en https://apps.facebook.com/utn_deathlist/
 
 ---
 
@@ -11,39 +13,67 @@ Para ejecutar el servidor utilizar el comando 'mvn jetty:run-war'
 
 ## Endpoints:
 
-Aclaracion: para todos los endpoints se debera mandar un token valido de facebook del uid.
+Aclaracion: para todos los endpoints se debera utilizar un token valido de facebook.
 
-* **`/deathlist/users/{uid}`**
-  
-        POST: createUser: Crea un nuevo usuario 
-        
-        GET: getUser: Obtiene la informacion de un determinado usuario
-    
-        DELETE: deleteUser: Elimina un usuario
-
-* **`/deathlist/users/{uid}/lists`**
-
-        GET: getAllLists: Obtiene todas las listas de un determinado usuario
-
-* **`/deathlist/users/{uid}/lists/{listName}`**
-
-        GET: getList: Obtiene una lista de un determinado usuario
-	      
-        POST: createList: Crea una nueva lista
-	      
-        DELETE: deleteList: Elimina una lista de un determinado usuario
-
-* **`/deathlist/users/{uid}/lists/{listName}/items/{itemName}`**
-	
-        POST: createItem: Crea un nuevo item
-	
-        DELETE: deleteItem: Elimina un item
-	
-* **`/deathlist/users/{uid}/lists/{listName}/items/{itemName}/vote`**
-
-        POST: voteItem: Vota item
 	
 * **`/`**
 	
         GET: Retorna la página principal de la aplicación
+
+* **`/deathlist/users/{uid}`**
+  
+        GET: Recupera la información del usuario 'uid'.
+            Produces: application/json 
  
+        POST: Crea el usuario 'uid'
+            Consumes: application/json
+            
+        DELETE: Elimina el usuario 'uid'
+           
+        Ejemplo: /deathlist/users/1015425246234553/
+  
+* **`/deathlist/users/{uid}/login`**
+  
+        POST: Loguea el usuario 'uid', creandolo si no existe
+            Produces: application/json
+        
+        Ejemplo: /deathlist/users/1015425246234553/login
+  
+* **`/deathlist/users/{uid}/friends`**
+  
+        GET: Recupera la lista de amigos del usuario 'uid'
+            Produces: application/json
+        
+        Ejemplo: /deathlist/users/1015425246234553/friends        
+        
+* **`/deathlist/users/{uid}/lists`**
+
+        GET: Obtiene todas las listas del usuario 'uid'
+            Produces: application/json
+        
+        Ejemplo: /deathlist/users/1015425246234553/lists
+        
+* **`/deathlist/users/{uid}/lists/{listName}`**
+
+        GET: Obtiene la lista 'listName' del usuario 'uid'
+            Produces: application/json
+            
+        POST: Crea una nueva lista 'listName' en el usuario 'uid' 
+            
+        DELETE: Elimina la lista 'listName' del usuario 'uid'
+        
+        Ejemplo: /deathlist/users/1015425246234553/lists/materias
+        
+* **`/deathlist/users/{uid}/lists/{listName}/items/{itemName}`**
+	
+        POST: Crea un nuevo item 'itemName' en la lista 'listName' del usuario 'uid'
+	
+        DELETE: Elimina el item 'itemName' de la lista 'listName' del usuario 'uid'
+	
+        Ejemplo: /deathlist/users/1015425246234553/lists/materias/items/tacs
+        
+* **`/deathlist/users/{uid}/lists/{listName}/items/{itemName}/vote`**
+
+        POST: Vota el item 'itemName' de la lista 'listName' del usuario 'uid'
+        
+        Ejemplo: /deathlist/users/1015425246234553/lists/materias/items/tacs/vote

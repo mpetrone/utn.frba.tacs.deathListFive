@@ -15,9 +15,11 @@ Repositorio del tp del primer cuatrimestre del 2014 http://www.tacs-utn.com.ar/
   
 ## Instrucciones
 
-Para levantar el servidor realizar **mvn jetty:run-war**  
+Para ejecutar la aplicación localmente utilizar el comando 'mvn appengine:devserver' 
 
-El cliente esta en http://localhost:8080/
+La aplicación se encuentra online en https://utn-tacs.appspot.com o también se puede acceder directamente desde facebook en https://apps.facebook.com/utn_deathlist/
+
+El servidor local espera conexiones en http://localhost:8080/
 
 Para mas informacion acerca de las APIs ir a http://localhost:8080/#/about
 
