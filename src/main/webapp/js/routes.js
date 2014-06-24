@@ -114,5 +114,20 @@ App.AboutRoute = Ember.Route.extend({
    model: function () {
       return $.get('/howto.md');
    }
-})
+});
+
+App.LoadingRoute = Ember.Route.extend({
+   renderTemplate: function() {
+      this.render('loading', {
+         outlet: 'loading',
+         into: 'application'
+      });
+   },
+});
+
+App.LoadingView = Ember.View.extend({
+   didInsertElement: function () {
+      App.spinner.spin(document.getElementById('loading-wheel'));
+   },
+});
 

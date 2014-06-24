@@ -25,6 +25,7 @@
             {{#link-to 'about' tagName="li"}}<a href="#" {{bind-attr href="view.href"}}>About</a>{{/link-to}}
           </ul>
           <ul class="nav navbar-nav navbar-right">
+            <li>{{outlet loading}}</li>
             {{#link-to 'login' tagName="li"}}<a href="#" {{bind-attr href="view.href"}}>Status</a>{{/link-to}}
           </ul>
         </div><!-- /.navbar-collapse -->
@@ -34,9 +35,15 @@
     {{outlet}}
   </script>
   
+  <script type="text/x-handlebars" data-template-name="loading">
+    <p class="navbar-text" id="loading-wheel">Loading</p>
+  </script>
+  
   <script type="text/x-handlebars" id="login">
     {{#if App.FBloading}}
-      <div>Waiting for Facebook</div>
+      Waiting for Facebook
+    {{else}} {{#if App.serverLoading}}
+      Waiting for Google
     {{else}}
       {{#if App.FBUser}}
         <div>
@@ -49,38 +56,34 @@
           Connect to Facebook
         {{/view}}
       {{/if}}
-    {{/if}}
+    {{/if}}{{/if}}
   </script>
   
   <script type="text/x-handlebars" id="people">
-    {{#if App.FBloading}}
-      <div>Waiting for Facebook</div>
-    {{else}}
-      {{#if App.FBUser}}
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-xs-4">
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <h3 class="panel-title">People</h3>
-                </div>
-                <div class="panel-body">
-                  <div class="list-group">
-                    {{#each}}
-                    <li href="#" class="list-group-item">
-                      {{#link-to 'lists' this.uid}}{{this.nombre}}{{/link-to}}
-                    </li>
-                    {{/each}}
-                  </div><!-- /.list-group -->
-                </div>
+    {{#if App.FBUser}}
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-xs-4">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">People</h3>
               </div>
-            </div><!-- /.col-xs-3 -->
-            {{outlet}}
-          </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
-      {{else}}
-        <div>Please login</div>
-      {{/if}}
+              <div class="panel-body">
+                <div class="list-group">
+                  {{#each}}
+                  <li href="#" class="list-group-item">
+                    {{#link-to 'lists' this.uid}}{{this.nombre}}{{/link-to}}
+                  </li>
+                  {{/each}}
+                </div><!-- /.list-group -->
+              </div>
+            </div>
+          </div><!-- /.col-xs-3 -->
+          {{outlet}}
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    {{else}}
+      <div>Please login</div>
     {{/if}}
   </script>
   
@@ -120,12 +123,10 @@
     <div class="col-xs-4">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <span class="panel-title">{{id}} items</h3>
-            <button class="btn btn-default" type="button" {{action "shareItems" }}>Share
-		      <span class="glyphicon glyphicon-share">
-			  </span>
-		    </button>
-		  </span>
+          <span class="panel-title">{{id}} items</span>
+          <button class="btn btn-default pull-right" type="button" style="margin-top:-5px"{{action "shareItems" }}>Share
+	          <span class="glyphicon glyphicon-share"/>
+		      </button>
         </div>
         <div class="panel-body">
           <div class="input-group">
@@ -158,6 +159,7 @@
   <script src="js/libs/ember-1.5.1.js"></script>
   <script src="js/libs/bootstrap-dialog.js"></script>
   <script src="js/libs/bootstrap-dialog.min.js"></script>
+  <script src="js/libs/spin.min.js"></script>
   <script src="js/libs/ember-facebook.js"></script>
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>

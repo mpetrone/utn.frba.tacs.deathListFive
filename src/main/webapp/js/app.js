@@ -3,6 +3,7 @@ var API_NAMESPACE = '/deathlist/';
 
 App = Ember.Application.createWithMixins(Em.Facebook, {
    authenticated: false,
+   serverLoading: false,
    fbUserChanged: function() {
       var self = this;
       var FBUser = this.get('FBUser');
@@ -10,6 +11,8 @@ App = Ember.Application.createWithMixins(Em.Facebook, {
       if (FBUser) {
          document.cookie = 'token=' + FBUser.accessToken;
          document.cookie = 'uid=' + FBUser.id;
+
+         this.set('serverLoading', true);
 
          $.ajax({
             type: 'POST',
@@ -26,6 +29,8 @@ App = Ember.Application.createWithMixins(Em.Facebook, {
             } else {
                window.location.hash='/people';
             }
+         }).always(function () {
+            self.set('serverLoading', false);
          });
       } else {
          this.set('authenticated', false);
@@ -34,6 +39,24 @@ App = Ember.Application.createWithMixins(Em.Facebook, {
          document.cookie = 'uid=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
       }
    }.observes('FBUser'),
+   spinner: new Spinner({
+     lines: 9, // The number of lines to draw
+     length: 4, // The length of each line
+     width: 2, // The line thickness
+     radius: 3, // The radius of the inner circle
+     corners: 1, // Corner roundness (0..1)
+     rotate: 0, // The rotation offset
+     direction: 1, // 1: clockwise, -1: counterclockwise
+     color: '#EBEBEB', // #rgb or #rrggbb or array of colors
+     speed: 1, // Rounds per second
+     trail: 60, // Afterglow percentage
+     shadow: true, // Whether to render a shadow
+     hwaccel: false, // Whether to use hardware acceleration
+     className: 'spinner', // The CSS class to assign to the spinner
+     zIndex: 2e9, // The z-index (defaults to 2000000000)
+     top: '50%', // Top position relative to parent
+     left: '-5%' // Left position relative to parent
+   })
 });
 
 
