@@ -123,10 +123,7 @@
     <div class="col-xs-4">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <span class="panel-title">{{id}} items</span>
-          <button class="btn btn-default pull-right" type="button" style="margin-top:-5px"{{action "shareItems" }}>Share
-	          <span class="glyphicon glyphicon-share"/>
-		      </button>
+          <h3 class="panel-title">{{id}} items</h3>
         </div>
         <div class="panel-body">
           <div class="input-group">
@@ -145,6 +142,9 @@
             </li>
             {{/each}}
           </div><!-- /.list-group -->
+          <button class="btn btn-default pull-right" type="button" style="margin-top:-5px"{{action "shareItems" }}>Share
+	          <span class="glyphicon glyphicon-share"/>
+		      </button>
         </div>
       </div>
     </div>
