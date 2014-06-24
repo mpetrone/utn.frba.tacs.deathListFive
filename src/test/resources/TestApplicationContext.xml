@@ -11,7 +11,7 @@
         <property name="locations" value="classpath:com/tacs/deathlist/properties/deathlist.properties"/>
     </bean>
 
-    <bean id="stubUserService" class="com.tacs.deathlist.service.StubUserService" />
+    <bean id="stubUserService" class="com.tacs.deathlist.usuario.StubUserService" />
     
     <bean id="objectifyService" class="com.tacs.deathlist.service.ObjectifyService" />
 

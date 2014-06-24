@@ -6,7 +6,6 @@ import org.junit.rules.ExpectedException;
 
 import com.tacs.deathlist.DeathListTest;
 import com.tacs.deathlist.domain.exception.CustomForbiddenException;
-import com.tacs.deathlist.service.StubUserService;
 import com.tacs.deathlist.service.UserService;
 
 public class UserServiceTest extends DeathListTest {

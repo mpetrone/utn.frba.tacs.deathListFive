@@ -1,6 +1,7 @@
-package com.tacs.deathlist.service;
+package com.tacs.deathlist.usuario;
 
 import com.tacs.deathlist.domain.Usuario;
+import com.tacs.deathlist.service.UserService;
 
 import org.apache.commons.lang3.StringUtils;
 
