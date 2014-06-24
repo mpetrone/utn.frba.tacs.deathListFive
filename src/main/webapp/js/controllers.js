@@ -6,8 +6,6 @@ App.ListsController = Ember.ObjectController.extend({
 
    actions: {
       createList: function() {
-         // TODO: error handling
-
          // valor del input
          var list = this.get('newList');
          if (!$.trim(list)) {
@@ -16,7 +14,20 @@ App.ListsController = Ember.ObjectController.extend({
 
          var controller = this;
          $.post(API_NAMESPACE + 'users/' + App.FBUser.id + '/lists/' + list)
-            .done(function() {
+         .fail(function() {
+         		 BootstrapDialog.show({
+         			 title: 'You cannot create this List.',
+         			 message: 'List name already exists, try a different one.',
+         			 type: BootstrapDialog.TYPE_INFO,
+         			 buttons: [{
+         				label: 'Close',
+         				action: function(dialogRef){
+         					dialogRef.close();
+         				}
+         			 }]
+         		 }); 
+         	 })
+          .done(function() {
                // limpia el input
                controller.set('newList', '');
 
@@ -32,13 +43,13 @@ App.ListsController = Ember.ObjectController.extend({
       },
 
       deleteList: function(list) {
-         // TODO: error handling
          var controller = this;
-
+         
+         if (list.id){
          BootstrapDialog.show({
             type: BootstrapDialog.TYPE_WARNING,
             title: 'Warning',
-            message: 'Do you really want to delete list "' + list.id + '"?',
+            message: 'Do you really want to delete List "' + list.id + '"?',
             buttons: [{
                label: 'Yes',
                action: function(dialogItself) {
@@ -68,6 +79,20 @@ App.ListsController = Ember.ObjectController.extend({
                }
             }]
          });
+         }
+         else{
+     		 BootstrapDialog.show({
+     			 title: 'You cannot delete this List.',
+     			 message: 'The List you are trying to delete does not exist.',
+     			 type: BootstrapDialog.TYPE_WARNING,
+     			 buttons: [{
+     				label: 'Close',
+     				action: function(dialogRef){
+     					dialogRef.close();
+     				}
+     			 }]
+     		 }); 
+         };
       }
    }
 });
@@ -76,8 +101,6 @@ App.ListsController = Ember.ObjectController.extend({
 App.ListController = Ember.ObjectController.extend({
    actions: {
       createItem: function() {
-         // TODO: error handling
-
          var list = this.get('id');
 
          // valor del input
@@ -89,7 +112,20 @@ App.ListController = Ember.ObjectController.extend({
          var controller = this;
 
          $.post(API_NAMESPACE + 'users/' + controller.content.uid + '/lists/' + list + '/items/' + item)
-            .done(function() {
+         .fail(function() {
+         		 BootstrapDialog.show({
+         			 title: 'You cannot create this Item.',
+         			 message: 'Maximum ammount of Items reached OR Item name already exists.',
+         			 type: BootstrapDialog.TYPE_INFO,
+         			 buttons: [{
+         				label: 'Close',
+         				action: function(dialogRef){
+         					dialogRef.close();
+         				}
+         			 }]
+         		 }); 
+         })   
+         .done(function() {
                // limpia el input
                controller.set('newItem', '');
 
@@ -106,16 +142,15 @@ App.ListController = Ember.ObjectController.extend({
             });
       },
       deleteItem: function(item) {
-         // TODO: error handling
-
          var list = this.get('id');
 
          var controller = this;
-
+        
+         if(item.id){
          BootstrapDialog.show({
-            type: BootstrapDialog.TYPE_WARNING,
+            type: BootstrapDialog.TYPE_INFO,
             title: 'Warning',
-            message: 'Do you really want to delete item "' + item.id + '"?',
+            message: 'Do you really want to delete Item "' + item.id + '"?',
             buttons: [{
                label: 'Yes',
                action: function(dialogItself) {
@@ -137,15 +172,40 @@ App.ListController = Ember.ObjectController.extend({
                }
             }]
          });
+      }
+      else{
+  		 BootstrapDialog.show({
+ 			 title: 'You cannot delete this Item.',
+ 			 message: 'The Item you are trying to delete does not exist.',
+ 			 type: BootstrapDialog.TYPE_WARNING,
+ 			 buttons: [{
+ 				label: 'Close',
+ 				action: function(dialogRef){
+ 					dialogRef.close();
+ 						}
+ 			 		}]
+  		 		}); 
+      	};
       },
       voteItem: function(item) {
-         // TODO: error handling           
-
          var controller = this;
          var list = this.get('id');
 
          $.post(API_NAMESPACE + 'users/' + controller.content.uid + '/lists/' + list + '/items/' + item.id + '/vote')
-            .done(function() {
+         .fail(function() {
+         		 BootstrapDialog.show({
+         			 title: 'You cannot vote this Item.',
+         			 message: 'An unexpected error ocurred.',
+         			 type: BootstrapDialog.TYPE_DANGER,
+         			 buttons: [{
+         				label: 'Close',
+         				action: function(dialogRef){
+         					dialogRef.close();
+         				}
+         			 }]
+         		 }); 
+         })     
+         .done(function() {
                item.incrementProperty('votos');
 
                var items = controller.get('model.items');
@@ -161,12 +221,12 @@ App.ListController = Ember.ObjectController.extend({
             });
       },
       shareItems: function(item) {
-          // TODO: error handling           
-
+    	  
           var controller = this;
           var list = this.get('id');
           var items = controller.get('model.items');
           
+          try{
           FB.ui({
               method: 'share_open_graph',
               action_type: 'utn_deathlist:share',
@@ -174,7 +234,20 @@ App.ListController = Ember.ObjectController.extend({
                  website: document.URL,
               })
            });
-
+          }
+          catch(err){
+        	  BootstrapDialog.show({
+      			 title: 'You cannot share this Item.',
+      			 message: 'An unexpected error ocurred: ' + err.message,
+      			 type: BootstrapDialog.TYPE_DANGER,
+      			 buttons: [{
+      				label: 'Close',
+      				action: function(dialogRef){
+      					dialogRef.close();
+      				}
+      			 }]
+      		 });
+          }
        }
    }
 });
